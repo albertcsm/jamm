@@ -5,10 +5,9 @@ angular.module('jamm.tableHeaderSortable', [ ])
         restrict: "E",
         scope: {
             fieldName: '@',
-            sortField: '=',
-            sortReversed: '='
+            sortParam: '='
         },
-        template: "<a href=\"#\" ng-click=\"sortField != fieldName ? sortField = fieldName : sortReversed = !sortReversed\"><span ng-transclude></span> <span class=\"glyphicon\" ng-if=\"sortField == fieldName\" ng-class=\"sortReversed ? 'glyphicon-chevron-down' : 'glyphicon-chevron-up'\"></span></a>",
+        template: "<a href=\"#\" ng-click=\"sortParam.field != fieldName ? sortParam.field = fieldName : sortParam.reversed = !sortParam.reversed\"><span ng-transclude></span> <span class=\"glyphicon\" ng-if=\"sortParam.field == fieldName\" ng-class=\"sortParam.reversed ? 'glyphicon-chevron-down' : 'glyphicon-chevron-up'\"></span></a>",
         transclude: true
     };
 
