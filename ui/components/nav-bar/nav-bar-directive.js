@@ -1,4 +1,4 @@
-angular.module('jamm')
+angular.module('jamm.navBar', [])
 .directive('navBar', function($state) {
 
     function link(scope, element, attrs) {

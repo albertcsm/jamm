@@ -1,5 +1,12 @@
-angular.module('jamm', [ 'ui.bootstrap', 'ui.router', 'ngAnimate' ])
-.config(function ($stateProvider, $urlRouterProvider) {
+angular.module('jamm', [ 
+    'ui.bootstrap',
+    'ui.router',
+    'ngAnimate',
+    'jamm.tableHeaderSortable',
+    'jamm.repository',
+    'jamm.coverThumbnail',
+    'jamm.navBar'
+]).config(function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/movies");
     $stateProvider
         .state('movies', {

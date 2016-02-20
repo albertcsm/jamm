@@ -1,11 +1,11 @@
-angular.module('jamm')
+angular.module('jamm.repository', [])
 .service('MovieService', function () {
     this.movies = [
         { 
             id: 'IP_MAN-3',
-            title: '葉問3：師徒情',
+            name: '葉問3：師徒情',
             actors: [ '甄子丹', '熊黛林', '張晉', '譚耀文' ],
-            releaseDates: '2015-12-24',
+            releaseDate: '2015-12-24',
             rating: 3,
             tags: [ 'Action', 'Martial arts' ],
             storage: {
@@ -16,9 +16,9 @@ angular.module('jamm')
         },
         { 
             id: 'HUNGER_GAME-3_1',
-            title: 'The Hunger Games: Mockingjay – Part 1',
+            name: 'The Hunger Games: Mockingjay – Part 1',
             actors: [ 'Jennifer Lawrence', 'Josh Hutcherson', 'Liam Hemsworth' ],
-            releaseDates: '2014-11-10',
+            releaseDate: '2014-11-10',
             rating: 2,
             tags: [ 'Adventure', 'Sci-Fi' ],
             storage: {
@@ -29,9 +29,9 @@ angular.module('jamm')
         },
         { 
             id: 'ANT_MAN',
-            title: 'Ant-Man',
+            name: 'Ant-Man',
             actors: [ 'Paul Rudd', 'Michael Douglas', 'Corey Stoll' ],
-            releaseDates: '2015-06-29',
+            releaseDate: '2015-06-29',
             rating: 3,
             tags: [ 'Action' ],
             storage: {
@@ -42,9 +42,9 @@ angular.module('jamm')
         },
         { 
             id: 'EX_MACHINA',
-            title: 'Ex Machina',
+            name: 'Ex Machina',
             actors: [ 'Alicia Vikander', 'Domhnall Gleeson', 'Oscar Isaac' ],
-            releaseDates: '2015-01-21',
+            releaseDate: '2015-01-21',
             rating: 3,
             tags: [ ],
             storage: {
@@ -55,9 +55,9 @@ angular.module('jamm')
         },
         { 
             id: 'INTERSTELLAR',
-            title: 'Interstellar',
+            name: 'Interstellar',
             actors: [ 'Matthew McConaughey', 'Anne Hathaway', 'Jessica Chastain' ],
-            releaseDates: '2014-11-06',
+            releaseDate: '2014-11-06',
             rating: 3,
             tags: [ 'Mars' ],
             storage: {

@@ -15,6 +15,14 @@ body {
     margin-bottom: 1em;
 }
 
+.jamm-img-table-row {
+    max-height: 3em;
+}
+
+.jamm-table-row tr {
+    cursor: pointer;
+}
+
 .animate-if.ng-enter, .animate-if.ng-leave {
   transition: all ease-out 0.25s;
 }

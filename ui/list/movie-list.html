@@ -13,11 +13,13 @@
     <div class="text-center form-inline">
         <div class="form-group">
             <div class="btn-group jamm-btn-group">
-                <label class="btn btn-default" ng-model="MovieService.displayMode" btn-radio="'thumbnail'">
-                    <span class="glyphicon glyphicon-th"> Thumbnail</span>
+                <label class="btn btn-default" ng-class="displayStyle == 'thumbnail' ? 'active' : ''" ng-click="displayStyle = 'thumbnail'">
+                    <span class="glyphicon glyphicon-th"></span>
+                    Thumbnail
                 </label>
-                <label class="btn btn-default" ng-model="MovieService.displayMode" btn-radio="'list'">
-                    <span class="glyphicon glyphicon-th-list"> List</span>
+                <label class="btn btn-default" ng-class="displayStyle == 'list' ? 'active' : ''" ng-click="displayStyle = 'list'">
+                    <span class="glyphicon glyphicon-th-list"></span>
+                    List
                 </label>
             </div>
         </div>
@@ -28,16 +30,42 @@
                     Sort by: &nbsp;<span class="glyphicon glyphicon-calendar"></span> Release date, asc. <span class="caret"></span>
                 </button>
                 <ul uib-dropdown-menu role="menu" aria-labelledby="single-button">
-                    <li role="menuitem"><a href="#"><span class="glyphicon glyphicon-calendar"></span> Release date</a></li>
-                    <li role="menuitem"><a href="#"><span class="glyphicon glyphicon-calendar"></span> Collect date</a></li>
-                    <li role="menuitem"><a href="#"><span class="glyphicon glyphicon-text-background"></span> Movie ID</a></li>
+                    <li role="menuitem" ng-click="sortField = 'id'">
+                        <a>
+                            <span class="glyphicon glyphicon-text-background"></span>
+                            Movie ID
+                            <span class="pull-right glyphicon glyphicon-ok-circle" ng-if="sortField == 'id'"></span>
+                        </a>
+                    </li>
+                    <li role="menuitem" ng-click="sortField = 'name'">
+                        <a>
+                            <span class="glyphicon glyphicon-text-background"></span>
+                            Movie name
+                            <span class="pull-right glyphicon glyphicon-ok-circle" ng-if="sortField == 'name'"></span>
+                        </a>
+                    </li>
+                    <li role="menuitem" ng-click="sortField = 'releaseDate'">
+                        <a>
+                            <span class="glyphicon glyphicon-calendar"></span>
+                            Release date
+                            <span class="pull-right glyphicon glyphicon-ok-circle" ng-if="sortField == 'releaseDate'"></span>
+                        </a>
+                    </li>
                     <li class="divider"></li>
-                    <li role="menuitem"><a href="#">
-                        <span class="glyphicon glyphicon-sort-by-attributes"></span>
-                        Ascending
-                        <span class="pull-right glyphicon glyphicon-ok"></span>
-                    </a></li>
-                    <li role="menuitem"><a href="#"><span class="glyphicon glyphicon-sort-by-attributes-alt"></span> Descending</a></li>
+                    <li role="menuitem" ng-click="sortReversed = false">
+                        <a>
+                            <span class="glyphicon glyphicon-sort-by-attributes"></span>
+                            Ascending
+                            <span class="pull-right glyphicon glyphicon-ok-circle" ng-show="sortReversed == false"></span>
+                        </a>
+                    </li>
+                    <li role="menuitem" ng-click="sortReversed = true">
+                        <a>
+                            <span class="glyphicon glyphicon-sort-by-attributes-alt"></span>
+                            Descending
+                            <span class="pull-right glyphicon glyphicon-ok-circle" ng-show="sortReversed == true"></span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -45,18 +73,15 @@
         <div class="form-group">
             <div class="input-group jamm-btn-group">
                 <span class="input-group-addon" id="sizing-addon1"><span class="glyphicon glyphicon-search"></span></span>
-                <input type="text" class="form-control search-query" ng-model="search"/>
+                <input type="text" class="form-control search-query" ng-model="searchString"/>
             </div>
         </div>
+        
     </div>
 
-    <div class="container" ng-if="!!selected">
-        <movie-detail movie="selected = movie"></movie-detail>
-    </div>
-    
-    <div class="container-fluid" ng-if="!selected">
+    <div class="container-fluid" ng-if="displayStyle == 'thumbnail'">
         <div class="row-fluid">
-            <div ng-repeat-start="movie in movies" class="col-sm-3 col-md-3 col-lg-2">
+            <div ng-repeat-start="movie in movies | filter:searchString | orderBy:sortField:sortReversed" class="col-sm-3 col-md-3 col-lg-2">
                 <a ui-sref="movies/detail({id: movie.id})">
                     <cover-thumbnail movie="movie"></cover-thumbnail>
                 </a>
@@ -67,5 +92,40 @@
             <div ng-repeat-end=""></div>
         </div>
     </div>
+
+    <!-- <div class="table-responsive"> -->
+    <div class="container-fluid">
+        <table class="table table-hover" ng-if="displayStyle == 'list'">
+            <thead>
+                <tr>
+                    <th><!-- thumbnail --></th>
+                    <th>
+                        <table-header-sortable field-name="id" sort-field="sortField" sort-reversed="sortReversed">ID</table-header-sortable>
+                    </th>
+                    <th>
+                        <table-header-sortable field-name="name" sort-field="sortField" sort-reversed="sortReversed">Name</table-header-sortable>
+                    </th>
+                    <th>
+                        Actors
+                    </th>
+                    <th>
+                        <table-header-sortable field-name="releaseDate" sort-field="sortField" sort-reversed="sortReversed">Release date</table-header-sortable>
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="jamm-table-row">
+                <tr ng-repeat="movie in movies | filter:searchString | orderBy:sortField:sortReversed" ui-sref="movies/detail({id: movie.id})">
+                    <td><img class="img-responsive center-block jamm-img-table-row" src="media/cover.jpg"/></td>
+                    <td>{{movie.id}}</td>
+                    <td>{{movie.name}}</td>
+                    <td>
+                        <span ng-repeat-start="actor in movie.actors">{{actor}}</span><span ng-repeat-end ng-if="!($last)">, </span>
+                    </td>
+                    <td>{{movie.releaseDate}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- </div> -->
 
 </div>

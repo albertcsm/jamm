@@ -1,4 +1,4 @@
-angular.module('jamm')
+angular.module('jamm.coverThumbnail', [])
 .directive('coverThumbnail', function($state) {
 
     function link(scope, element, attrs) {
