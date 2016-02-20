@@ -1,0 +1,17 @@
+{
+  "name": "jamm",
+  "version": "1.0.0",
+  "description": "Just a media manager",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Albert Cheung",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.14.2",
+    "errorhandler": "^1.4.3",
+    "express": "^4.13.4",
+    "method-override": "^2.3.5"
+  }
+}

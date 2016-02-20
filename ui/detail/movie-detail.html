@@ -1,0 +1,102 @@
+<nav-bar></nav-bar>
+
+<div class="container-fluid">
+    <ol class="breadcrumb">
+        <li><a href="#"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+        <li><a ui-sref="movies">Movies</a></li>
+        <li class="active">{{movie.id}}</li>
+    </ol>
+</div>
+
+<div class="container">
+
+    <video controls preload="auto" autoplay>
+        <source src="/video/手紙~Angela Aki~獻給未來的你~_(480p).mp4" type="video/mp4">
+    </video>
+
+    <p>
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">ID</label>
+                <div class="col-sm-10">
+                    <a editable-text="movie.vendorId">{{movie.id || '(edit)'}}</a>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Title</label>
+                <div class="col-sm-10">
+                    <a editable-text="movie.title">{{movie.title || '(edit)'}}</a>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Actors</label>
+                <div class="col-sm-4">
+                    <ul class="list-unstyled" style="margin: 0" ui-sortable ng-model="movie.actors">
+                        <li ng-repeat="actor in movie.actors">
+                            <div class="clearfix">
+                                <a editable-text="movie.actors[$index]">{{movie.actors[$index]}}</a>
+                                <button class="close" ng-click="deleteArtist($index)">x</button>
+                            </div>
+                        </li>
+                    </ul>
+                    <a editable-text="movie.artists[movie.artists.length]">(add)</a>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Categories</label>
+                <div class="col-sm-4">
+                    <ul class="list-unstyled" style="margin: 0" ui-sortable ng-model="movie.categories">
+                        <li ng-repeat="category in movie.categories">
+                            <div class="clearfix">
+                                <a editable-text="movie.categories[$index]" e-typeahead="state for state in ['aaa',bbb'] | limitTo:8">{{movie.categories[$index]}}</a>
+                                <button class="close" ng-click="deleteCategory($index)">x</button>
+                            </div>
+                        </li>
+                    </ul>
+                    <a editable-text="movie.categories[movie.categories.length]" e-typeahead="state for state in ['aaa',bbb'] | limitTo:8">(add)</a>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Release date</label>
+                <div class="col-sm-3">
+                    <input type="date" class="form-control" ng-model="movie.dateReleased"/>
+                </div>
+                <label class="col-sm-2 control-label">Collect date</label>
+                <div class="col-sm-3">
+                    <input type="date" class="form-control" ng-model="movie.dateAdded"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Quality</label>
+                <div class="col-sm-10">
+                    <div class="btn-group">
+                        <label class="btn btn-default" ng-model="movie.quality" btn-radio="'SD'" uncheckable>SD</label>
+                        <label class="btn btn-default" ng-model="movie.quality" btn-radio="'DVD'" uncheckable>DVD</label>
+                        <label class="btn btn-default" ng-model="movie.quality" btn-radio="'HD'" uncheckable>HD</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Rating</label>
+                <div class="col-sm-10">
+                    <rating ng-model="movie.rating" max="3"></rating>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Path</label>
+                <div class="col-sm-10">
+                    <a editable-text="movie.path">{{movie.path || '(edit)'}}</a>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Files</label>
+                <div class="col-sm-10">
+                    <ul class="list-unstyled" style="margin: 0">
+                        <li ng-repeat="file in movie.files"><a ng-click="openFile(movie.path + '/' + file)">{{file}}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </p>
+
+</div>

@@ -1,0 +1,71 @@
+<nav-bar></nav-bar>
+
+<div class="container-fluid">
+    
+    <ol class="breadcrumb">
+        <li><a href="#"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+        <li class="active">Movies</li>
+    </ol>
+</div>
+
+<div>
+
+    <div class="text-center form-inline">
+        <div class="form-group">
+            <div class="btn-group jamm-btn-group">
+                <label class="btn btn-default" ng-model="MovieService.displayMode" btn-radio="'thumbnail'">
+                    <span class="glyphicon glyphicon-th"> Thumbnail</span>
+                </label>
+                <label class="btn btn-default" ng-model="MovieService.displayMode" btn-radio="'list'">
+                    <span class="glyphicon glyphicon-th-list"> List</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="btn-group jamm-btn-group" uib-dropdown is-open="status.isopen">
+                <button id="single-button" type="button" class="btn btn-default" uib-dropdown-toggle ng-disabled="disabled">
+                    Sort by: &nbsp;<span class="glyphicon glyphicon-calendar"></span> Release date, asc. <span class="caret"></span>
+                </button>
+                <ul uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                    <li role="menuitem"><a href="#"><span class="glyphicon glyphicon-calendar"></span> Release date</a></li>
+                    <li role="menuitem"><a href="#"><span class="glyphicon glyphicon-calendar"></span> Collect date</a></li>
+                    <li role="menuitem"><a href="#"><span class="glyphicon glyphicon-text-background"></span> Movie ID</a></li>
+                    <li class="divider"></li>
+                    <li role="menuitem"><a href="#">
+                        <span class="glyphicon glyphicon-sort-by-attributes"></span>
+                        Ascending
+                        <span class="pull-right glyphicon glyphicon-ok"></span>
+                    </a></li>
+                    <li role="menuitem"><a href="#"><span class="glyphicon glyphicon-sort-by-attributes-alt"></span> Descending</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="input-group jamm-btn-group">
+                <span class="input-group-addon" id="sizing-addon1"><span class="glyphicon glyphicon-search"></span></span>
+                <input type="text" class="form-control search-query" ng-model="search"/>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" ng-if="!!selected">
+        <movie-detail movie="selected = movie"></movie-detail>
+    </div>
+    
+    <div class="container-fluid" ng-if="!selected">
+        <div class="row-fluid">
+            <div ng-repeat-start="movie in movies" class="col-sm-3 col-md-3 col-lg-2">
+                <a ui-sref="movies/detail({id: movie.id})">
+                    <cover-thumbnail movie="movie"></cover-thumbnail>
+                </a>
+            </div>
+            <div class="clearfix visible-sm" ng-if="$index % 4 == 3"></div>
+            <div class="clearfix visible-md" ng-if="$index % 4 == 3"></div>
+            <div class="clearfix visible-lg" ng-if="$index % 6 == 5"></div>
+            <div ng-repeat-end=""></div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,26 @@
+{
+  "name": "jamm",
+  "description": "Just a media manager",
+  "authors": [
+    "Albert Cheung"
+  ],
+  "license": "ISC",
+  "moduleType": [],
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "ui/libs",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-ui-router": "^0.2.18",
+    "angular": "^1.5.0",
+    "bootstrap": "^3.3.6",
+    "lodash": "^4.3.0",
+    "angular-bootstrap": "^1.1.2"
+  }
+}
