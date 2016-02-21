@@ -68,9 +68,9 @@
                             </span>
                         </div>
 
-                        <div ui-sortable="uiSortableOptions">
+                        <div ui-sortable ng-model="movie.actors">
                             <div class="input-group jamm-form-group" ng-repeat="actor in movie.actors">
-                                <div class="ui-sortable-handle input-group-addon"><span class="glyphicon glyphicon-move"></span></div>
+                                <div class="input-group-addon"><span class="glyphicon glyphicon-move"></span></div>
                                 <input type="text" class="form-control" ng-model="actor"/>
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-remove"></span></button>

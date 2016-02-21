@@ -7,8 +7,4 @@ angular.module('jamm')
         $scope.movie = _.find($scope.movies, { id: movieId });
     }
 
-    $scope.uiSortableOptions = {
-        handle: '.ui-sortable-handle'
-    };
-
 });
