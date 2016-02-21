@@ -15,7 +15,7 @@ body {
 }
 
 .jamm-vertical-spacer { 
-    margin: 0; padding:0; height:2em;
+    margin: 0; padding:0; height:1.5em;
 }
 
 .jamm-form-group {
@@ -35,6 +35,18 @@ body {
     border-right: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
     padding: 1em;
+}
+
+.jamm-well-zero-bottom-margin {
+    margin-bottom: 0px;
+}
+
+img.jamm-image-square-thumbnail {
+    height: 4em;
+    width: 4em;
+    object-fit: cover; /* Do not scale the image */
+    object-position: center; /* Center the image within the element */
+    margin: 0.2em;
 }
 
 .ui-sortable-handle {
