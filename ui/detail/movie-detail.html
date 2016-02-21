@@ -10,11 +10,33 @@
 
 <div class="container">
 
-    <div class="panel">
-        <video controls preload="auto">
-            <source src="media/手紙~Angela Aki~獻給未來的你~_(480p).mp4" type="video/mp4">
-        </video>
+<div>
+
+    <ul class="nav nav-tabs">
+        <li>
+            <a href="javascript:;" data-target="#videos" data-toggle="tab">
+                Videos
+            </a>
+        </li>
+        <li class="active">
+            <a href="javascript:;" data-target="#images" data-toggle="tab">
+                Images
+            </a>
+        </li>
+    </ul>
+
+    <div class="tab-content jamm-tab-content-border">
+        <div role="tabpanel" class="tab-pane" id="videos">
+            <video controls preload="auto">
+                <source src="media/手紙~Angela Aki~獻給未來的你~_(480p).mp4" type="video/mp4">
+            </video>
+        </div>
+        <div role="tabpanel" class="tab-pane active" id="images">
+            <img src="media/cover.jpg"/>
+        </div>
     </div>
+
+    <div class="jamm-vertical-spacer"></div>
 
     <div class="panel panel-default">
         <div class="panel-heading"><h3 class="panel-title">Information</h3></div>
@@ -38,15 +60,6 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Actors</label>
                     <div class="col-sm-5">
-
-<!-- <div ui-sortable="sortableOptions" >
-
-      <li  ng-repeat="group in groups">
-          <div class="handle btn btn-primary"><i class="glyphicon glyphicon-move"></i></div>
-          {{group.title}}
-      </li>
-
-    </div> -->
 
                         <div class="input-group jamm-form-group">
                             <input type="text" class="form-control" ng-model="actor"/>
