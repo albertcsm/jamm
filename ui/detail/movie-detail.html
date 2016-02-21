@@ -79,7 +79,7 @@
                         <div ui-sortable ng-model="movie.actors">
                             <div class="input-group jamm-form-group" ng-repeat="actor in movie.actors">
                                 <div class="input-group-addon"><span class="glyphicon glyphicon-move"></span></div>
-                                <input type="text" class="form-control" ng-model="actor"/>
+                                <input type="text" class="form-control" ng-model="movie.actors[$index]" ng-model-options="{updateOn: 'blur'}"/>
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-remove"></span></button>
                                 </span>
@@ -87,7 +87,7 @@
                         </div>
 
                         <div class="input-group jamm-form-group">
-                            <input type="text" class="form-control" placeholder="add more..." ng-model="actor"/>
+                            <input type="text" class="form-control" placeholder="add more..." ng-model="newActor"/>
                             <span class="input-group-btn">
                                 <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-plus-sign"></span></button>
                             </span>
