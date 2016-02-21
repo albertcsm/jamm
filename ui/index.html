@@ -3,8 +3,9 @@
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
-        <link rel="stylesheet" href="libs/bootstrap/dist/css/bootstrap.min.css">
-        <link rel="stylesheet" href="app.css"> 
+        <link rel="stylesheet" href="libs/bootstrap/dist/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="libs/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css"/>
+        <link rel="stylesheet" href="app.css"/>
 
         <!-- required by sortable -->
         <script src="libs/jquery/dist/jquery.min.js"></script>
@@ -17,9 +18,12 @@
         <script src="libs/angular-bootstrap/ui-bootstrap.min.js"></script>
         <script src="libs/angular-ui-router/release/angular-ui-router.min.js"></script>
         <script src="libs/angular-ui-sortable/sortable.min.js"></script>
+        <script src="libs/moment/min/moment.min.js"></script>
+        <script src="libs/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
         <script src="libs/lodash/dist/lodash.min.js"></script>
 
         <script src="components/table-header-sortable/table-header-sortable-directive.js"></script>
+        <script src="components/date-time-picker/date-time-picker-directive.js"></script>
         <script src="components/movie-service.js"></script>
         <script src="components/nav-bar/nav-bar-directive.js"></script>
         <script src="components/cover-thumbnail/cover-thumbnail-directive.js"></script>
@@ -30,5 +34,8 @@
     <body ng-app="jamm">
         <div ui-view></div>
         <div class="footer"></div>
+
+
+
     </body>
 </html>
