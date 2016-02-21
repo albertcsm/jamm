@@ -9,10 +9,13 @@ body {
     border-color: #37A7FF;
 }
 
-.jamm-btn-group {
-    margin-left: 0.75em;
-    margin-right: 0.75em;
-    margin-bottom: 1em;
+.jamm-btn-group-spacer {
+    display: inline-block;
+    width: 1em;
+}
+
+.jamm-form-group {
+    margin-bottom: 0.25em;
 }
 
 .jamm-img-table-row {
@@ -20,6 +23,10 @@ body {
 }
 
 .jamm-table-row tr {
+    cursor: pointer;
+}
+
+.ui-sortable-handle {
     cursor: pointer;
 }
 

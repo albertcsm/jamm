@@ -21,6 +21,9 @@
     "angular": "^1.5.0",
     "bootstrap": "^3.3.6",
     "lodash": "^4.3.0",
-    "angular-bootstrap": "^1.1.2"
+    "angular-bootstrap": "^1.1.2",
+    "angular-ui-sortable": "^0.13.4",
+    "jquery": "^2.2.0",
+    "jquery-ui": "jqueryui#^1.11.4"
   }
 }
