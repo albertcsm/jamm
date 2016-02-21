@@ -76,13 +76,6 @@
                     <label class="col-sm-2 control-label">Actors</label>
                     <div class="col-sm-5">
 
-                        <div class="input-group jamm-form-group">
-                            <input type="text" class="form-control" ng-model="actor"/>
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-plus-sign"></span></button>
-                            </span>
-                        </div>
-
                         <div ui-sortable ng-model="movie.actors">
                             <div class="input-group jamm-form-group" ng-repeat="actor in movie.actors">
                                 <div class="input-group-addon"><span class="glyphicon glyphicon-move"></span></div>
@@ -92,6 +85,14 @@
                                 </span>
                             </div>
                         </div>
+
+                        <div class="input-group jamm-form-group">
+                            <input type="text" class="form-control" placeholder="add more..." ng-model="actor"/>
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-plus-sign"></span></button>
+                            </span>
+                        </div>
+
                     </div>
                 </div>
                 
