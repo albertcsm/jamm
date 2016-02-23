@@ -26,7 +26,7 @@ angular.module('jamm')
     $scope.delete = function () {
         _.remove(movies, { id: $scope.originalMovie.id });
         $('#confirmDeleteModal').on('hidden.bs.modal', function () {
-            $state.go('movies', null, { location: 'replace' });
+            $state.go('movies');
         });
         $('#confirmDeleteModal').modal('hide');
     };
