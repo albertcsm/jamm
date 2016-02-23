@@ -77,9 +77,9 @@
                     <div class="col-sm-5">
 
                         <div ui-sortable ng-model="movie.actors">
-                            <div class="input-group jamm-form-group" ng-repeat="actor in movie.actors">
+                            <div class="input-group jamm-form-group" ng-repeat="actor in movie.actors track by $index">
                                 <div class="input-group-addon"><span class="glyphicon glyphicon-move"></span></div>
-                                <input type="text" class="form-control" ng-model="movie.actors[$index]" ng-model-options="{updateOn: 'blur'}"/>
+                                <input type="text" class="form-control" ng-model="movie.actors[$index]"/>
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button" ng-click="movie.actors.splice($index, 1)"><span class="glyphicon glyphicon-remove"></span></button>
                                 </span>
