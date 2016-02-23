@@ -49,6 +49,12 @@ img.jamm-image-square-thumbnail {
     margin: 0.2em;
 }
 
+.jamm-rating-large {
+    font-size: 1.5em;
+    line-height: 1.75em;
+    color: #555;
+}
+
 .ui-sortable-handle {
     cursor: pointer;
 }
