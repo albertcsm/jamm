@@ -1,10 +1,10 @@
 angular.module('jamm')
-.controller('MovieDetailController', function ($scope, MovieService, $stateParams) {
-    $scope.movies = MovieService.movies;
+.controller('MovieDetailController', function ($scope, MovieService, $stateParams, $state) {
+    var movies = MovieService.movies;
 
     var movieId = $stateParams.id;
     if (movieId) {
-        $scope.originalMovie = _.find($scope.movies, { id: movieId });
+        $scope.originalMovie = _.find(movies, { id: movieId });
         $scope.movie = _.cloneDeep($scope.originalMovie);
     }
 
@@ -21,6 +21,14 @@ angular.module('jamm')
 
     $scope.discard = function() {
         $scope.movie = _.cloneDeep($scope.originalMovie);
+    };
+
+    $scope.delete = function () {
+        _.remove(movies, { id: $scope.originalMovie.id });
+        $('#confirmDeleteModal').on('hidden.bs.modal', function () {
+            $state.go('movies');
+        });
+        $('#confirmDeleteModal').modal('hide');
     };
 
 });

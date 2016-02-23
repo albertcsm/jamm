@@ -14,8 +14,7 @@ angular.module('jamm', [
         .state('movies', {
             url: "/movies",
             templateUrl: "list/movie-list.html",
-            controller: 'MovieListController',
-            deepStateRedirect: true
+            controller: 'MovieListController'
         })
         .state('movies/detail', {
             url: "/movies/:id",
@@ -35,9 +34,3 @@ angular.module('jamm', [
             templateUrl: "about.html"
         });
 });
-// .directive('navBar', function() {
-//     return {
-//         restrict: "E",
-//         templateUrl: 'nav-bar/nav-bar.html'
-//     };
-// });

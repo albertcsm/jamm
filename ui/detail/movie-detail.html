@@ -115,14 +115,19 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label"></label>
                     <div class="col-sm-8">
-                        <button class="btn btn-default btn-primary" ng-click="save()" ng-class="isModified ? '' : 'disabled'" type="button">
+                        <button class="btn btn-default btn-primary" ng-click="save()" ng-disabled="!isModified" type="button">
                             <span class="glyphicon glyphicon-ok"></span>
                             Save
                         </button>
                         <div class="jamm-btn-group-spacer"/>
-                        <button class="btn btn-default" ng-click="discard()" ng-class="isModified ? '' : 'disabled'" type="button">
+                        <button class="btn btn-default" ng-click="discard()" ng-disabled="!isModified" type="button">
                             <span class="glyphicon glyphicon-remove"></span>
                             Discard
+                        </button>
+                        <div class="jamm-btn-group-spacer"/>
+                        <button class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal" ng-disabled="!originalMovie" type="button">
+                            <span class="glyphicon glyphicon-trash"></span>
+                            Delete
                         </button>
                     </div>
                 </div>
@@ -130,4 +135,28 @@
         </div>
     </div>
 
+</div>
+
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Confirm delete</h4>
+            </div>
+            <div class="modal-body">
+                Delete {{movie.name ? movie.name : movie.id}}?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" ng-click="delete()">
+                    <span class="glyphicon glyphicon-trash"></span>
+                    Delete
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
 </div>
