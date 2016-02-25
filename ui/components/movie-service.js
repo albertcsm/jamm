@@ -11,6 +11,11 @@ angular.module('jamm.repository', [])
             storage: {
                 repository: 'wd2b',
                 path: 'download/ipman3-hd1080',
+                cover: 'media/cover.jpg',
+                images: [
+                    { file: 'media/gallery1.jpg' },
+                    { file: 'media/gallery2.jpg' }
+                ],
                 quality: 'HD'
             }
         },
@@ -24,6 +29,11 @@ angular.module('jamm.repository', [])
             storage: {
                 repository: 'home',
                 path: 'Downloads/bt/The Hunger Games Mockingjay Part 1 (2014) HDRip XviD-MAXSPEED',
+                cover: 'media/cover.jpg',
+                images: [
+                    { file: 'media/gallery1.jpg' },
+                    { file: 'media/gallery2.jpg' }
+                ],
                 quality: 'HD'
             }
         },
@@ -37,6 +47,11 @@ angular.module('jamm.repository', [])
             storage: {
                 repository: 'home',
                 path: 'Downloads/bt/Ant-Man 2015 1080p BluRay x264 DTS-JYK',
+                cover: 'media/cover.jpg',
+                images: [
+                    { file: 'media/gallery1.jpg' },
+                    { file: 'media/gallery2.jpg' }
+                ],
                 quality: 'HD'
             }
         },
@@ -50,6 +65,11 @@ angular.module('jamm.repository', [])
             storage: {
                 repository: 'wd2b',
                 path: 'Downloads/bt/EX Machina ENG (2015) [1080p] - NEGATiVE',
+                cover: 'media/cover.jpg',
+                images: [
+                    { file: 'media/gallery1.jpg' },
+                    { file: 'media/gallery2.jpg' }
+                ],
                 quality: 'HD'
             }
         },
@@ -63,6 +83,11 @@ angular.module('jamm.repository', [])
             storage: {
                 repository: 'wd2b',
                 path: 'Downloads/bt/Interstellar (2014) (2014) [1080p]',
+                cover: 'media/cover.jpg',
+                images: [
+                    { file: 'media/gallery1.jpg' },
+                    { file: 'media/gallery2.jpg' }
+                ],
                 quality: 'HD'
             }
         }
