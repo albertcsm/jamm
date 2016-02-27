@@ -5,6 +5,7 @@ angular.module('jamm', [
     'ngAnimate',
     'jamm.tableHeaderSortable',
     'jamm.dateTimePicker',
+    'jamm.photoswipe',
     'jamm.repository',
     'jamm.coverThumbnail',
     'jamm.navBar'
