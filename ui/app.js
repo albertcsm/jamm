@@ -3,6 +3,7 @@ angular.module('jamm', [
     'ui.router',
     'ui.sortable',
     'ngAnimate',
+    'jamm.unitFilter',
     'jamm.tableHeaderSortable',
     'jamm.dateTimePicker',
     'jamm.photoswipe',
