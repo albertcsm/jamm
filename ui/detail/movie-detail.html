@@ -13,12 +13,12 @@
 <div>
 
     <ul class="nav nav-tabs">
-        <li>
+        <li class="active">
             <a href="javascript:;" data-target="#videos" data-toggle="tab">
                 Videos
             </a>
         </li>
-        <li class="active">
+        <li>
             <a href="javascript:;" data-target="#images" data-toggle="tab">
                 Images
             </a>
@@ -31,12 +31,35 @@
     </ul>
 
     <div class="tab-content jamm-tab-content-border">
-        <div role="tabpanel" class="tab-pane" id="videos">
-            <video controls preload="auto">
-                <source src="media/手紙~Angela Aki~獻給未來的你~_(480p).mp4" type="video/mp4">
-            </video>
+        <div role="tabpanel" class="tab-pane active" id="videos">
+            <div class="xwell col-md-12 jamm-well-zero-bottom-margin">
+                <video controls preload="auto" id="videoPlayer">
+                    <source ng-src="{{movie.storage.videos[selectedVideoIndex].file}}"/>
+                </video>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th><!-- Playing --></th>
+                            <th>File</th>
+                            <th>Resolution</th>
+                            <th>Length</th>
+                            <th>Size</th>
+                        </tr>
+                    </thead>
+                    <tbody class="jamm-table-row">
+                        <tr ng-repeat="video in movie.storage.videos track by video.file" ng-click="selectVideo($index)">
+                            <td><span class="glyphicon glyphicon-play" ng-if="$index === selectedVideoIndex"></span></td>
+                            <td>{{video.file}}</td>
+                            <td>{{video.resolution}}</td>
+                            <td>{{video.length}}</td>
+                            <td>{{video.size}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="clearfix"/>
         </div>
-        <div role="tabpanel" class="tab-pane active" id="images">
+        <div role="tabpanel" class="tab-pane" id="images">
             <div class="well col-md-12 jamm-well-zero-bottom-margin" jamm-photoswipe-gallery>
                 <div class="text-center row">
                     <a href="javascript:;" jamm-photoswipe-image="{{movie.storage.cover}}"><img class="img-responsive" style="display: inline-block;" ng-src="{{movie.storage.cover}}"/></a>

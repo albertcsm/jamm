@@ -31,4 +31,11 @@ angular.module('jamm')
         $('#confirmDeleteModal').modal('hide');
     };
 
+    $scope.selectedVideoIndex = 0;
+
+    $scope.selectVideo = function (index) {
+        $scope.selectedVideoIndex = index;
+        angular.element('#videoPlayer').attr('src', $scope.movie.storage.videos[$scope.selectedVideoIndex].file);
+    };
+
 });

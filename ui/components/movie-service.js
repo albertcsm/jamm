@@ -16,6 +16,20 @@ angular.module('jamm.repository', [])
                     { file: 'media/gallery1.jpg' },
                     { file: 'media/gallery2.jpg' }
                 ],
+                videos: [
+                    { 
+                        file: 'media/video1.mp4',
+                        resolution: '720x480',
+                        length: '05:10',
+                        size: 33387486
+                    },
+                    {
+                        file: 'media/video2.mkv',
+                        resolution: '1280x688',
+                        length: '2:06:35',
+                        size: 1626060492
+                    }
+                ],
                 quality: 'HD'
             }
         },
@@ -33,6 +47,20 @@ angular.module('jamm.repository', [])
                 images: [
                     { file: 'media/gallery1.jpg' },
                     { file: 'media/gallery2.jpg' }
+                ],
+                videos: [
+                    { 
+                        file: 'media/video1.mp4',
+                        resolution: '720x480',
+                        length: '05:10',
+                        size: 33387486
+                    },
+                    {
+                        file: 'media/video2.mkv',
+                        resolution: '1280x688',
+                        length: '2:06:35',
+                        size: 1626060492
+                    }
                 ],
                 quality: 'HD'
             }
@@ -52,6 +80,20 @@ angular.module('jamm.repository', [])
                     { file: 'media/gallery1.jpg' },
                     { file: 'media/gallery2.jpg' }
                 ],
+                videos: [
+                    { 
+                        file: 'media/video1.mp4',
+                        resolution: '720x480',
+                        length: '05:10',
+                        size: 33387486
+                    },
+                    {
+                        file: 'media/video2.mkv',
+                        resolution: '1280x688',
+                        length: '2:06:35',
+                        size: 1626060492
+                    }
+                ],
                 quality: 'HD'
             }
         },
@@ -70,6 +112,20 @@ angular.module('jamm.repository', [])
                     { file: 'media/gallery1.jpg' },
                     { file: 'media/gallery2.jpg' }
                 ],
+                videos: [
+                    { 
+                        file: 'media/video1.mp4',
+                        resolution: '720x480',
+                        length: '05:10',
+                        size: 33387486
+                    },
+                    {
+                        file: 'media/video2.mkv',
+                        resolution: '1280x688',
+                        length: '2:06:35',
+                        size: 1626060492
+                    }
+                ],
                 quality: 'HD'
             }
         },
@@ -87,6 +143,20 @@ angular.module('jamm.repository', [])
                 images: [
                     { file: 'media/gallery1.jpg' },
                     { file: 'media/gallery2.jpg' }
+                ],
+                videos: [
+                    { 
+                        file: 'media/video1.mp4',
+                        resolution: '720x480',
+                        length: '05:10',
+                        size: 33387486
+                    },
+                    {
+                        file: 'media/video2.mkv',
+                        resolution: '1280x688',
+                        length: '2:06:35',
+                        size: 1626060492
+                    }
                 ],
                 quality: 'HD'
             }
