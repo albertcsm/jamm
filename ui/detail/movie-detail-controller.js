@@ -12,8 +12,6 @@ angular.module('jamm')
 
     $scope.$watch('movie', function (value) {
         $scope.isModified = !angular.equals(value, $scope.originalMovie);
-        console.log(value);
-        console.log($scope.originalMovie);
     }, true);
 
     $scope.save = function() {
