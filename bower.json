@@ -26,6 +26,7 @@
     "jquery": "^2.2.0",
     "jquery-ui": "jqueryui#^1.11.4",
     "eonasdan-bootstrap-datetimepicker": "^4.17.37",
-    "photoswipe": "^4.1.1"
+    "photoswipe": "^4.1.1",
+    "mediaelement": "^2.20.1"
   }
 }

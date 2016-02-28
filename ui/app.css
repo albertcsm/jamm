@@ -55,6 +55,9 @@ img.jamm-image-square-thumbnail {
     color: #555;
 }
 
+/*Hide mediaelement player loading overlay*/
+.mejs-overlay-loading { display: none; }
+
 .ui-sortable-handle {
     cursor: pointer;
 }

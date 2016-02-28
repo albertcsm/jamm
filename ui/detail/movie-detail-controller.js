@@ -38,4 +38,15 @@ angular.module('jamm')
         angular.element('#videoPlayer').attr('src', $scope.movie.storage.videos[$scope.selectedVideoIndex].file);
     };
 
+    $scope.initVideoPlayer = function () {
+        $scope.selectVideo($scope.selectedVideoIndex);
+        var player = new MediaElementPlayer('#videoPlayer', {
+            videoWidth: '100%',
+            videoHeight: '100%',
+            success: function(mediaElement, originalNode) {
+                // do things
+            }
+        });
+    };
+
 });
