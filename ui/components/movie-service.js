@@ -4,7 +4,12 @@ angular.module('jamm.repository', [])
         { 
             id: 'IP_MAN-3',
             name: '葉問3：師徒情',
-            actors: [ '甄子丹', '熊黛林', '張晉', '譚耀文' ],
+            actors: [ 
+                { name: '甄子丹' }, 
+                { name: '熊黛林' },
+                { name: '張晉' },
+                { name: '譚耀文' }
+            ],
             releaseDate: '2015-12-24',
             rating: 3,
             tags: [ 'Action', 'Martial arts' ],
@@ -36,7 +41,11 @@ angular.module('jamm.repository', [])
         { 
             id: 'HUNGER_GAME-3_1',
             name: 'The Hunger Games: Mockingjay – Part 1',
-            actors: [ 'Jennifer Lawrence', 'Josh Hutcherson', 'Liam Hemsworth' ],
+            actors: [ 
+                { name: 'Jennifer Lawrence' },
+                { name: 'Josh Hutcherson' },
+                { name: 'Liam Hemsworth' }
+            ],
             releaseDate: '2014-11-10',
             rating: 2,
             tags: [ 'Adventure', 'Sci-Fi' ],
@@ -68,7 +77,11 @@ angular.module('jamm.repository', [])
         { 
             id: 'ANT_MAN',
             name: 'Ant-Man',
-            actors: [ 'Paul Rudd', 'Michael Douglas', 'Corey Stoll' ],
+            actors: [
+                { name: 'Paul Rudd' },
+                { name: 'Michael Douglas' },
+                { name: 'Corey Stoll' }
+            ],
             releaseDate: '2015-06-29',
             rating: 3,
             tags: [ 'Action' ],
@@ -100,7 +113,11 @@ angular.module('jamm.repository', [])
         { 
             id: 'EX_MACHINA',
             name: 'Ex Machina',
-            actors: [ 'Alicia Vikander', 'Domhnall Gleeson', 'Oscar Isaac' ],
+            actors: [
+                { name: 'Alicia Vikander' },
+                { name: 'Domhnall Gleeson' },
+                { name: 'Oscar Isaac' }
+            ],
             releaseDate: '2015-01-21',
             rating: 3,
             tags: [ ],
@@ -132,7 +149,11 @@ angular.module('jamm.repository', [])
         { 
             id: 'INTERSTELLAR',
             name: 'Interstellar',
-            actors: [ 'Matthew McConaughey', 'Anne Hathaway', 'Jessica Chastain' ],
+            actors: [
+                { name: 'Matthew McConaughey' },
+                { name: 'Anne Hathaway' },
+                { name: 'Jessica Chastain' }
+            ],
             releaseDate: '2014-11-06',
             rating: 3,
             tags: [ 'Mars' ],
@@ -162,4 +183,13 @@ angular.module('jamm.repository', [])
             }
         }
     ];
+
+    this.updateMovie = function(id, movie) {
+        var index = _.findIndex(this.movies, { id: id });
+        if (index > -1) {
+            this.movies[index] = _.cloneDeep(movie);
+            return this.movies[index];
+        }
+    };
+
 });

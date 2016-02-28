@@ -15,7 +15,8 @@ angular.module('jamm')
     }, true);
 
     $scope.save = function() {
-        _.assign($scope.originalMovie, $scope.movie);
+        $scope.originalMovie = MovieService.updateMovie($scope.originalMovie.id, $scope.movie);
+        $scope.movie = _.cloneDeep($scope.originalMovie);
         $scope.isModified = false;
     };
 

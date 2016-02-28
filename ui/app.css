@@ -58,10 +58,6 @@ img.jamm-image-square-thumbnail {
 /*Hide mediaelement player loading overlay*/
 .mejs-overlay-loading { display: none; }
 
-.ui-sortable-handle {
-    cursor: pointer;
-}
-
 .animate-if.ng-enter, .animate-if.ng-leave {
   transition: all ease-out 0.25s;
 }
@@ -80,8 +76,4 @@ img.jamm-image-square-thumbnail {
 
 .footer {
     height: 3em;
-}
-
-video {
-    width: 100%;
 }

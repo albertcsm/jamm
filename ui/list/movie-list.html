@@ -124,7 +124,7 @@
                     <td>{{movie.id}}</td>
                     <td>{{movie.name}}</td>
                     <td>
-                        <span ng-repeat-start="actor in movie.actors">{{actor}}</span><span ng-repeat-end ng-if="!($last)">, </span>
+                        <span ng-repeat-start="actor in movie.actors">{{actor.name}}</span><span ng-repeat-end ng-if="!($last)">, </span>
                     </td>
                     <td>{{movie.releaseDate}}</td>
                 </tr>
