@@ -173,7 +173,7 @@
                     <span aria-hidden="true"></span>
                     &times;
                 </button>
-                <h4 class="modal-title" id="myModalLabel">Confirm delete</h4>
+                <h4 class="modal-title">Confirm delete</h4>
             </div>
             <div class="modal-body">
                 Delete {{movie.name ? movie.name : movie.id}}?
@@ -188,3 +188,17 @@
         </div>
     </div>
 </div>
+
+<script type="text/ng-template" id="unsaved-change-modal-template">
+    <div class="modal-header">
+        <h4 class="modal-title">Unsaved change</h4>
+    </div>
+    <div class="modal-body">
+        Information is modified, save before leave?
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-click="saveAndProceed()">Yes, save it</button>
+        <button class="btn btn-warning" type="button" ng-click="proceedWithoutSave()">No, discard the change</button>
+        <button class="btn btn-default" type="button" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
