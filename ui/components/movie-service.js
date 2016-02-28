@@ -187,7 +187,7 @@ angular.module('jamm.repository', [])
     this.updateMovie = function(id, movie) {
         var index = _.findIndex(this.movies, { id: id });
         if (index > -1) {
-            this.movies[index] = _.cloneDeep(movie);
+            this.movies[index] = angular.copy(movie);
             return this.movies[index];
         }
     };

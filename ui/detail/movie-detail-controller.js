@@ -5,7 +5,7 @@ angular.module('jamm')
     var movieId = $stateParams.id;
     if (movieId) {
         $scope.originalMovie = _.find(movies, { id: movieId });
-        $scope.movie = _.cloneDeep($scope.originalMovie);
+        $scope.movie = angular.copy($scope.originalMovie);
     }
 
     $scope.isModified = false;
@@ -16,12 +16,12 @@ angular.module('jamm')
 
     $scope.save = function() {
         $scope.originalMovie = MovieService.updateMovie($scope.originalMovie.id, $scope.movie);
-        $scope.movie = _.cloneDeep($scope.originalMovie);
+        $scope.movie = angular.copy($scope.originalMovie);
         $scope.isModified = false;
     };
 
     $scope.discard = function() {
-        $scope.movie = _.cloneDeep($scope.originalMovie);
+        $scope.movie = angular.copy($scope.originalMovie);
     };
 
     $scope.delete = function () {
