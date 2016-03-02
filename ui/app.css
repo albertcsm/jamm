@@ -26,8 +26,12 @@ body {
     max-height: 3em;
 }
 
-.jamm-table-row tr {
+.jamm-cursor-pointer tr {
     cursor: pointer;
+}
+
+.jamm-table-no-bottom-margin {
+    margin-bottom: 0;
 }
 
 .jamm-tab-content-border {
@@ -37,16 +41,12 @@ body {
     padding: 1em;
 }
 
-.jamm-well-zero-bottom-margin {
-    margin-bottom: 0px;
-}
-
 img.jamm-image-square-thumbnail {
     height: 4em;
     width: 4em;
     object-fit: cover; /* Do not scale the image */
     object-position: center; /* Center the image within the element */
-    margin: 0.2em;
+    margin-right: 0.5em;
 }
 
 .jamm-rating-large {
@@ -55,8 +55,10 @@ img.jamm-image-square-thumbnail {
     color: #555;
 }
 
-/*Hide mediaelement player loading overlay*/
-.mejs-overlay-loading { display: none; }
+/* Hide mediaelement player loading overlay */
+.mejs-overlay-loading {
+    display: none;
+}
 
 .animate-if.ng-enter, .animate-if.ng-leave {
   transition: all ease-out 0.25s;

@@ -31,51 +31,47 @@
     </ul>
 
     <div class="tab-content jamm-tab-content-border">
-        <div role="tabpanel" class="tab-pane active" id="videos">
-            <div class="xwell col-md-12 jamm-well-zero-bottom-margin">
-                <video id="videoPlayer" controls preload="auto" ng-init="initVideoPlayer()">
-                </video>
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th><!-- Playing --></th>
-                            <th>File</th>
-                            <th>Resolution</th>
-                            <th>Length</th>
-                            <th>Size</th>
-                        </tr>
-                    </thead>
-                    <tbody class="jamm-table-row">
-                        <tr ng-repeat="video in movie.storage.videos track by video.file" ng-click="selectVideo($index)">
-                            <td><span class="glyphicon glyphicon-play" ng-if="$index === selectedVideoIndex"></span></td>
-                            <td>{{video.file}}</td>
-                            <td>{{video.resolution}}</td>
-                            <td>{{video.length}}</td>
-                            <td>{{video.size | formatByte}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="clearfix"/>
-        </div>
-        <div role="tabpanel" class="tab-pane" id="images">
-            <div class="container-fluid jamm-well-zero-bottom-margin" jamm-photoswipe-gallery>
-                <div class="row">
-                    <div class="text-center">
-                        <a href="javascript:;" jamm-photoswipe-image="{{movie.storage.cover}}"><img class="img-responsive" style="display: inline-block;" ng-src="{{movie.storage.cover}}"/></a>
-                    </div>
-                
-                    <div class="jamm-vertical-spacer"/>
 
-                    <span ng-repeat="image in movie.storage.images track by image.file">
-                        <a href="javascript:;" jamm-photoswipe-image="{{image.file}}"><img class="jamm-image-square-thumbnail" ng-src="{{image.file}}"/></a>
-                    </span>
-                </div>
-            </div>
-            <div class="clearfix"/>
+        <div role="tabpanel" class="tab-pane active" id="videos">
+            <video id="videoPlayer" controls preload="auto" ng-init="initVideoPlayer()">
+            </video>
+            <table class="table table-hover jamm-table-no-bottom-margin">
+                <thead>
+                    <tr>
+                        <th><!-- Playing --></th>
+                        <th>File</th>
+                        <th>Resolution</th>
+                        <th>Length</th>
+                        <th>Size</th>
+                    </tr>
+                </thead>
+                <tbody class="jamm-cursor-pointer">
+                    <tr ng-repeat="video in movie.storage.videos track by video.file" ng-click="selectVideo($index)">
+                        <td><span class="glyphicon glyphicon-play" ng-if="$index === selectedVideoIndex"></span></td>
+                        <td>{{video.file}}</td>
+                        <td>{{video.resolution}}</td>
+                        <td>{{video.length}}</td>
+                        <td>{{video.size | formatByte}}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
+
+        <div role="tabpanel" class="tab-pane" id="images" jamm-photoswipe-gallery>
+            <div class="text-center">
+                <a href="javascript:;" jamm-photoswipe-image="{{movie.storage.cover}}"><img class="img-responsive" style="display: inline-block;" ng-src="{{movie.storage.cover}}"/></a>
+            </div>
+        
+            <div class="jamm-vertical-spacer"/>
+
+            <span ng-repeat="image in movie.storage.images track by image.file">
+                <a href="javascript:;" jamm-photoswipe-image="{{image.file}}"><img class="jamm-image-square-thumbnail" ng-src="{{image.file}}"/></a>
+            </span>
+        </div>
+
         <div role="tabpanel" class="tab-pane" id="allFiles">
         </div>
+
     </div>
 
     <div class="jamm-vertical-spacer"></div>

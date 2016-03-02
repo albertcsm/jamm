@@ -118,7 +118,7 @@
                     </th>
                 </tr>
             </thead>
-            <tbody class="jamm-table-row">
+            <tbody class="jamm-cursor-pointer">
                 <tr ng-repeat="movie in movies | filter:searchString | orderBy:sortParam.field:sortParam.reversed" ui-sref="movies/detail({id: movie.id})">
                     <td><img class="img-responsive center-block jamm-img-table-row" src="media/cover.jpg"/></td>
                     <td>{{movie.id}}</td>
