@@ -1,11 +1,17 @@
 angular.module('jamm')
-.controller('MovieDetailController', function ($scope, MovieService, $stateParams, $state, $uibModal) {
-    var movies = MovieService.movies;
+.controller('MovieDetailController', function ($scope, Movie, $stateParams, $state, $uibModal) {
 
     var movieId = $stateParams.id;
+
+    $scope.selectedVideoIndex = null;
+
     if (movieId) {
-        $scope.originalMovie = _.find(movies, { id: movieId });
-        $scope.movie = angular.copy($scope.originalMovie);
+        $scope.movie = Movie.get({ id: movieId }, function () {
+            $scope.originalMovie = angular.copy($scope.movie);
+            if ($scope.movie.storage.videos) {
+                $scope.selectVideo(0);
+            }
+        });
     }
 
     $scope.isModified = false;
@@ -15,9 +21,19 @@ angular.module('jamm')
     }, true);
 
     $scope.save = function() {
-        $scope.originalMovie = MovieService.updateMovie($scope.originalMovie.id, $scope.movie);
-        $scope.movie = angular.copy($scope.originalMovie);
-        $scope.isModified = false;
+        if ($scope.movie.id == $scope.originalMovie.id) {
+            $scope.movie.$update(function () {
+                $scope.originalMovie = angular.copy($scope.movie);
+                $scope.isModified = false;
+            });
+        } else {
+            Movie.create($scope.movie, function () {
+                Movie.delete({ id: $scope.originalMovie.id }, function () {
+                    $scope.originalMovie = angular.copy($scope.movie);
+                    $scope.isModified = false;
+                });
+            });
+        }
     };
 
     $scope.discard = function() {
@@ -26,13 +42,14 @@ angular.module('jamm')
     };
 
     $scope.delete = function () {
-        _.remove(movies, { id: $scope.originalMovie.id });
-        $('#confirmDeleteModal').on('hidden.bs.modal', function () {
-            $scope.originalMovie = null;
-            $scope.movie = null;
-            $state.go('movies');
+        Movie.delete({ id: $scope.originalMovie.id }, function () {
+            $('#confirmDeleteModal').on('hidden.bs.modal', function () {
+                $scope.originalMovie = null;
+                $scope.movie = null;
+                $state.go('movies');
+            });
+            $('#confirmDeleteModal').modal('hide');
         });
-        $('#confirmDeleteModal').modal('hide');
     };
 
     $scope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options) {
@@ -52,20 +69,17 @@ angular.module('jamm')
         }
     });
 
-    $scope.selectedVideoIndex = 0;
-
     $scope.selectVideo = function (index) {
         $scope.selectedVideoIndex = index;
         angular.element('#videoPlayer').attr('src', $scope.movie.storage.videos[$scope.selectedVideoIndex].file);
-    };
 
-    $scope.initVideoPlayer = function () {
-        $scope.selectVideo($scope.selectedVideoIndex);
-        var player = new MediaElementPlayer('#videoPlayer', {
+        new MediaElementPlayer('#videoPlayer', {
             videoWidth: '100%',
             videoHeight: '100%',
             success: function(mediaElement, originalNode) {
-                // do things
+            },
+            error : function(mediaElement) {
+                console.error('medialement problem is detected: %o', mediaElement);
             }
         });
     };

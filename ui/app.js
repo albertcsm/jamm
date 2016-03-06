@@ -2,6 +2,7 @@ angular.module('jamm', [
     'ui.bootstrap',
     'ui.router',
     'as.sortable',
+    'ngResource',
     'ngAnimate',
     'jamm.unitFilter',
     'jamm.tableHeaderSortable',

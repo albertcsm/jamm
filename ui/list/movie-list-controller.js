@@ -1,6 +1,6 @@
 angular.module('jamm')
-.controller('MovieListController', function ($scope, MovieService, $stateParams) {
-    $scope.movies = MovieService.movies;
+.controller('MovieListController', function ($scope, Movie, $stateParams) {
+    $scope.movies = Movie.query();
     $scope.displayStyle = 'list';
     $scope.sortParam = {
         field: 'releaseDate',

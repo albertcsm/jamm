@@ -33,7 +33,7 @@
     <div class="tab-content jamm-tab-content-border">
 
         <div role="tabpanel" class="tab-pane active" id="videos">
-            <video id="videoPlayer" controls preload="auto" ng-init="initVideoPlayer()">
+            <video id="videoPlayer" controls preload="auto">
             </video>
             <table class="table table-hover jamm-table-no-bottom-margin">
                 <thead>
@@ -58,7 +58,7 @@
         </div>
 
         <div role="tabpanel" class="tab-pane" id="images" jamm-photoswipe-gallery>
-            <div class="text-center">
+            <div class="text-center" ng-if="movie.storage.cover">
                 <a href="javascript:;" jamm-photoswipe-image="{{movie.storage.cover}}"><img class="img-responsive" style="display: inline-block;" ng-src="{{movie.storage.cover}}"/></a>
             </div>
         
