@@ -8,7 +8,7 @@ angular.module('jamm')
     if (movieId) {
         $scope.movie = Movie.get({ id: movieId }, function () {
             $scope.originalMovie = angular.copy($scope.movie);
-            if ($scope.movie.storage.videos) {
+            if ($scope.movie.storage && $scope.movie.storage.videos) {
                 $scope.selectVideo(0);
             }
         });
@@ -21,17 +21,22 @@ angular.module('jamm')
     }, true);
 
     $scope.save = function() {
-        if ($scope.movie.id == $scope.originalMovie.id) {
+        if ($scope.movie._id == $scope.originalMovie._id) {
             $scope.movie.$update(function () {
                 $scope.originalMovie = angular.copy($scope.movie);
                 $scope.isModified = false;
             });
         } else {
             Movie.create($scope.movie, function () {
-                Movie.delete({ id: $scope.originalMovie.id }, function () {
+                if ($scope.originalMovie._id) {
+                    Movie.delete({ id: $scope.originalMovie._id }, function () {
+                        $scope.originalMovie = angular.copy($scope.movie);
+                        $scope.isModified = false;
+                    });
+                } else {
                     $scope.originalMovie = angular.copy($scope.movie);
                     $scope.isModified = false;
-                });
+                }
             });
         }
     };
@@ -42,7 +47,7 @@ angular.module('jamm')
     };
 
     $scope.delete = function () {
-        Movie.delete({ id: $scope.originalMovie.id }, function () {
+        Movie.delete({ id: $scope.originalMovie._id }, function () {
             $('#confirmDeleteModal').on('hidden.bs.modal', function () {
                 $scope.originalMovie = null;
                 $scope.movie = null;

@@ -4,7 +4,7 @@
     <ol class="breadcrumb">
         <li><a href="#"><span class="glyphicon glyphicon-home"></span> Home</a></li>
         <li><a ui-sref="movies">Movies</a></li>
-        <li class="active">{{movie.id}}</li>
+        <li class="active">{{originalMovie._id}}</li>
     </ol>
 </div>
 
@@ -84,7 +84,7 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label">ID</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" ng-model="movie.id"/>
+                        <input type="text" class="form-control" ng-model="movie._id"/>
                     </div>
                 </div>
 
@@ -174,7 +174,7 @@
                 <h4 class="modal-title">Confirm delete</h4>
             </div>
             <div class="modal-body">
-                Delete {{movie.name ? movie.name : movie.id}}?
+                Delete {{movie.name ? movie.name : movie._id}}?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" ng-click="delete()">
