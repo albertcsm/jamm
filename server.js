@@ -5,9 +5,47 @@ var express = require('express'),
     methodOverride = require('method-override'),
     uiDir = __dirname + '/ui',
     path = require('path');
-var movies = require('./server/movies.js');
 var argv = require('minimist')(process.argv.slice(2));
 var fs = require('fs');
+
+function createRestResource(resourceName, controllerFile) {
+    var restApi = express();
+    var controller = require(controllerFile);
+    var requestMethod;
+    var requestPath;
+    var requestHandler;
+    for (var key in controller) {
+        switch (key) {
+            case 'create':
+                requestMethod = 'post';
+                requestPath = '/' + resourceName;
+                break;
+            case 'list':
+                requestMethod = 'get';
+                requestPath = '/' + resourceName;
+                break;
+            case 'show':
+                requestMethod = 'get';
+                requestPath = '/' + resourceName + '/:id';
+                break;
+            case 'update':
+                requestMethod = 'put';
+                requestPath = '/' + resourceName + '/:id';
+                break;
+            case 'delete':
+                requestMethod = 'delete';
+                requestPath = '/' + resourceName + '/:id';
+                break;
+            default:
+                throw new Error('unrecognized route: ' + key);
+        }
+
+        requestHandler = controller[key];
+        restApi[requestMethod](requestPath, requestHandler);
+        console.log('    %s %s -> %s:%s', requestMethod.toUpperCase(), requestPath, controllerFile, key);
+    }
+    return restApi;
+}
 
 function startServer(port) {
     app.use(methodOverride());
@@ -25,38 +63,7 @@ function startServer(port) {
         res.sendFile(uiDir + "/index.html");
     });
 
-    var router = express.Router();
-
-    router.route('/movies')
-        .post(function(req, res) {
-            movies.create(req.body, function (err, result) {
-                res.json(result);
-            });
-        })
-        .get(function(req, res) {
-            movies.all(function (err, result) {
-                res.json(result);
-            });
-        });
-
-    router.route('/movies/:id')
-        .get(function(req, res) {
-            movies.get(req.params.id, function (err, result) {
-                res.json(result);
-            });
-        })
-        .put(function(req, res) {
-            movies.update(req.params.id, req.body, function (err, result) {
-                res.json(result);
-            });
-        })
-        .delete(function (req, res) {
-            movies.delete(req.params.id, function (err, result) {
-                res.json(result);
-            });
-        });
-
-    app.use('/api', router);
+    app.use('/api', createRestResource('movies', './server/movies.js'));
 
     app.listen(port, "::");
 }
