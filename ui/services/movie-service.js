@@ -1,4 +1,4 @@
-angular.module('jamm.repository', [])
+angular.module('jamm')
 .factory('Movie', function ($resource) {
 
     return $resource('/api/movies/:id', { id: '@_id' }, {

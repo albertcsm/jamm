@@ -8,7 +8,6 @@ angular.module('jamm', [
     'jamm.tableHeaderSortable',
     'jamm.dateTimePicker',
     'jamm.photoswipe',
-    'jamm.repository',
     'jamm.coverThumbnail',
     'jamm.navBar'
 ]).config(function ($stateProvider, $urlRouterProvider) {
@@ -26,7 +25,8 @@ angular.module('jamm', [
         })
         .state('import', {
             url: "/import",
-            templateUrl: "import/movie-import.html"
+            templateUrl: "import/movie-import.html",
+            controller: 'MovieImportController'
         })
         .state('settings', {
             url: "/settings",
