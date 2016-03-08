@@ -1,7 +1,7 @@
 var path = require('path');
 var Datastore = require('nedb');
 
-var db = new Datastore({ filename: path.resolve(__dirname, '../data/movies'), autoload: true });
+var db = new Datastore({ filename: path.resolve(__dirname, '../data/movies.db'), autoload: true });
 
 exports.create = function (req, res, next) {
     var body = req.body;
