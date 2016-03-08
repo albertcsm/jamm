@@ -64,6 +64,7 @@ function startServer(port) {
     });
 
     app.use('/api', createRestResource('movies', './server/movies.js'));
+    app.use('/api', createRestResource('repositories', './server/repositories.js'));
 
     app.listen(port, "::");
 }
