@@ -12,7 +12,12 @@
 
         <uib-accordion>
             <uib-accordion-group ng-repeat="repository in repositories" heading="{{repository.name}}" is-open="$first">
-                
+                <treecontrol class="tree-light"
+                   tree-model="repository.files"
+                   on-node-toggle="showToggle(repository._id, node, expanded, $parentNode, $index, $first, $middle, $last, $odd, $even)"
+                   on-selection="showSelected(node)">
+                   {{node.name}}
+                </treecontrol>
             </uib-accordion-group>
         </uib-accordion>
 

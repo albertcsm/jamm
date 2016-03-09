@@ -95,6 +95,7 @@ router.get('/repositories/:id/files', function (req, res, next) {
                             if (stats.isFile()) {
                                 callback(null, {
                                     name: file,
+                                    dir: dir ? dir : null,
                                     type: 'file',
                                     ctime: stats.ctime,
                                     mtime: stats.mtime,
@@ -103,6 +104,7 @@ router.get('/repositories/:id/files', function (req, res, next) {
                             } else if (stats.isDirectory()) {
                                 callback(null, {
                                     name: file,
+                                    dir: dir ? dir : null,
                                     type: 'directory',
                                     ctime: stats.ctime,
                                     mtime: stats.mtime

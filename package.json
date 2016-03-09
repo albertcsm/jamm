@@ -9,6 +9,7 @@
   "author": "Albert Cheung",
   "license": "ISC",
   "dependencies": {
+    "async": "^1.5.2",
     "body-parser": "^1.14.2",
     "errorhandler": "^1.4.3",
     "express": "^4.13.4",

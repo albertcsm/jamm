@@ -4,6 +4,7 @@ angular.module('jamm', [
     'as.sortable',
     'ngResource',
     'ngAnimate',
+    'treeControl',
     'jamm.unitFilter',
     'jamm.tableHeaderSortable',
     'jamm.dateTimePicker',
