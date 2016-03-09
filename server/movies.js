@@ -1,9 +1,12 @@
+var express = require('express');
+var router = express.Router();
+
 var path = require('path');
 var Datastore = require('nedb');
 
 var db = new Datastore({ filename: path.resolve(__dirname, '../data/movies.db'), autoload: true });
 
-exports.create = function (req, res, next) {
+router.post('/movies', function (req, res, next) {
     var body = req.body;
 
     db.insert(body, function (err, newDoc) {
@@ -13,9 +16,9 @@ exports.create = function (req, res, next) {
             res.json(newDoc);
         }
     });
-};
+});
 
-exports.list = function (req, res, next) {
+router.get('/movies', function (req, res, next) {
     db.find({}, function (err, docs) {
         if (err) {
             res.status(500).send(err);
@@ -23,9 +26,9 @@ exports.list = function (req, res, next) {
             res.json(docs);
         }
     });
-};
+});
 
-exports.show = function (req, res, next) {
+router.get('/movies/:id', function (req, res, next) {
     var id = req.params.id;
 
     db.find({ _id: id }, function (err, docs) {
@@ -37,9 +40,9 @@ exports.show = function (req, res, next) {
             res.json(docs[0]);
         }
     });
-};
+});
 
-exports.update = function (req, res, next) {
+router.put('/movies/:id', function (req, res, next) {
     var id = req.params.id;
     var body = req.body;
 
@@ -52,9 +55,9 @@ exports.update = function (req, res, next) {
             res.json(body);
         }
     });
-};
+});
 
-exports.delete = function (req, res, next) {
+router.delete('/movies/:id', function (req, res, next) {
     var id = req.params.id;
 
     db.remove({ _id: id }, {}, function (err, numRemoved) {
@@ -64,4 +67,6 @@ exports.delete = function (req, res, next) {
             res.json({ numDeleted: numRemoved });
         }
     });
-};
+});
+
+module.exports = router;

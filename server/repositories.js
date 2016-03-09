@@ -1,9 +1,16 @@
+var express = require('express');
+var router = express.Router();
+
 var path = require('path');
+var fs = require('fs');
+var async = require('async');
+var _ = require('lodash');
+
 var Datastore = require('nedb');
 
 var db = new Datastore({ filename: path.resolve(__dirname, '../data/repositories.db'), autoload: true });
 
-exports.create = function (req, res, next) {
+router.post('/repositories', function (req, res, next) {
     var body = req.body;
 
     db.insert(body, function (err, newDoc) {
@@ -13,9 +20,9 @@ exports.create = function (req, res, next) {
             res.json(newDoc);
         }
     });
-};
+});
 
-exports.list = function (req, res, next) {
+router.get('/repositories', function (req, res, next) {
     db.find({}, function (err, docs) {
         if (err) {
             res.status(500).send(err);
@@ -23,9 +30,9 @@ exports.list = function (req, res, next) {
             res.json(docs);
         }
     });
-};
+});
 
-exports.show = function (req, res, next) {
+router.get('/repositories/:id', function (req, res, next) {
     var id = req.params.id;
 
     db.find({ _id: id }, function (err, docs) {
@@ -37,9 +44,9 @@ exports.show = function (req, res, next) {
             res.json(docs[0]);
         }
     });
-};
+});
 
-exports.update = function (req, res, next) {
+router.put('/repositories/:id', function (req, res, next) {
     var id = req.params.id;
     var body = req.body;
 
@@ -52,9 +59,9 @@ exports.update = function (req, res, next) {
             res.json(body);
         }
     });
-};
+});
 
-exports.delete = function (req, res, next) {
+router.delete('/repositories/:id', function (req, res, next) {
     var id = req.params.id;
 
     db.remove({ _id: id }, {}, function (err, numRemoved) {
@@ -64,4 +71,53 @@ exports.delete = function (req, res, next) {
             res.json({ numDeleted: numRemoved });
         }
     });
-};
+});
+
+router.get('/repositories/:id/files', function (req, res, next) {
+    var id = req.params.id;
+    var dir = req.query.dir;
+
+    db.find({ _id: id }, function (err, docs) {
+        if (err) {
+            res.status(500).send(err);
+        } else if (docs.length == 0) {
+            res.status(404).send('Repository not found');
+        } else {
+            var doc = docs[0];
+            var fullpath = dir ? path.resolve(doc.path, dir) : doc.path;
+            fs.readdir(fullpath, function (err, files) {
+                if (err) {
+                    res.status(500).send(err);
+                } else {
+                    var filteredFiles = _.filter(files, function (f) { return f[0] != '.'; });
+                    async.map(filteredFiles, function (file, callback) {
+                        fs.stat(path.resolve(fullpath, file), function (err, stats) {
+                            if (stats.isFile()) {
+                                callback(null, {
+                                    name: file,
+                                    type: 'file',
+                                    ctime: stats.ctime,
+                                    mtime: stats.mtime,
+                                    size: stats.size
+                                });
+                            } else if (stats.isDirectory()) {
+                                callback(null, {
+                                    name: file,
+                                    type: 'directory',
+                                    ctime: stats.ctime,
+                                    mtime: stats.mtime
+                                });
+                            } else {
+                                callback(null, null);
+                            }
+                        });
+                    }, function (err, results) {
+                        res.json(results);
+                    });
+                }
+            });
+        }
+    });
+});
+
+module.exports = router;

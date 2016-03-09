@@ -8,45 +8,6 @@ var express = require('express'),
 var argv = require('minimist')(process.argv.slice(2));
 var fs = require('fs');
 
-function createRestResource(resourceName, controllerFile) {
-    var restApi = express();
-    var controller = require(controllerFile);
-    var requestMethod;
-    var requestPath;
-    var requestHandler;
-    for (var key in controller) {
-        switch (key) {
-            case 'create':
-                requestMethod = 'post';
-                requestPath = '/' + resourceName;
-                break;
-            case 'list':
-                requestMethod = 'get';
-                requestPath = '/' + resourceName;
-                break;
-            case 'show':
-                requestMethod = 'get';
-                requestPath = '/' + resourceName + '/:id';
-                break;
-            case 'update':
-                requestMethod = 'put';
-                requestPath = '/' + resourceName + '/:id';
-                break;
-            case 'delete':
-                requestMethod = 'delete';
-                requestPath = '/' + resourceName + '/:id';
-                break;
-            default:
-                throw new Error('unrecognized route: ' + key);
-        }
-
-        requestHandler = controller[key];
-        restApi[requestMethod](requestPath, requestHandler);
-        console.log('    %s %s -> %s:%s', requestMethod.toUpperCase(), requestPath, controllerFile, key);
-    }
-    return restApi;
-}
-
 function startServer(port) {
     app.use(methodOverride());
     app.use(bodyParser.json());
@@ -63,8 +24,8 @@ function startServer(port) {
         res.sendFile(uiDir + "/index.html");
     });
 
-    app.use('/api', createRestResource('movies', './server/movies.js'));
-    app.use('/api', createRestResource('repositories', './server/repositories.js'));
+    app.use('/api', require(__dirname + '/server/movies.js'));
+    app.use('/api', require(__dirname + '/server/repositories.js'));
 
     app.listen(port, "::");
 }
