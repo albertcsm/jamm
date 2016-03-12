@@ -24,7 +24,7 @@ angular.module('jamm')
                                 file: 'api/volumes/' + $scope.volumes[0]._id + '/files/' + encodeURIComponent(node.path + '/' + file.name)
                             })
                         } else if (file.name.match(/\.mp4$/) || file.name.match(/\.mkv$/)) {
-                            dir.videos.push({ file: file.name, resolution: '1280x688', length: '2:06:35', size: 1626060492 });
+                            dir.videos.push({ path: file.path, file: file.name, resolution: '1280x688', length: '2:06:35', size: 1626060492 });
                         }
                     }
                 });
@@ -49,6 +49,22 @@ angular.module('jamm')
         }
     };
 
+    $scope.previewVideo = function(volume, video) {
+        var url = 'api/volumes/' + volume._id + '/files/' + encodeURIComponent(video.path);
+        $uibModal.open({
+            size: 'lg',
+            templateUrl: 'movie-preview-modal-template',
+            resolve: {
+                url: function() {
+                    return url;
+                }
+            },
+            controller: 'MoviePreviewModalController'
+        }).result.then(function () {
+            
+        });
+    };
+
     $scope.import = function() {
         $uibModal.open({
             size: 'lg',
@@ -67,5 +83,25 @@ angular.module('jamm')
     $scope.cancel = function () {
         $uibModalInstance.dismiss('cancel');
     };
-});
+})
+.controller('MoviePreviewModalController', function ($scope, $uibModalInstance, url) {
+    $scope.init = function () {
+        var player = new MediaElementPlayer('#videoPlayer', {
+            videoWidth: '100%',
+            videoHeight: '100%',
+            type: 'video/mp4',
+            success: function(mediaElement, originalNode) {
+                mediaElement.setSrc(url);
+                mediaElement.load();
+                mediaElement.play();
+            },
+            error : function(mediaElement) {
+                console.error('medialement problem is detected: %o', mediaElement);
+            }
+        });
+    };
 
+    $scope.dismiss = function () {
+        $uibModalInstance.dismiss();
+    };
+});

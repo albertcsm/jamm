@@ -51,7 +51,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="jamm-cursor-pointer">
-                                    <tr ng-repeat="video in selectedDir.videos track by video.file" ng-click="selectVideo($index)">
+                                    <tr ng-repeat="video in selectedDir.videos track by video.file" ng-click="previewVideo(volume, video)">
                                         <td>{{video.file}}</td>
                                         <td>{{video.resolution}}</td>
                                         <td>{{video.length}}</td>
@@ -96,4 +96,18 @@
             <ng-include src="'detail/movie-detail-form.html'"></ng-include>
         </div>
     </div>
-</div>
+</script>
+
+<script type="text/ng-template" id="movie-preview-modal-template">
+    <div class="modal-header">
+        <h4 class="modal-title">Preview</h4>
+    </div>
+    <div class="modal-body">
+        <video id="videoPlayer" ng-init="init()" controls preload="auto">
+        </video>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default" type="button" ng-click="dismiss()">Dismiss</button>
+    </div>
+</script>
+
