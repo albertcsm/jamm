@@ -14,6 +14,11 @@ angular.module('jamm')
         });
     }
 
+    $scope.getMediaUrl = function (file) {
+        var storage = $scope.movie.storage;
+        return 'api/volumes/' + storage.volume + '/files/' + encodeURIComponent(storage.path + '/' + file);
+    };
+
     $scope.isModified = false;
 
     $scope.$watch('movie', function (value) {
@@ -76,7 +81,7 @@ angular.module('jamm')
 
     $scope.selectVideo = function (index) {
         $scope.selectedVideoIndex = index;
-        angular.element('#videoPlayer').attr('src', $scope.movie.storage.videos[$scope.selectedVideoIndex].file);
+        angular.element('#videoPlayer').attr('src', $scope.getMediaUrl($scope.movie.storage.videos[$scope.selectedVideoIndex].file));
 
         new MediaElementPlayer('#videoPlayer', {
             videoWidth: '100%',

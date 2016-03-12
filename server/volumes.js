@@ -125,6 +125,7 @@ router.get('/volumes/:id/files', function (req, res, next) {
 router.get('/volumes/:id/files/:file', function (req, res, next) {
     var id = req.params.id;
     var file = req.params.file;
+    var range = req.headers.range;
 
     db.find({ _id: id }, function (err, docs) {
         if (err) {
@@ -133,10 +134,56 @@ router.get('/volumes/:id/files/:file', function (req, res, next) {
             res.status(404).send('Volume not found');
         } else {
             var doc = docs[0];
-            if (file.match(/\.jpg$/)) {
-                res.setHeader('Content-type', 'image/jpeg');
-            }
-            fs.createReadStream(doc.path + '/' + file).pipe(res);
+            var path = doc.path + '/' + file;
+            fs.stat(path, function (err, stats) {
+                if (err) {
+                    res.status(500, err);
+                } else {
+                    var total = stats.size;
+                    var start = 0;
+                    var end = total - 1;
+
+                    if (range) {
+                        var matches = range.match(/(.*)=(\d*)-(\d*)/);
+                        start = parseInt(matches[2], 10);
+                        end = parseInt(matches[3], 10);
+                        if (isNaN(start)) {
+                            start = 0;
+                        }
+                        if (isNaN(end)) {
+                            end = total - 1;
+                        }
+                    }
+                    var chunkSize = end - start + 1;
+
+                    var contentType = '';
+                    if (file.match(/\.jpg$/)) {
+                        contentType = 'image/jpeg';
+                    } else if (file.match(/\.mp4$/)) {
+                        contentType = 'video/mp4';
+                    }
+
+                    res.writeHead(206, {
+                        'Content-Range': 'bytes ' + start + '-' + end + '/' + total,
+                        'Accept-Ranges': 'bytes',
+                        'Content-Length': chunkSize,
+                        'Content-Type': contentType
+                    });
+
+                    var option = { start: start };
+                    if (end) {
+                        option.end = end;
+                    }
+                    var stream = fs.createReadStream(path, option)
+                    .on('open', function() {
+                        stream.pipe(res);
+                    })
+                    .on('error', function (err) {
+                        res.end(err);
+                        console.error(err);
+                    });
+                }
+            });
         }
     });
 });

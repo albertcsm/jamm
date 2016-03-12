@@ -120,7 +120,7 @@
             </thead>
             <tbody class="jamm-cursor-pointer">
                 <tr ng-repeat="movie in movies | filter:searchString | orderBy:sortParam.field:sortParam.reversed" ui-sref="movies/detail({id: movie._id})">
-                    <td><img class="img-responsive center-block jamm-img-table-row" src="media/cover.jpg"/></td>
+                    <td><img class="img-responsive center-block jamm-img-table-row" ng-src="{{getCoverUrl(movie)}}"/></td>
                     <td>{{movie._id}}</td>
                     <td>{{movie.name}}</td>
                     <td>

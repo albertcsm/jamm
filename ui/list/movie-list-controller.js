@@ -7,4 +7,9 @@ angular.module('jamm')
         reversed: true
     };
     $scope.searchString = '';
+
+    $scope.getCoverUrl = function (movie) {
+        var storage = movie.storage;
+        return 'api/volumes/' + storage.volume + '/files/' + encodeURIComponent(storage.path + '/' + storage.cover);
+    };
 });
