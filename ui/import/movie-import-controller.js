@@ -16,13 +16,12 @@ angular.module('jamm')
     $scope.showSelected = function (node) {
         if (node.type == 'directory') {
             var dir = { images: [], videos: [] };
-            var path = node.dir ? node.dir + '/' + node.name : node.name;
-            Volume.files({ id: $scope.volumes[0]._id, dir: path }, function (files) {
+            Volume.files({ id: $scope.volumes[0]._id, dir: node.path }, function (files) {
                 angular.forEach(files, function (file) {
                     if (file.type == 'file') {
                         if (file.name.match(/\.jpg$/)) {
                             dir.images.push({
-                                file: 'api/volumes/' + $scope.volumes[0]._id + '/files/' + encodeURIComponent(path + '/' + file.name)
+                                file: 'api/volumes/' + $scope.volumes[0]._id + '/files/' + encodeURIComponent(node.path + '/' + file.name)
                             })
                         } else if (file.name.match(/\.mp4$/) || file.name.match(/\.mkv$/)) {
                             dir.videos.push({ file: file.name, resolution: '1280x688', length: '2:06:35', size: 1626060492 });
@@ -38,8 +37,7 @@ angular.module('jamm')
 
     $scope.showToggle = function(volumeId, node, expanded, $parentNode, $index, $first, $middle, $last, $odd, $even) {
         if (expanded) {
-            var dirPath = node.dir ? node.dir + '/' + node.name : node.name;
-            node.children = Volume.files({ id: volumeId, dir: dirPath }, function () {
+            node.children = Volume.files({ id: volumeId, dir: node.path }, function () {
                 for (var key in node.children) {
                     if (node.children[key].type == 'directory') {
                         node.children[key].children = [ {} ];

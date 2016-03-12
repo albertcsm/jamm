@@ -83,19 +83,20 @@ router.get('/volumes/:id/files', function (req, res, next) {
         } else if (docs.length == 0) {
             res.status(404).send('Volume not found');
         } else {
-            var doc = docs[0];
-            var fullpath = dir ? path.resolve(doc.path, dir) : doc.path;
-            fs.readdir(fullpath, function (err, files) {
+            var volume = docs[0];
+            var dirDiskPath = dir ? path.resolve(volume.path, dir) : volume.path;
+            fs.readdir(dirDiskPath, function (err, files) {
                 if (err) {
                     res.status(500).send(err);
                 } else {
                     var filteredFiles = _.filter(files, function (f) { return f[0] != '.'; });
                     async.map(filteredFiles, function (file, callback) {
-                        fs.stat(path.resolve(fullpath, file), function (err, stats) {
+                        var pathUnderVolume = dir ? dir + '/' + file : file;
+                        fs.stat(path.resolve(dirDiskPath, file), function (err, stats) {
                             if (stats.isFile()) {
                                 callback(null, {
+                                    path: pathUnderVolume,
                                     name: file,
-                                    dir: dir ? dir : null,
                                     type: 'file',
                                     ctime: stats.ctime,
                                     mtime: stats.mtime,
@@ -103,8 +104,8 @@ router.get('/volumes/:id/files', function (req, res, next) {
                                 });
                             } else if (stats.isDirectory()) {
                                 callback(null, {
+                                    path: pathUnderVolume,
                                     name: file,
-                                    dir: dir ? dir : null,
                                     type: 'directory',
                                     ctime: stats.ctime,
                                     mtime: stats.mtime
