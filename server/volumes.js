@@ -8,9 +8,9 @@ var _ = require('lodash');
 
 var Datastore = require('nedb');
 
-var db = new Datastore({ filename: path.resolve(__dirname, '../data/repositories.db'), autoload: true });
+var db = new Datastore({ filename: path.resolve(__dirname, '../data/volumes.db'), autoload: true });
 
-router.post('/repositories', function (req, res, next) {
+router.post('/volumes', function (req, res, next) {
     var body = req.body;
 
     db.insert(body, function (err, newDoc) {
@@ -22,7 +22,7 @@ router.post('/repositories', function (req, res, next) {
     });
 });
 
-router.get('/repositories', function (req, res, next) {
+router.get('/volumes', function (req, res, next) {
     db.find({}, function (err, docs) {
         if (err) {
             res.status(500).send(err);
@@ -32,7 +32,7 @@ router.get('/repositories', function (req, res, next) {
     });
 });
 
-router.get('/repositories/:id', function (req, res, next) {
+router.get('/volumes/:id', function (req, res, next) {
     var id = req.params.id;
 
     db.find({ _id: id }, function (err, docs) {
@@ -46,7 +46,7 @@ router.get('/repositories/:id', function (req, res, next) {
     });
 });
 
-router.put('/repositories/:id', function (req, res, next) {
+router.put('/volumes/:id', function (req, res, next) {
     var id = req.params.id;
     var body = req.body;
 
@@ -61,7 +61,7 @@ router.put('/repositories/:id', function (req, res, next) {
     });
 });
 
-router.delete('/repositories/:id', function (req, res, next) {
+router.delete('/volumes/:id', function (req, res, next) {
     var id = req.params.id;
 
     db.remove({ _id: id }, {}, function (err, numRemoved) {
@@ -73,7 +73,7 @@ router.delete('/repositories/:id', function (req, res, next) {
     });
 });
 
-router.get('/repositories/:id/files', function (req, res, next) {
+router.get('/volumes/:id/files', function (req, res, next) {
     var id = req.params.id;
     var dir = req.query.dir;
 
@@ -81,7 +81,7 @@ router.get('/repositories/:id/files', function (req, res, next) {
         if (err) {
             res.status(500).send(err);
         } else if (docs.length == 0) {
-            res.status(404).send('Repository not found');
+            res.status(404).send('Volume not found');
         } else {
             var doc = docs[0];
             var fullpath = dir ? path.resolve(doc.path, dir) : doc.path;
@@ -118,6 +118,25 @@ router.get('/repositories/:id/files', function (req, res, next) {
                     });
                 }
             });
+        }
+    });
+});
+
+router.get('/volumes/:id/files/:file', function (req, res, next) {
+    var id = req.params.id;
+    var file = req.params.file;
+
+    db.find({ _id: id }, function (err, docs) {
+        if (err) {
+            res.status(500).send(err);
+        } else if (docs.length == 0) {
+            res.status(404).send('Volume not found');
+        } else {
+            var doc = docs[0];
+            if (file.match(/\.jpg$/)) {
+                res.setHeader('Content-type', 'image/jpeg');
+            }
+            fs.createReadStream(doc.path + '/' + file).pipe(res);
         }
     });
 });

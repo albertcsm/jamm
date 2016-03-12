@@ -25,7 +25,7 @@ function startServer(port) {
     });
 
     app.use('/api', require(__dirname + '/server/movies.js'));
-    app.use('/api', require(__dirname + '/server/repositories.js'));
+    app.use('/api', require(__dirname + '/server/volumes.js'));
 
     app.listen(port, "::");
 }
