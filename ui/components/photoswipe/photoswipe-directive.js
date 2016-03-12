@@ -19,8 +19,15 @@ angular.module('jamm.photoswipe', [ ])
         return index;
     };
 
+    PhotoswipeGalleryController.prototype.removeImage = function(item) {
+        var index = this.items.indexOf(item);
+        if (index > -1) {
+            this.items.splice(index, 1);
+        }
+    };
+
     PhotoswipeGalleryController.prototype.startSlideshow = function(startIndex) {
-        var pswpElement = galleryElement.find('.pswp')[0];
+        var pswpElement = document.querySelectorAll('.pswp')[0];
 
         var options = {
             index: startIndex,
@@ -71,6 +78,10 @@ angular.module('jamm.photoswipe', [ ])
             };
 
             var index = controller.addImage(item);
+
+            scope.$on('$destroy', function() {
+                controller.removeImage(item);
+            });
 
             element.click(function (){
                 controller.startSlideshow(index);
