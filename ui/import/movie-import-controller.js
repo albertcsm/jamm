@@ -16,6 +16,9 @@ angular.module('jamm')
     $scope.mediaInfo = null;
 
     $scope.showSelected = function (node, selected) {
+        if ($scope.mediaInfo) {
+            $scope.mediaInfo.cancel();
+        }
         if (selected) {
             $scope.selectedPath = node.path;
             if (node.type == 'directory') {
@@ -88,6 +91,12 @@ angular.module('jamm')
     $scope.cancel = function () {
         $uibModalInstance.dismiss('cancel');
     };
+
+    $scope.$on('$destroy', function () {
+        if ($scope.mediaInfo) {
+            $scope.mediaInfo.cancel();
+        }
+    });
 })
 .controller('MoviePreviewModalController', function ($scope, $uibModalInstance, url) {
     var player;

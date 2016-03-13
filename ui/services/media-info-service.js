@@ -1,5 +1,5 @@
 angular.module('jamm')
-.service('MediaInfoService', function (VolumeFile) {
+.service('MediaInfoService', function ($q, VolumeFile) {
     function parseMediaInfoDuration(val) {
         var parts = val.split(' ');
         var seconds = 0;
@@ -29,13 +29,16 @@ angular.module('jamm')
     }
 
     this.getMediaInfo = function (volumeId, path, callback) {
-        var mediaInfo = {
-            videos: [],
-            images: [],
-            others: []
-        };
+        var videos = [];
+        var images = [];
+        var others = [];
 
-        VolumeFile.query({ volumeId: volumeId, dir: path }, function (files) {
+        var deferred = $q.defer();
+        var promise = deferred.promise;
+
+        var dependentPromises = [];
+
+        dependentPromises.push(VolumeFile.query({ volumeId: volumeId, dir: path }, function (files) {
             angular.forEach(files, function (file) {
                 if (file.type == 'file') {
                     var info = {
@@ -44,24 +47,37 @@ angular.module('jamm')
                         src: 'api/volumes/' + volumeId + '/files/' + encodeURIComponent(file.path)
                     };
                     if (file.name.match(/\.jpg$/) || file.name.match(/\.png$/)) {
-                        mediaInfo.images.push(info);
+                        images.push(info);
                     } else if (file.name.match(/\.mp4$/) || file.name.match(/\.mkv$/) || file.name.match(/\.wmv$/) || file.name.match(/\.avi$/) || file.name.match(/\.rmvb$/)) {
-                        mediaInfo.videos.push(info);
+                        videos.push(info);
                         var videoInfo = VolumeFile.mediaInfo({ volumeId: volumeId, path: file.path }, function () {
                             info.length = parseMediaInfoDuration(videoInfo.duration);
                             info.resolution = parseMediaInfoResolution(videoInfo);
                         });
+                        dependentPromises.push(videoInfo);
                     } else {
-                        mediaInfo.others.push(info);
+                        others.push(info);
                     }
                 }
             });
 
+            $q.all(dependentPromises).then(function () {
+                deferred.resolve('All media info completed');
+            });
+            deferred.notify('Media file list completed');
             if (callback) {
-                callback(mediaInfo);
+                callback(promise);
             }
-        });
+        }));
 
-        return mediaInfo;
+        promise.videos = videos;
+        promise.images = images;
+        promise.others = others;
+        promise.cancel = function () {
+            for (var key in dependentPromises) {
+                dependentPromises[key].$cancelRequest();
+            }
+        };
+        return promise;
     };
 });

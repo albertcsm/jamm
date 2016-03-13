@@ -115,6 +115,10 @@ angular.module('jamm')
         player.setSrc('');
         player.load();
         player = null;
+
+        if ($scope.mediaInfo) {
+            $scope.mediaInfo.cancel();
+        }
     });
 })
 .controller('UnsavedChangeModalController', function ($scope, $uibModalInstance) {

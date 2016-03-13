@@ -8,5 +8,5 @@ angular.module('jamm')
 .factory('VolumeFile', function ($resource) {
     return $resource('/api/volumes/:volumeId/files/:path/:subResource', { path: '@path' }, {
         mediaInfo: { method: 'GET', params: { subResource: 'mediaInfo' } }
-    });
+    }, { cancellable: true });
 });
