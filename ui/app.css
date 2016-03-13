@@ -47,6 +47,7 @@ img.jamm-image-square-thumbnail {
     object-fit: cover; /* Do not scale the image */
     object-position: center; /* Center the image within the element */
     margin-right: 0.5em;
+    background-color: LightGray;
 }
 
 .jamm-rating-large {

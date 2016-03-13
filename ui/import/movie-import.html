@@ -35,49 +35,47 @@
 
                         <div class="col-md-8" ng-if="selectedDir">
 
-                            <h4>Videos</h4>
+                            <section ng-if="selectedDir.videos.length">
+                                <h4>Videos</h4>
+                                <table class="table table-hover jamm-table-no-bottom-margin">
+                                    <thead>
+                                        <tr>
+                                            <th>File</th>
+                                            <th>Resolution</th>
+                                            <th>Length</th>
+                                            <th>Size</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="jamm-cursor-pointer">
+                                        <tr ng-repeat="video in selectedDir.videos track by video.file" ng-click="previewVideo(volume, video)">
+                                            <td>{{video.file}}</td>
+                                            <td>{{video.resolution}}</td>
+                                            <td>{{video.length | formatDuration}}</td>
+                                            <td>{{video.size | formatByte}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </section>
 
-                            <!-- <video width="100%" controls>
-                                <source src="media/video1.mp4" type="video/mp4">
-                            </video> -->
+                            <section ng-if="selectedDir.images.length">
+                                <h4>Images</h4>
+                                <div jamm-photoswipe-gallery>
+                                    <span ng-repeat="image in selectedDir.images track by image.file">
+                                        <a href="javascript:;" jamm-photoswipe-image="{{image.file}}"><img class="jamm-image-square-thumbnail" ng-src="{{image.file}}"/></a>
+                                    </span>
+                                </div>
+                            </section>
 
-                            <table class="table table-hover jamm-table-no-bottom-margin">
-                                <thead>
-                                    <tr>
-                                        <th>File</th>
-                                        <th>Resolution</th>
-                                        <th>Length</th>
-                                        <th>Size</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="jamm-cursor-pointer">
-                                    <tr ng-repeat="video in selectedDir.videos track by video.file" ng-click="previewVideo(volume, video)">
-                                        <td>{{video.file}}</td>
-                                        <td>{{video.resolution}}</td>
-                                        <td>{{video.length}}</td>
-                                        <td>{{video.size | formatByte}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                            <hr/>
-
-                            <h4>Images</h4>
-
-                            <div jamm-photoswipe-gallery>
-                                <span ng-repeat="image in selectedDir.images track by image.file">
-                                    <a href="javascript:;" jamm-photoswipe-image="{{image.file}}"><img class="jamm-image-square-thumbnail" ng-src="{{image.file}}"/></a>
-                                </span>
-                            </div>
-
-                            <hr/>
-
-                            <div class="form-group">
-                                <button class="btn btn-default btn-primary" ng-click="import()" type="button">
-                                    <span class="glyphicon glyphicon-plus"></span>
-                                    Import...
-                                </button>
-                            </div>
+                            <div class="jamm-vertical-spacer"></div>
+                            
+                            <section>
+                                <div class="form-group">
+                                    <button class="btn btn-default btn-primary" ng-click="import()" type="button">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                        Import...
+                                    </button>
+                                </div>
+                            </section>
                         </div>
                     </div>
                 </div>

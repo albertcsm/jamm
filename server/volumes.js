@@ -5,6 +5,7 @@ var path = require('path');
 var fs = require('fs');
 var async = require('async');
 var _ = require('lodash');
+var mediainfo = require("mediainfo-q");
 
 var Datastore = require('nedb');
 
@@ -91,25 +92,23 @@ router.get('/volumes/:id/files', function (req, res, next) {
                 } else {
                     var filteredFiles = _.filter(files, function (f) { return f[0] != '.'; });
                     async.map(filteredFiles, function (file, callback) {
+                        var fullDiskPath = path.resolve(dirDiskPath, file);
                         var pathUnderVolume = dir ? dir + '/' + file : file;
-                        fs.stat(path.resolve(dirDiskPath, file), function (err, stats) {
+                        fs.stat(fullDiskPath, function (err, stats) {
+                            var fileInfo = {
+                                path: pathUnderVolume,
+                                name: file,
+                                ctime: stats.ctime,
+                                mtime: stats.mtime,
+                            };
+
                             if (stats.isFile()) {
-                                callback(null, {
-                                    path: pathUnderVolume,
-                                    name: file,
-                                    type: 'file',
-                                    ctime: stats.ctime,
-                                    mtime: stats.mtime,
-                                    size: stats.size
-                                });
+                                fileInfo.type = 'file';
+                                fileInfo.size = stats.size;
+                                callback(null, fileInfo);
                             } else if (stats.isDirectory()) {
-                                callback(null, {
-                                    path: pathUnderVolume,
-                                    name: file,
-                                    type: 'directory',
-                                    ctime: stats.ctime,
-                                    mtime: stats.mtime
-                                });
+                                fileInfo.type = 'directory';
+                                callback(null, fileInfo);
                             } else {
                                 callback(null, null);
                             }
@@ -184,6 +183,28 @@ router.get('/volumes/:id/files/:file', function (req, res, next) {
                         console.error(err);
                     });
                 }
+            });
+        }
+    });
+});
+
+router.get('/volumes/:id/files/:file/mediainfo', function (req, res, next) {
+    var id = req.params.id;
+    var file = req.params.file;
+
+    db.find({ _id: id }, function (err, docs) {
+        if (err) {
+            res.status(500).send(err);
+        } else if (docs.length == 0) {
+            res.status(404).send('Volume not found');
+        } else {
+            var doc = docs[0];
+            var path = doc.path + '/' + file;
+
+            mediainfo(path).then(function (info) {
+                res.json(info[0]);
+            }).catch(function (err) {
+                res.status(500, err);
             });
         }
     });
