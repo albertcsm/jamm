@@ -73,6 +73,12 @@ angular.module('jamm')
             
         });
     };
+
+    $scope.$on('$destroy', function () {
+        if ($scope.mediaInfo) {
+            $scope.mediaInfo.cancel();
+        }
+    });
 })
 .controller('MovieImportModalController', function ($scope, $uibModalInstance, Movie, volumeId, path) {
     $scope.movie = {
@@ -91,12 +97,6 @@ angular.module('jamm')
     $scope.cancel = function () {
         $uibModalInstance.dismiss('cancel');
     };
-
-    $scope.$on('$destroy', function () {
-        if ($scope.mediaInfo) {
-            $scope.mediaInfo.cancel();
-        }
-    });
 })
 .controller('MoviePreviewModalController', function ($scope, $uibModalInstance, url) {
     var player;
