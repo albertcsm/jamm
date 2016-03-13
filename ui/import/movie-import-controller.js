@@ -41,9 +41,9 @@ angular.module('jamm')
 
     $scope.selectedDir = null;
 
-    $scope.showSelected = function (node) {
-        if (node.type == 'directory') {
-            var dir = { images: [], videos: [] };
+    $scope.showSelected = function (node, selected) {
+        if (selected && node.type == 'directory') {
+            var dir = { path: node.path, images: [], videos: [] };
             VolumeFile.query({ volumeId: $scope.volumes[0]._id, dir: node.path }, function (files) {
                 angular.forEach(files, function (file) {
                     if (file.type == 'file') {
@@ -102,15 +102,28 @@ angular.module('jamm')
         $uibModal.open({
             size: 'lg',
             templateUrl: 'movie-info-modal-template',
-            controller: 'MovieImportModalController'
+            controller: 'MovieImportModalController',
+            resolve: {
+                volumeId: function() { return $scope.volumes[0]._id; },
+                path: function() { return $scope.selectedDir.path; }
+            }
         }).result.then(function () {
             
         });
     };
 })
-.controller('MovieImportModalController', function ($scope, $uibModalInstance) {
+.controller('MovieImportModalController', function ($scope, $uibModalInstance, Movie, volumeId, path) {
+    $scope.movie = {
+        storage: {
+            volume: volumeId,
+            path: path
+        }
+    };
+
     $scope.save = function () {
-        $uibModalInstance.close(true);
+        Movie.create($scope.movie, function () {
+            $uibModalInstance.close(true); 
+        });
     };
 
     $scope.cancel = function () {
