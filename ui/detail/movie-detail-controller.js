@@ -1,22 +1,30 @@
 angular.module('jamm')
-.controller('MovieDetailController', function ($scope, Movie, $stateParams, $state, $uibModal) {
+.controller('MovieDetailController', function ($scope, $stateParams, $state, $uibModal, Movie, VolumeFile, MediaInfoService) {
 
     var movieId = $stateParams.id;
 
-    $scope.selectedVideoIndex = null;
+    $scope.movie = null;
+    $scope.mediaInfo = null;
+    $scope.selectedVideo = null;
 
     if (movieId) {
         $scope.movie = Movie.get({ id: movieId }, function () {
             $scope.originalMovie = angular.copy($scope.movie);
-            if ($scope.movie.storage && $scope.movie.storage.videos) {
-                $scope.selectVideo(0);
+
+            var storageInfo = $scope.movie.storage;
+            if (storageInfo) {
+                $scope.mediaInfo = MediaInfoService.getMediaInfo(storageInfo.volume, storageInfo.path, function (info) {
+                    if (info.videos.length) {
+                        $scope.selectVideo(info.videos[0]);
+                    }
+                });
             }
         });
     }
 
-    $scope.getMediaUrl = function (file) {
-        var storage = $scope.movie.storage;
-        return 'api/volumes/' + storage.volume + '/files/' + encodeURIComponent(storage.path + '/' + file);
+    $scope.getCoverUrl = function (movie) {
+        var storage = movie.storage;
+        return 'api/volumes/' + storage.volume + '/files/' + encodeURIComponent(storage.path + '/' + storage.cover);
     };
 
     $scope.isModified = false;
@@ -81,16 +89,15 @@ angular.module('jamm')
 
     var player = null;
 
-    $scope.selectVideo = function (index) {
-        $scope.selectedVideoIndex = index;
+    $scope.selectVideo = function (video) {
+        $scope.selectedVideo = video;
 
-        var url = $scope.getMediaUrl($scope.movie.storage.videos[$scope.selectedVideoIndex].file);
         player = new MediaElementPlayer('#videoPlayer', {
             videoWidth: '100%',
             videoHeight: '100%',
             type: 'video/mp4',
             success: function(mediaElement, originalNode) {
-                mediaElement.setSrc(url);
+                mediaElement.setSrc(video.src);
                 mediaElement.load();
                 mediaElement.play();
             },

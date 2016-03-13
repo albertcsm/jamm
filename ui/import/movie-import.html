@@ -33,22 +33,22 @@
 
                         </div>
 
-                        <div class="col-md-8" ng-if="selectedDir">
+                        <div class="col-md-8" ng-if="selectedPath">
 
-                            <section ng-if="selectedDir.videos.length">
+                            <section ng-if="mediaInfo && mediaInfo.videos.length">
                                 <h4>Videos</h4>
                                 <table class="table table-hover jamm-table-no-bottom-margin">
                                     <thead>
                                         <tr>
-                                            <th>File</th>
+                                            <th>Name</th>
                                             <th>Resolution</th>
                                             <th>Length</th>
                                             <th>Size</th>
                                         </tr>
                                     </thead>
                                     <tbody class="jamm-cursor-pointer">
-                                        <tr ng-repeat="video in selectedDir.videos track by video.file" ng-click="previewVideo(volume, video)">
-                                            <td>{{video.file}}</td>
+                                        <tr ng-repeat="video in mediaInfo.videos track by video.name" ng-click="previewVideo(video.src)">
+                                            <td>{{video.name}}</td>
                                             <td>{{video.resolution}}</td>
                                             <td>{{video.length | formatDuration}}</td>
                                             <td>{{video.size | formatByte}}</td>
@@ -57,13 +57,31 @@
                                 </table>
                             </section>
 
-                            <section ng-if="selectedDir.images.length">
+                            <section ng-if="mediaInfo && mediaInfo.images.length">
                                 <h4>Images</h4>
                                 <div jamm-photoswipe-gallery>
-                                    <span ng-repeat="image in selectedDir.images track by image.file">
-                                        <a href="javascript:;" jamm-photoswipe-image="{{image.file}}"><img class="jamm-image-square-thumbnail" ng-src="{{image.file}}"/></a>
+                                    <span ng-repeat="image in mediaInfo.images track by image.name">
+                                        <a href="javascript:;" jamm-photoswipe-image="{{image.src}}"><img class="jamm-image-square-thumbnail" ng-src="{{image.src}}"/></a>
                                     </span>
                                 </div>
+                            </section>
+
+                            <section ng-if="mediaInfo && mediaInfo.others.length">
+                                <h4>Others</h4>
+                                <table class="table table-hover jamm-table-no-bottom-margin">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Size</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="jamm-cursor-pointer">
+                                        <tr ng-repeat="other in mediaInfo.others track by other.name">
+                                            <td>{{other.name}}</td>
+                                            <td>{{other.size | formatByte}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </section>
 
                             <div class="jamm-vertical-spacer"></div>
@@ -89,8 +107,7 @@
 <script type="text/ng-template" id="movie-info-modal-template">
     <div class="container-fluid">
         <div class="row-fluid">
-            <h3>asdf</h3>
-
+            <h3>Import</h3>
             <ng-include src="'detail/movie-detail-form.html'"></ng-include>
         </div>
     </div>

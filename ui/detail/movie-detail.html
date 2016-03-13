@@ -39,16 +39,16 @@
                 <thead>
                     <tr>
                         <th><!-- Playing --></th>
-                        <th>File</th>
+                        <th>Name</th>
                         <th>Resolution</th>
                         <th>Length</th>
                         <th>Size</th>
                     </tr>
                 </thead>
                 <tbody class="jamm-cursor-pointer">
-                    <tr ng-repeat="video in movie.storage.videos track by video.file" ng-click="selectVideo($index)">
-                        <td><span class="glyphicon glyphicon-play" ng-if="$index === selectedVideoIndex"></span></td>
-                        <td>{{video.file}}</td>
+                    <tr ng-repeat="video in mediaInfo.videos track by video.name" ng-click="selectVideo(video)">
+                        <td><span class="glyphicon glyphicon-play" ng-if="video == selectedVideo"></span></td>
+                        <td>{{video.name}}</td>
                         <td>{{video.resolution}}</td>
                         <td>{{video.length}}</td>
                         <td>{{video.size | formatByte}}</td>
@@ -59,13 +59,13 @@
 
         <div role="tabpanel" class="tab-pane" id="images" jamm-photoswipe-gallery>
             <div class="text-center" ng-if="movie.storage.cover">
-                <a href="javascript:;" jamm-photoswipe-image="{{getMediaUrl(movie.storage.cover)}}"><img class="img-responsive" style="display: inline-block;" ng-src="{{getMediaUrl(movie.storage.cover)}}"/></a>
+                <a href="javascript:;" jamm-photoswipe-image="{{getCoverUrl(movie.storage.cover)}}"><img class="img-responsive" style="display: inline-block;" ng-src="{{getMediaUrl(movie.storage.cover)}}"/></a>
             </div>
         
             <div class="jamm-vertical-spacer"/>
 
-            <span ng-repeat="image in movie.storage.images track by image.file">
-                <a href="javascript:;" jamm-photoswipe-image="{{getMediaUrl(image.file)}}"><img class="jamm-image-square-thumbnail" ng-src="{{getMediaUrl(image.file)}}"/></a>
+            <span ng-repeat="image in mediaInfo.images track by image.name">
+                <a href="javascript:;" jamm-photoswipe-image="{{image.src}}"><img class="jamm-image-square-thumbnail" ng-src="{{image.src}}"/></a>
             </span>
         </div>
 
