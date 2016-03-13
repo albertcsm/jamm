@@ -131,8 +131,10 @@ angular.module('jamm')
     };
 })
 .controller('MoviePreviewModalController', function ($scope, $uibModalInstance, url) {
+    var player;
+
     $scope.init = function () {
-        var player = new MediaElementPlayer('#videoPlayer', {
+        player = new MediaElementPlayer('#videoPlayer', {
             videoWidth: '100%',
             videoHeight: '100%',
             type: 'video/mp4',
@@ -142,10 +144,18 @@ angular.module('jamm')
                 mediaElement.play();
             },
             error : function(mediaElement) {
-                console.error('medialement problem is detected: %o', mediaElement);
+                if (player) {
+                    console.error('medialement problem is detected: %o', mediaElement);
+                }
             }
         });
     };
+
+    $scope.$on('$destroy', function () {
+        player.setSrc('');
+        player.load();
+        player = null;
+    });
 
     $scope.dismiss = function () {
         $uibModalInstance.dismiss();
