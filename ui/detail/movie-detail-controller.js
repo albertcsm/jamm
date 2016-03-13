@@ -89,17 +89,12 @@ angular.module('jamm')
 
     var player = null;
 
-    $scope.selectVideo = function (video) {
-        $scope.selectedVideo = video;
-
+    $scope.initPlayer = function () {
         player = new MediaElementPlayer('#videoPlayer', {
             videoWidth: '100%',
             videoHeight: '100%',
             type: 'video/mp4',
             success: function(mediaElement, originalNode) {
-                mediaElement.setSrc(video.src);
-                mediaElement.load();
-                mediaElement.play();
             },
             error : function(mediaElement) {
                 if (player) {
@@ -107,6 +102,13 @@ angular.module('jamm')
                 }
             }
         });
+    };
+
+    $scope.selectVideo = function (video) {
+        $scope.selectedVideo = video;
+        player.setSrc(video.src);
+        player.load();
+        player.play();
     };
 
     $scope.$on('$destroy', function () {

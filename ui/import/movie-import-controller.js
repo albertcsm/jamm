@@ -92,7 +92,7 @@ angular.module('jamm')
 .controller('MoviePreviewModalController', function ($scope, $uibModalInstance, url) {
     var player;
 
-    $scope.init = function () {
+    $scope.initPlayer = function () {
         player = new MediaElementPlayer('#videoPlayer', {
             videoWidth: '100%',
             videoHeight: '100%',
