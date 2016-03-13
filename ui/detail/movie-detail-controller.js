@@ -81,12 +81,16 @@ angular.module('jamm')
 
     $scope.selectVideo = function (index) {
         $scope.selectedVideoIndex = index;
-        angular.element('#videoPlayer').attr('src', $scope.getMediaUrl($scope.movie.storage.videos[$scope.selectedVideoIndex].file));
-
+        
+        var url = $scope.getMediaUrl($scope.movie.storage.videos[$scope.selectedVideoIndex].file);
         new MediaElementPlayer('#videoPlayer', {
             videoWidth: '100%',
             videoHeight: '100%',
+            type: 'video/mp4',
             success: function(mediaElement, originalNode) {
+                mediaElement.setSrc(url);
+                mediaElement.load();
+                mediaElement.play();
             },
             error : function(mediaElement) {
                 console.error('medialement problem is detected: %o', mediaElement);

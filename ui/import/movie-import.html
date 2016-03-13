@@ -25,11 +25,10 @@
                         <div class="col-md-4">
 
                             <treecontrol class="tree-light"
-                               tree-model="volume.files"
-                               selected-node="selectedNode"
-                               on-node-toggle="showToggle(volume._id, node, expanded, $parentNode, $index, $first, $middle, $last, $odd, $even)"
-                               on-selection="showSelected(node, selected)">
-                               {{node.name}}
+                                tree-model="volume.files"
+                                on-node-toggle="showToggle(volume._id, node, expanded, $parentNode, $index, $first, $middle, $last, $odd, $even)"
+                                on-selection="showSelected(node, selected)">
+                                {{node.name}}
                             </treecontrol>
 
                         </div>
