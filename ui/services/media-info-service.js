@@ -62,9 +62,9 @@ angular.module('jamm')
             });
 
             $q.all(dependentPromises).then(function () {
-                deferred.resolve('All media info completed');
+                deferred.resolve(promise);
             });
-            deferred.notify('Media file list completed');
+            deferred.notify(promise);
             if (callback) {
                 callback(promise);
             }

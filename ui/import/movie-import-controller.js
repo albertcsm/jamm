@@ -67,7 +67,8 @@ angular.module('jamm')
             controller: 'MovieImportModalController',
             resolve: {
                 volumeId: function() { return $scope.volumes[0]._id; },
-                path: function() { return $scope.selectedPath; }
+                path: function() { return $scope.selectedPath; },
+                images: function() { return $scope.mediaInfo.images; }
             }
         }).result.then(function () {
             
@@ -80,11 +81,24 @@ angular.module('jamm')
         }
     });
 })
-.controller('MovieImportModalController', function ($scope, $uibModalInstance, Movie, volumeId, path) {
+.controller('MovieImportModalController', function ($scope, $uibModalInstance, Movie, volumeId, path, images) {
     $scope.movie = {
         storage: {
             volume: volumeId,
             path: path
+        }
+    };
+
+    $scope.mediaInfo = {
+        images: images
+    }
+
+    $scope.getCoverUrl = function (movie) {
+        if (movie && movie.storage) {
+            var storage = movie.storage;
+            return 'api/volumes/' + storage.volume + '/files/' + encodeURIComponent(storage.path + '/' + storage.cover);
+        } else {
+            return null;
         }
     };
 

@@ -1,6 +1,23 @@
 <form class="form-horizontal">
 
     <div class="form-group">
+        <label class="col-sm-2 control-label">Cover</label>
+        <div class="col-sm-8">
+            <div class="btn-group" uib-dropdown>
+                <button id="button-template-url" type="button" class="btn btn-default" uib-dropdown-toggle ng-disabled="disabled">
+                    <img class="jamm-image-square-thumbnail" ng-src="{{getCoverUrl(movie)}}"/>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu list-inline" uib-dropdown-menu>
+                    <li ng-repeat="image in mediaInfo.images track by image.name">
+                        <a href="javascript:;" ng-click="movie.storage.cover=image.name"><img class="jamm-image-square-thumbnail" ng-src="{{image.src}}"/></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="form-group">
         <label class="col-sm-2 control-label">ID</label>
         <div class="col-sm-8">
             <input type="text" class="form-control" ng-model="movie._id"/>
@@ -53,7 +70,7 @@
             <span class="jamm-rating-large"><uib-rating ng-model="movie.rating" max="3"></uib-rating></span>
         </div>
     </div>
-    
+
     <div class="jamm-vertical-spacer"/>
 
     <div class="form-group">
