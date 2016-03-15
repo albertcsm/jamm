@@ -2,6 +2,11 @@ body {
     background: #fff;
 }
 
+html {
+    /* prevent screen from shifting left and right when modal show/hide */
+    overflow-y: scroll; 
+}
+
 .jamn-thumbnail {
 }
 
