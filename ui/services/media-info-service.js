@@ -46,9 +46,9 @@ angular.module('jamm')
                         size: file.size,
                         src: 'api/volumes/' + volumeId + '/files/' + encodeURIComponent(file.path)
                     };
-                    if (file.name.match(/\.jpg$/) || file.name.match(/\.png$/)) {
+                    if (file.name.match(/\.(jpg|jpeg|png|gif)$/)) {
                         images.push(info);
-                    } else if (file.name.match(/\.mp4$/) || file.name.match(/\.mkv$/) || file.name.match(/\.wmv$/) || file.name.match(/\.avi$/) || file.name.match(/\.rmvb$/)) {
+                    } else if (file.name.match(/\.(mp4|mkv|wmv|avi|rmvb|mpg)$/)) {
                         videos.push(info);
                         var videoInfo = VolumeFile.mediaInfo({ volumeId: volumeId, path: file.path }, function () {
                             info.length = parseMediaInfoDuration(videoInfo.duration);
