@@ -201,10 +201,17 @@ router.get('/volumes/:id/files/:file/mediainfo', function (req, res, next) {
             var doc = docs[0];
             var path = doc.path + '/' + file;
 
-            mediainfo(path).then(function (info) {
-                res.json(info[0]);
-            }).catch(function (err) {
-                res.status(500, err);
+            fs.stat(path, function (err, stats) {
+                if (err) {
+                    res.status(500, err);
+                } else {
+                    mediainfo(path).then(function (info) {
+                        res.setHeader('Last-Modified', stats.mtime.toUTCString());
+                        res.json(info[0]);
+                    }).catch(function (err) {
+                        res.status(500, err);
+                    });
+                }
             });
         }
     });
