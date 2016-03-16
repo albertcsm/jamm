@@ -191,6 +191,7 @@ router.get('/volumes/:id/files/:file', function (req, res, next) {
 router.get('/volumes/:id/files/:file/mediainfo', function (req, res, next) {
     var id = req.params.id;
     var file = req.params.file;
+    var ifModifiedSince = req.headers['if-modified-since'];
 
     db.find({ _id: id }, function (err, docs) {
         if (err) {
@@ -205,12 +206,16 @@ router.get('/volumes/:id/files/:file/mediainfo', function (req, res, next) {
                 if (err) {
                     res.status(500, err);
                 } else {
-                    mediainfo(path).then(function (info) {
-                        res.setHeader('Last-Modified', stats.mtime.toUTCString());
-                        res.json(info[0]);
-                    }).catch(function (err) {
-                        res.status(500, err);
-                    });
+                    if (ifModifiedSince && new Date(ifModifiedSince).getTime() == stats.mtime.getTime()) {
+                        res.status(304).send('Not Modified');
+                    } else {
+                        mediainfo(path).then(function (info) {
+                            res.setHeader('Last-Modified', stats.mtime.toUTCString());
+                            res.json(info[0]);
+                        }).catch(function (err) {
+                            res.status(500, err);
+                        });
+                    }
                 }
             });
         }
