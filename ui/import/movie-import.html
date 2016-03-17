@@ -107,7 +107,7 @@
     <div class="container-fluid">
         <div class="row-fluid">
             <h3>Import</h3>
-            <ng-include src="'detail/movie-detail-form.html'"></ng-include>
+            <movie-detail-form ng-model="movie" on-save="save(model)" on-cancel="cancel()"></movie-detail-form>
         </div>
     </div>
 </script>

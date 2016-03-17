@@ -102,9 +102,10 @@ angular.module('jamm')
         }
     };
 
-    $scope.save = function () {
-        Movie.create($scope.movie, function () {
-            $uibModalInstance.close(true); 
+    $scope.save = function (model) {
+        Movie.create(model, function () {
+            $uibModalInstance.close(true);
+            $scope.movie = model;
         });
     };
 

@@ -9,8 +9,6 @@ angular.module('jamm')
 
     if (movieId) {
         $scope.movie = Movie.get({ id: movieId }, function () {
-            $scope.originalMovie = angular.copy($scope.movie);
-
             var storageInfo = $scope.movie.storage;
             if (storageInfo) {
                 $scope.mediaInfo = MediaInfoService.getMediaInfo(storageInfo.volume, storageInfo.path, function (info) {
@@ -31,46 +29,36 @@ angular.module('jamm')
         }
     };
 
-    $scope.isModified = false;
-
-    $scope.$watch('movie', function (value) {
-        $scope.isModified = !angular.equals(value, $scope.originalMovie);
-    }, true);
-
-    $scope.save = function() {
-        if ($scope.movie._id == $scope.originalMovie._id) {
-            $scope.movie.$update(function () {
-                $scope.originalMovie = angular.copy($scope.movie);
-                $scope.isModified = false;
+    $scope.save = function(model, savedCallback) {
+        if (model._id == $scope.movie._id) {
+            model.$update(function () {
+                $scope.movie = angular.copy(model);
+                savedCallback();
             });
         } else {
-            Movie.create($scope.movie, function () {
-                if ($scope.originalMovie._id) {
-                    Movie.delete({ id: $scope.originalMovie._id }, function () {
-                        $scope.originalMovie = angular.copy($scope.movie);
-                        $scope.isModified = false;
-                    });
-                } else {
-                    $scope.originalMovie = angular.copy($scope.movie);
-                    $scope.isModified = false;
-                }
+            Movie.create(model, function () {
+                Movie.delete({ id: $scope.movie._id }, function () {
+                    $scope.movie = angular.copy(model);
+                    savedCallback();
+                });
             });
         }
     };
 
-    $scope.discard = function() {
-        $scope.movie = angular.copy($scope.originalMovie);
-        $scope.isModified = false;
+    $scope.confirmDelete = function () {
+        $uibModal.open({
+            templateUrl: 'confirm-delete-modal-template',
+            controller: 'ConfirmDeleteModalController',
+            scope: $scope
+        }).result.then(function () {
+            $scope.delete();
+        });
     };
 
     $scope.delete = function () {
-        Movie.delete({ id: $scope.originalMovie._id }, function () {
-            $('#confirmDeleteModal').on('hidden.bs.modal', function () {
-                $scope.originalMovie = null;
-                $scope.movie = null;
-                $state.go('movies');
-            });
-            $('#confirmDeleteModal').modal('hide');
+        Movie.delete({ id: $scope.movie._id }, function () {
+            $scope.movie = null;
+            $state.go('movies');
         });
     };
 
@@ -132,6 +120,15 @@ angular.module('jamm')
 
     $scope.proceedWithoutSave = function () {
         $uibModalInstance.close(false);
+    };
+
+    $scope.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
+})
+.controller('ConfirmDeleteModalController', function ($scope, $uibModalInstance) {
+    $scope.proceedToDelete = function () {
+        $uibModalInstance.close();
     };
 
     $scope.cancel = function () {

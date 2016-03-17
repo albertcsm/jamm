@@ -10,7 +10,8 @@ angular.module('jamm', [
     'jamm.dateTimePicker',
     'jamm.photoswipe',
     'jamm.coverThumbnail',
-    'jamm.navBar'
+    'jamm.navBar',
+    'jamm.movieDetailForm'
 ]).config(function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/movies");
     $stateProvider

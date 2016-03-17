@@ -76,21 +76,21 @@
     <div class="form-group">
         <label class="col-sm-2 control-label"></label>
         <div class="col-sm-8">
-            <button class="btn btn-default btn-primary" ng-click="save()" ng-disabled="originalMovie && !isModified" type="button">
+            <button class="btn btn-default btn-primary" ng-click="save()" ng-disabled="originalMovie._id && !isModified" type="button">
                 <span class="glyphicon glyphicon-ok"></span>
                 Save
             </button>
             <div class="jamm-btn-group-spacer"/>
-            <button class="btn btn-default" ng-click="discard()" ng-if="originalMovie" ng-disabled="!isModified" type="button">
+            <button class="btn btn-default" ng-click="discard()" ng-if="originalMovie._id" ng-disabled="!isModified" type="button">
                 <span class="glyphicon glyphicon-remove"></span>
                 Discard
             </button>
-            <button class="btn btn-default" ng-click="cancel()" ng-if="!originalMovie" type="button">
+            <button class="btn btn-default" ng-click="cancel()" ng-if="!originalMovie._id" type="button">
                 <span class="glyphicon glyphicon-remove"></span>
                 Cancel
             </button>
             <div class="jamm-btn-group-spacer"/>
-            <button class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal" ng-if="originalMovie" type="button">
+            <button class="btn btn-danger" ng-click="delete()" ng-if="originalMovie._id" type="button">
                 <span class="glyphicon glyphicon-trash"></span>
                 Delete
             </button>
