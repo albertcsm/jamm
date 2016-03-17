@@ -10,6 +10,10 @@ angular.module('jamm')
 
     $scope.getCoverUrl = function (movie) {
         var storage = movie.storage;
-        return 'api/volumes/' + storage.volume + '/files/' + encodeURIComponent(storage.path + '/' + storage.cover);
+        if (storage && storage.cover) {
+            return 'api/volumes/' + storage.volume + '/files/' + encodeURIComponent(storage.path + '/' + storage.cover);
+        } else {
+            return null;
+        }
     };
 });
