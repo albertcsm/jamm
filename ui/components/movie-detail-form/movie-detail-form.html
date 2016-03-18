@@ -5,12 +5,12 @@
         <div class="col-sm-8">
             <div class="btn-group" uib-dropdown>
                 <button id="button-template-url" type="button" class="btn btn-default" uib-dropdown-toggle ng-disabled="disabled">
-                    <img class="jamm-image-square-thumbnail" ng-src="{{getCoverUrl(movie)}}"/>
+                    <img class="jamm-image-square-thumbnail" ng-src="{{getCoverUrl()}}"/>
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu list-inline" uib-dropdown-menu>
                     <li ng-repeat="image in mediaInfo.images track by image.name">
-                        <a href="javascript:;" ng-click="movie.storage.cover=image.name"><img class="jamm-image-square-thumbnail" ng-src="{{image.src}}"/></a>
+                        <a href="javascript:;" ng-click="setCover(image.name)"><img class="jamm-image-square-thumbnail" ng-src="{{image.src}}"/></a>
                     </li>
                 </ul>
             </div>

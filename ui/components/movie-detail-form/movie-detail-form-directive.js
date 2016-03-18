@@ -5,6 +5,7 @@ angular.module('jamm.movieDetailForm', [ ])
         restrict: 'E',
         scope: {
             modelValue: '=ngModel',
+            mediaInfo: '=',
             onSave: '&',
             onCancel: '&',
             onDelete: '&'
@@ -28,6 +29,21 @@ angular.module('jamm.movieDetailForm', [ ])
                 } else {
                     init(scope.modelValue);
                 }
+            }
+
+            scope.mediaInfo = scope.mediaInfo;
+
+            scope.getCoverUrl = function () {
+                if (scope.movie && scope.movie.storage && scope.movie.storage.cover) {
+                    var storage = scope.movie.storage;
+                    return 'api/volumes/' + storage.volume + '/files/' + encodeURIComponent(storage.path + '/' + storage.cover);
+                } else {
+                    return null;
+                }
+            };
+
+            scope.setCover = function (imageName) {
+                scope.movie.storage.cover = imageName;
             }
 
             scope.$watch('movie', function (value) {
