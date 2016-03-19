@@ -22,7 +22,7 @@ angular.module('jamm')
             if (selected) {
                 scope.selectedPath = node.path;
                 if (node.type == 'directory') {
-                    scope.mediaInfo = MediaInfoService.getMediaInfo(scope.volumes[0]._id, node.path);
+                    scope.mediaInfo = MediaInfoService.getMediaInfo(scope.volume._id, node.path);
                 } else {
                     scope.mediaInfo = null;
                 }   
@@ -66,7 +66,7 @@ angular.module('jamm')
                 templateUrl: 'movie-info-modal-template',
                 controller: 'MovieImportModalController',
                 resolve: {
-                    volumeId: function() { return scope.volumes[0]._id; },
+                    volumeId: function() { return scope.volume._id; },
                     path: function() { return scope.selectedPath; },
                     images: function() { return scope.mediaInfo.images; }
                 }

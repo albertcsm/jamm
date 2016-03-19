@@ -1,14 +1,25 @@
 angular.module('jamm')
 .controller('MovieImportController', function ($scope, $uibModal, Volume) {
 
-    $scope.volumes = Volume.query();
+    $scope.init = function () {
+        $scope.volumePieCharts = {};
 
-    $scope.pieChartData = [{
-        label: "Disk",
-        value: 75,
-        suffix: "%",
-        color: "steelblue"
-    }];
+        $scope.volumes = Volume.query(function () {
+            angular.forEach($scope.volumes, function(volume, key) {
+                var diskusage = Volume.diskusage({ id: volume._id }, function () {
+                    var percentage = Math.round((1 - diskusage.free / diskusage.total) * 1000) / 10;
+                    $scope.volumePieCharts[volume._id] = [{
+                        label: volume.name,
+                        value: percentage,
+                        suffix: "%",
+                        color: "steelblue"
+                    }];
+                });
+            });
+        });
+    };
+
+    $scope.init();
 
     $scope.pieChartOptions = {
         mode: "gauge",
@@ -16,13 +27,18 @@ angular.module('jamm')
         total: 100
     };
 
-    $scope.showAddVolumeModal = function() {
+    $scope.showAddVolumeModal = function(volume) {
         $uibModal.open({
             size: 'lg',
-            templateUrl: 'add-volume-template',
-            controller: 'AddVolumeModalController'
+            templateUrl: 'edit-volume-template',
+            controller: 'EditVolumeModalController',
+            resolve: {
+                volume: function () {
+                    return volume;
+                }
+            }
         }).result.then(function () {
-            
+            $scope.init();
         });
     };
 
@@ -90,12 +106,35 @@ angular.module('jamm')
         $uibModalInstance.dismiss();
     };
 })
-.controller('AddVolumeModalController', function ($scope, $uibModalInstance) {
-    $scope.addVolume = function() {
-        console.log('addVolume');
-        $uibModalInstance.close(true);
+.controller('EditVolumeModalController', function ($scope, $uibModalInstance, Volume, volume) {
+    $scope.isNew = !volume || !volume._id;
+    $scope.volume = angular.copy(volume);
+    var originalVolume = angular.copy(volume);
+    $scope.isModified = false;
+
+    $scope.$watch('volume', function () {
+        $scope.isModified = !angular.equals($scope.volume, originalVolume);
+    }, true);
+
+    $scope.save = function() {
+        if ($scope.isNew) {
+            Volume.create({ name: $scope.volume.name, path: $scope.volume.path }, function () {
+                $uibModalInstance.close(true);
+            });
+        } else {
+            $scope.volume.$update(function () {
+                $uibModalInstance.close(true); 
+            });
+        }
     };
-    $scope.dismiss = function () {
+
+    $scope.delete = function () {
+        Volume.delete({ id: originalVolume._id }, function () {
+            $uibModalInstance.close(false); 
+        });
+    };
+
+    $scope.cancel = function () {
         $uibModalInstance.dismiss();
     };
 });

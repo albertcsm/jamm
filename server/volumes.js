@@ -6,6 +6,7 @@ var fs = require('fs');
 var async = require('async');
 var _ = require('lodash');
 var mediainfo = require("mediainfo-q");
+var diskusage = require('diskusage');
 
 var Datastore = require('nedb');
 
@@ -70,6 +71,27 @@ router.delete('/volumes/:id', function (req, res, next) {
             res.status(500).send(err);
         } else {
             res.json({ numDeleted: numRemoved });
+        }
+    });
+});
+
+router.get('/volumes/:id/diskusage', function (req, res, next) {
+    var id = req.params.id;
+
+    db.find({ _id: id }, function (err, docs) {
+        if (err) {
+            res.status(500).send(err);
+        } else if (docs.length == 0) {
+            res.status(404).send('Not found');
+        } else {
+            var volume = docs[0];
+            diskusage.check(volume.path, function (err, info) {
+                if (err) {
+                    res.status(500).send(err);
+                } else {
+                    res.json(info);
+                }
+            });
         }
     });
 });
