@@ -5,6 +5,7 @@ angular.module('jamm', [
     'ngResource',
     'ngAnimate',
     'treeControl',
+    'n3-pie-chart',
     'jamm.unitFilter',
     'jamm.tableHeaderSortable',
     'jamm.dateTimePicker',

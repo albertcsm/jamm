@@ -1,7 +1,30 @@
 angular.module('jamm')
-.controller('MovieImportController', function ($scope, Volume) {
+.controller('MovieImportController', function ($scope, $uibModal, Volume) {
 
     $scope.volumes = Volume.query();
+
+    $scope.pieChartData = [{
+        label: "Disk",
+        value: 75,
+        suffix: "%",
+        color: "steelblue"
+    }];
+
+    $scope.pieChartOptions = {
+        mode: "gauge",
+        thickness: 3,
+        total: 100
+    };
+
+    $scope.showAddVolumeModal = function() {
+        $uibModal.open({
+            size: 'lg',
+            templateUrl: 'add-volume-template',
+            controller: 'AddVolumeModalController'
+        }).result.then(function () {
+            
+        });
+    };
 
 })
 .controller('MovieImportModalController', function ($scope, $uibModalInstance, Movie, volumeId, path, images) {
@@ -63,6 +86,15 @@ angular.module('jamm')
         player = null;
     });
 
+    $scope.dismiss = function () {
+        $uibModalInstance.dismiss();
+    };
+})
+.controller('AddVolumeModalController', function ($scope, $uibModalInstance) {
+    $scope.addVolume = function() {
+        console.log('addVolume');
+        $uibModalInstance.close(true);
+    };
     $scope.dismiss = function () {
         $uibModalInstance.dismiss();
     };

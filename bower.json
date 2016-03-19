@@ -29,7 +29,8 @@
     "mediaelement": "^2.20.1",
     "ng-sortable": "^1.3.2",
     "angular-resource": "^1.5.0",
-    "angular-tree-control": "^0.2.23"
+    "angular-tree-control": "^0.2.23",
+    "pie-chart": "^1.0.0"
   },
   "resolutions": {
     "angular": "^1.5.0"
