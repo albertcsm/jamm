@@ -43,13 +43,8 @@ angular.module('jamm')
     };
 
 })
-.controller('MovieImportModalController', function ($scope, $uibModalInstance, Movie, volumeId, path, images) {
-    $scope.movie = {
-        storage: {
-            volume: volumeId,
-            path: path
-        }
-    };
+.controller('MovieImportModalController', function ($scope, $uibModalInstance, Movie, images, movie) {
+    $scope.movie = movie;
 
     $scope.mediaInfo = {
         images: images

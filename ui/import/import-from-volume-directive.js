@@ -66,8 +66,15 @@ angular.module('jamm')
                 templateUrl: 'movie-info-modal-template',
                 controller: 'MovieImportModalController',
                 resolve: {
-                    volumeId: function() { return scope.volume._id; },
-                    path: function() { return scope.selectedPath; },
+                    movie: function() {
+                        return {
+                            name: scope.selectedPath.split('/').reverse()[0],
+                            storage: {
+                                volume: scope.volume._id,
+                                path: scope.selectedPath
+                            }
+                        };
+                    },
                     images: function() { return scope.mediaInfo.images; }
                 }
             }).result.then(function () {
