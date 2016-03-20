@@ -31,10 +31,6 @@ angular.module('jamm', [
             templateUrl: "import/movie-import.html",
             controller: 'MovieImportController'
         })
-        .state('settings', {
-            url: "/settings",
-            templateUrl: "settings/settings.html"
-        })
         .state('about', {
             url: "/about",
             templateUrl: "about.html"
