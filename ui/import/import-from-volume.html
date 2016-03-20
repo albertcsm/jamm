@@ -7,7 +7,8 @@
                 tree-model="volume.files"
                 on-node-toggle="showToggle(volume._id, node, expanded, $parentNode, $index, $first, $middle, $last, $odd, $even)"
                 on-selection="showSelected(node, selected)">
-                {{node.name}}
+                <span style="color: steelblue;" ng-if="importedPaths.indexOf(node.path) == -1">{{node.name}}</span>
+                <span style="color: black;" ng-if="importedPaths.indexOf(node.path) > -1">{{node.name}}</span>
             </treecontrol>
 
         </div>

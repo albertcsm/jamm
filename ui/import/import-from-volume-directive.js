@@ -1,5 +1,5 @@
 angular.module('jamm')
-.directive('importFromVolume', function($parse, $uibModal, VolumeFile, MediaInfoService) {
+.directive('importFromVolume', function($parse, $uibModal, VolumeFile, MediaInfoService, Movie) {
 
     function link(scope, element, attrs) {
         scope.volume = $parse(attrs.volume)(scope);
@@ -10,6 +10,15 @@ angular.module('jamm')
                     scope.volume.files[key].children = [ {} ];
                 }
             }
+        });
+
+        scope.importedPaths = [];
+        Movie.query(function (movies) {
+            angular.forEach(movies, function (movie) {
+                if (movie.storage.volume == scope.volume._id) {
+                    scope.importedPaths.push(movie.storage.path);
+                }
+            });
         });
 
         scope.selectedPath = null;
@@ -77,8 +86,10 @@ angular.module('jamm')
                     },
                     images: function() { return scope.mediaInfo.images; }
                 }
-            }).result.then(function () {
-                
+            }).result.then(function (saved) {
+                if (saved) {
+                    scope.importedPaths.push(scope.selectedPath);
+                }
             });
         };
 
