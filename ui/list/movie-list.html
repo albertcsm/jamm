@@ -89,7 +89,7 @@
         <div class="row-fluid">
             <div ng-repeat-start="movie in movies | filter:searchString | orderBy:sortParam.field:sortParam.reversed" class="col-sm-3 col-md-3 col-lg-2">
                 <a ui-sref="movies/detail({id: movie._id})">
-                    <cover-thumbnail movie="movie"></cover-thumbnail>
+                    <cover-thumbnail movie="movie" image="getCoverUrl(movie)"></cover-thumbnail>
                 </a>
             </div>
             <div class="clearfix visible-sm" ng-if="$index % 4 == 3"></div>

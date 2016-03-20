@@ -8,7 +8,8 @@ angular.module('jamm.coverThumbnail', [])
     return {
         restrict: "E",
         scope: {
-            movie: '=movie'
+            image: '=',
+            movie: '='
         },
         templateUrl: 'components/cover-thumbnail/cover-thumbnail.html',
         link: link
