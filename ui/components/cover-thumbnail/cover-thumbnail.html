@@ -1,13 +1,12 @@
 <div class="thumbnail jamn-thumbnail">
     <img ng-src="{{image}}">
     <div class="caption">
-        <h4>{{movie.name}}</h4>
-        <ul class="list-inline">
-            <li ng-repeat="actor in movie.actors">{{actor.name}}</li>
-        </ul>
-        <p>
-            <small>{{movie._id}}</small>
-            <span class="pull-right glyphicon glyphicon-hd-video"></span>
-        </p>
+        <h5>{{movie.name}}</h5>
+        <small>
+            <ul class="list-inline">
+                <li ng-repeat="actor in movie.actors">{{actor.name}}</li>
+            </ul>
+        </small>
+        <span class="glyphicon glyphicon-hd-video"></span>
     </div>
 </div>

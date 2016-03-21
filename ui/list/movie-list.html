@@ -32,13 +32,6 @@
                     Sort by: &nbsp;<span class="glyphicon glyphicon-calendar"></span> Release date, asc. <span class="caret"></span>
                 </button>
                 <ul uib-dropdown-menu role="menu" aria-labelledby="single-button">
-                    <li role="menuitem" ng-click="sortParam.field = '_id'">
-                        <a>
-                            <span class="glyphicon glyphicon-text-background"></span>
-                            Movie ID
-                            <span class="pull-right glyphicon glyphicon-ok-circle" ng-if="sortParam.field == '_id'"></span>
-                        </a>
-                    </li>
                     <li role="menuitem" ng-click="sortParam.field = 'name'">
                         <a>
                             <span class="glyphicon glyphicon-text-background"></span>
@@ -105,10 +98,10 @@
                 <tr>
                     <th><!-- thumbnail --></th>
                     <th>
-                        <table-header-sortable field-name="_id" sort-param="sortParam">ID</table-header-sortable>
+                        <table-header-sortable field-name="name" sort-param="sortParam">Name</table-header-sortable>
                     </th>
                     <th>
-                        <table-header-sortable field-name="name" sort-param="sortParam">Name</table-header-sortable>
+                        Subheading
                     </th>
                     <th>
                         Actors
@@ -121,8 +114,8 @@
             <tbody class="jamm-cursor-pointer">
                 <tr ng-repeat="movie in movies | filter:searchString | orderBy:sortParam.field:sortParam.reversed" ui-sref="movies/detail({id: movie._id})">
                     <td><img class="img-responsive center-block jamm-img-table-row" ng-if="movie.storage.cover" ng-src="{{getCoverUrl(movie)}}"/></td>
-                    <td>{{movie._id}}</td>
                     <td>{{movie.name}}</td>
+                    <td>{{movie.subheading}}</td>
                     <td>
                         <span ng-repeat-start="actor in movie.actors">{{actor.name}}</span><span ng-repeat-end ng-if="!($last)">, </span>
                     </td>
