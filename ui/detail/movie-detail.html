@@ -70,6 +70,12 @@
         </div>
 
         <div role="tabpanel" class="tab-pane" id="allFiles">
+            <treecontrol class="tree-light"
+                tree-model="movieFiles"
+                xon-node-toggle="showToggle(volume._id, node, expanded, $parentNode, $index, $first, $middle, $last, $odd, $even)"
+                xon-selection="showSelected(node, selected)">
+                {{node.name}}
+            </treecontrol>
         </div>
 
     </div>

@@ -17,6 +17,8 @@ angular.module('jamm')
                     }
                 });
             }
+
+            $scope.movieFiles = VolumeFile.query({ volumeId: storageInfo.volume, dir: storageInfo.path });
         });
     }
 
