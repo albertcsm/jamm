@@ -7,8 +7,10 @@ var express = require('express'),
     path = require('path');
 var argv = require('minimist')(process.argv.slice(2));
 var fs = require('fs');
+var MovieController = require(__dirname + '/server/movies.js');
+var VolumeController = require(__dirname + '/server/volumes.js');
 
-function startServer(port) {
+function startServer(port, datadir) {
     app.use(methodOverride());
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({
@@ -24,35 +26,22 @@ function startServer(port) {
         res.sendFile(uiDir + "/index.html");
     });
 
-    app.use('/api', require(__dirname + '/server/movies.js'));
-    app.use('/api', require(__dirname + '/server/volumes.js'));
+    var movieController = new MovieController(path.resolve(__dirname, datadir, 'movies.db'));
+    app.use('/api', movieController.expressRouter());
+
+    var volumeController = new VolumeController(path.resolve(__dirname, datadir, 'volumes.db'));
+    app.use('/api', volumeController.expressRouter());
 
     app.listen(port, "::");
 }
 
-if (argv._.indexOf('export') > -1) {
-    console.log('Exporting...');
-    movies.all(function (err, result) {
-        if (!err) {
-            console.log(result);
-        }
-    });
-} else if (argv._.indexOf('import') > -1) {
-    fs.readFile('export.json', 'utf8', function (err, data) {
-        if (err) {
-            throw err;
-        }
-        var objArray = JSON.parse(data);
-        for (index in objArray) {
-            movies.create(objArray[index], function (err, result) {
-                if (err) {
-                    console.error('Failed to import: ' + err);
-                }
-            });
-        }
-    });
+if (argv.help || argv.h) {
+    console.log('Arguments:');
+    console.log('  --port=3000');
+    console.log('  --datadir=data');
 } else {
-    var port = 3000;
-    startServer(port);
+    var port = argv.port ? argv.port : 3000;
+    var datadir = argv.datadir ? argv.datadir : 'data';
+    startServer(port, datadir);
     console.log("Jamm server listening at port %s", port);
 }
