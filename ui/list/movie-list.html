@@ -32,38 +32,20 @@
             <div class="">
                 <span class="input-group-addon"><span class="glyphicon glyphicon-sort"></span></span>
                 <div class="input-group-btn">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ng-disabled="disabled" xstyle="text-align: left !important;">
-                        <span class="glyphicon glyphicon-calendar"></span> Release date, asc. <span class="caret"></span>
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ng-disabled="disabled" style="width: 9em;">
+                        {{sortDescription}}
+                        <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
-                        <li role="menuitem" ng-click="sortParam.field = 'name'">
-                            <a>
-                                <span class="glyphicon glyphicon-text-background"></span>
-                                Movie name
-                                <span class="pull-right glyphicon glyphicon-ok-circle" ng-if="sortParam.field == 'name'"></span>
-                            </a>
+                        <li role="menuitem" ng-click="sortParam = { field: 'releaseDate', reversed: true }">
+                            <a>Latest</a>
                         </li>
-                        <li role="menuitem" ng-click="sortParam.field = 'releaseDate'">
-                            <a>
-                                <span class="glyphicon glyphicon-calendar"></span>
-                                Release date
-                                <span class="pull-right glyphicon glyphicon-ok-circle" ng-if="sortParam.field == 'releaseDate'"></span>
-                            </a>
+                        <li role="menuitem" ng-click="sortParam = { field: 'releaseDate', reversed: false }">
+                            <a>Earliest</a>
                         </li>
                         <li class="divider"></li>
-                        <li role="menuitem" ng-click="sortParam.reversed = false">
-                            <a>
-                                <span class="glyphicon glyphicon-sort-by-attributes"></span>
-                                Ascending
-                                <span class="pull-right glyphicon glyphicon-ok-circle" ng-show="sortParam.reversed == false"></span>
-                            </a>
-                        </li>
-                        <li role="menuitem" ng-click="sortParam.reversed = true">
-                            <a>
-                                <span class="glyphicon glyphicon-sort-by-attributes-alt"></span>
-                                Descending
-                                <span class="pull-right glyphicon glyphicon-ok-circle" ng-show="sortParam.reversed == true"></span>
-                            </a>
+                        <li role="menuitem" ng-click="sortParam = { field: 'name', reversed: false }">
+                            <a>Sort by name</a>
                         </li>
                     </ul>
                 </div>

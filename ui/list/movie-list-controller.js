@@ -6,6 +6,20 @@ angular.module('jamm')
         field: 'releaseDate',
         reversed: true
     };
+    $scope.sortDescription = null;
+
+    $scope.$watch('sortParam', function (value) {
+        if (value.field == 'releaseDate' && value.reversed == true) {
+            $scope.sortDescription = 'Latest';
+        } else if (value.field == 'releaseDate' && value.reversed == false) {
+            $scope.sortDescription = 'Earliest';
+        } else if (value.field == 'name') {
+            $scope.sortDescription = 'Sort by name';
+        } else {
+            $scope.sortDescription = 'Sorting';
+        }
+    }, true);
+
     $scope.searchString = '';
 
     $scope.getCoverUrl = function (movie) {
