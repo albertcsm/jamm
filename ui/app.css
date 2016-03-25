@@ -10,6 +10,16 @@ html {
 .jamn-thumbnail {
 }
 
+.jamn-thumbnail h5 {
+    font-weight: bold;
+    margin-top: 0px;
+    margin-bottom: 0.5em;
+}
+
+.jamn-thumbnail .list-inline {
+    margin-bottom: 0px;
+}
+
 .jamn-thumbnail:hover {
     border-color: #37A7FF;
 }
