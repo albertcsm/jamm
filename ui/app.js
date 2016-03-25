@@ -14,6 +14,8 @@ angular.module('jamm', [
     'jamm.navBar',
     'jamm.movieDetailForm'
 ]).config(function ($stateProvider, $urlRouterProvider) {
+    FastClick.attach(document.body);
+    
     $urlRouterProvider.otherwise("/movies");
     $stateProvider
         .state('movies', {
