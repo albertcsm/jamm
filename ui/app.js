@@ -15,18 +15,30 @@ angular.module('jamm', [
     'jamm.movieDetailForm'
 ]).config(function ($stateProvider, $urlRouterProvider) {
     FastClick.attach(document.body);
-    
+
     $urlRouterProvider.otherwise("/movies");
     $stateProvider
         .state('movies', {
             url: "/movies",
-            templateUrl: "list/movie-list.html",
-            controller: 'MovieListController'
+            views: {
+                '': {
+                    templateUrl: 'list/movies.html',
+                    controller: 'MovieRootController'
+                },
+                'list@movies': {
+                    templateUrl: "list/movie-list.html",
+                    controller: 'MovieListController'
+                }
+            }
         })
-        .state('movies/detail', {
-            url: "/movies/:id",
-            templateUrl: "detail/movie-detail.html",
-            controller: 'MovieDetailController'
+        .state('movies.detail', {
+            url: "/:id",
+            views: {
+                'detail@movies': {
+                    templateUrl: "detail/movie-detail.html",
+                    controller: 'MovieDetailController'
+                }
+            }
         })
         .state('import', {
             url: "/import",

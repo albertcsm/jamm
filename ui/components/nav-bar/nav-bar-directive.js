@@ -2,7 +2,7 @@ angular.module('jamm.navBar', [])
 .directive('navBar', function($state) {
 
     function link(scope, element, attrs) {
-        scope.activeNavItem = $state.current.name.replace(/\/.*/, '');
+        scope.activeNavItem = $state.current.name.replace(/\..*/, '');
     }
 
     return {

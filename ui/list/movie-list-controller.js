@@ -1,5 +1,8 @@
 angular.module('jamm')
-.controller('MovieListController', function ($scope, Movie, $stateParams) {
+.controller('MovieRootController', function($scope, $state) {
+    $scope.$state = $state;
+})
+.controller('MovieListController', function ($scope, Movie) {
     $scope.movies = Movie.query();
     $scope.displayStyle = 'thumbnail';
     $scope.sortParam = {
