@@ -42,7 +42,7 @@
                     </tr>
                 </thead>
                 <tbody class="jamm-cursor-pointer">
-                    <tr ng-repeat="video in mediaInfo.videos track by video.name" ng-click="selectVideo(video)">
+                    <tr ng-repeat="video in mediaInfo.videos track by video.name" ng-click="playVideo(video)">
                         <td><span class="glyphicon glyphicon-play" ng-if="video == selectedVideo"></span></td>
                         <td>{{video.name}}</td>
                         <td>{{video.resolution}}</td>

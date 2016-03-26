@@ -98,12 +98,18 @@ angular.module('jamm')
         });
     };
 
-    $scope.selectVideo = function (video) {
+    $scope.selectVideo = function (video, play) {
         $scope.selectedVideo = video;
         player.setSrc(video.src);
         player.load();
-        player.play();
     };
+
+    $scope.playVideo = function (video) {
+        if (video) {
+            $scope.selectVideo(video);
+        }
+        player.play();
+    }
 
     $scope.$on('$destroy', function () {
         player.setSrc('');
