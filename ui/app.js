@@ -1,6 +1,7 @@
 angular.module('jamm', [ 
     'ui.bootstrap',
     'ui.router',
+    'ct.ui.router.extras',
     'as.sortable',
     'ngResource',
     'ngAnimate',
@@ -11,7 +12,6 @@ angular.module('jamm', [
     'jamm.dateTimePicker',
     'jamm.photoswipe',
     'jamm.coverThumbnail',
-    'jamm.navBar',
     'jamm.movieDetailForm'
 ]).config(function ($stateProvider, $urlRouterProvider) {
     FastClick.attach(document.body);
@@ -19,13 +19,15 @@ angular.module('jamm', [
     $urlRouterProvider.otherwise("/movies");
     $stateProvider
         .state('movies', {
-            url: "/movies",
+            url: '/movies',
+            abstract: true,
+            sticky: true
+        })
+        .state('movies.list', {
+            url: '',
+            sticky: true,
             views: {
-                '': {
-                    templateUrl: 'list/movies.html',
-                    controller: 'MovieRootController'
-                },
-                'list@movies': {
+                'movieList@': {
                     templateUrl: "list/movie-list.html",
                     controller: 'MovieListController'
                 }
@@ -34,7 +36,7 @@ angular.module('jamm', [
         .state('movies.detail', {
             url: "/:id",
             views: {
-                'detail@movies': {
+                'movieDetail@': {
                     templateUrl: "detail/movie-detail.html",
                     controller: 'MovieDetailController'
                 }
@@ -42,11 +44,19 @@ angular.module('jamm', [
         })
         .state('import', {
             url: "/import",
-            templateUrl: "import/movie-import.html",
-            controller: 'MovieImportController'
+            sticky: true,
+            views: {
+                'import': {
+                    templateUrl: "import/movie-import.html",
+                    controller: 'MovieImportController'
+                }
+            }
         })
         .state('about', {
             url: "/about",
             templateUrl: "about.html"
         });
+})
+.controller('AppStateController', function ($scope, $state) {
+    $scope.routerState = $state;
 });

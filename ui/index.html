@@ -19,6 +19,7 @@
         <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-animate.js"></script>
         <script src="libs/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
         <script src="libs/angular-ui-router/release/angular-ui-router.min.js"></script>
+        <script src="libs/ui-router-extras/release/ct-ui-router-extras.min.js"></script>
         <script src="libs/ng-sortable/dist/ng-sortable.min.js"></script>
         <script src="libs/moment/min/moment.min.js"></script>
         <script src="libs/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
@@ -35,7 +36,6 @@
         <script src="components/table-header-sortable/table-header-sortable-directive.js"></script>
         <script src="components/date-time-picker/date-time-picker-directive.js"></script>
         <script src="components/photoswipe/photoswipe-directive.js"></script>
-        <script src="components/nav-bar/nav-bar-directive.js"></script>
         <script src="components/cover-thumbnail/cover-thumbnail-directive.js"></script>
         <script src="components/movie-detail-form/movie-detail-form-directive.js"></script>
         <script src="app.js"></script>
@@ -48,7 +48,30 @@
         <script src="import/movie-import-controller.js"></script>
     </head>
     <body ng-app="jamm">
-        <div ui-view></div>
+        <div ng-controller="AppStateController">
+            <nav class="navbar navbar-default navbar-static-top">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Jamm</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li ng-class="{'active': routerState.includes('movies')}"><a ui-sref="movies.list">Movies</a></li>
+                        <li ng-class="{'active': routerState.includes('import')}"><a ui-sref="import">Import</a></li>
+                        <li ng-class="{'active': routerState.includes('about')}"><a ui-sref="about">About</a></li>
+                    </ul>
+                </div>
+            </nav>
+
+            <div ui-view="movieList" ng-show="routerState.includes('movies.list')"></div>
+            <div ui-view="movieDetail" ng-show="routerState.includes('movies.detail')"></div>
+            <div ui-view="import" ng-show="routerState.includes('import')"></div>
+            <div ui-view></div>
+        </div>
         <div class="footer"></div>
     </body>
 </html>
