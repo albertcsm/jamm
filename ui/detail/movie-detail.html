@@ -54,14 +54,12 @@
         </div>
 
         <div role="tabpanel" class="tab-pane" id="images" jamm-photoswipe-gallery>
-            <div class="text-center" ng-if="movie.storage.cover">
+            <div class="text-center" ng-if="movie.storage.cover" style="margin-bottom: 1em;">
                 <a href="javascript:;" jamm-photoswipe-image="{{getCoverUrl(movie)}}"><img class="img-responsive" style="display: inline-block;" ng-src="{{getCoverUrl(movie)}}"/></a>
             </div>
-        
-            <div class="jamm-vertical-spacer"/>
 
             <span ng-repeat="image in mediaInfo.images track by image.name">
-                <a href="javascript:;" jamm-photoswipe-image="{{image.src}}"><img class="jamm-image-square-thumbnail" ng-src="{{image.src}}"/></a>
+                <a href="javascript:;" jamm-photoswipe-image="{{image.src}}" ng-if="image.src != getCoverUrl(movie)"><img class="jamm-image-square-thumbnail" ng-src="{{image.src}}"/></a>
             </span>
         </div>
 
