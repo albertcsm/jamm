@@ -3,7 +3,16 @@ angular.module('jamm')
     $scope.$state = $state;
 })
 .controller('MovieListController', function ($scope, Movie) {
+    $scope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options) {
+        if (toState.name == 'movies') {
+            Movie.query(function (value) {
+                $scope.movies = value;
+            });
+        }
+    });
+    
     $scope.movies = Movie.query();
+
     $scope.displayStyle = 'thumbnail';
     $scope.sortParam = {
         field: 'releaseDate',
