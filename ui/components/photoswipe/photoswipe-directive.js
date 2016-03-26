@@ -60,7 +60,6 @@ angular.module('jamm.photoswipe', [ ])
         scope: {},
         controller: [ PhotoswipeGalleryController ],
         compile: function (element) {
-            element.append('<jamm-photoswipe-slideshow></jamm-photoswipe-slideshow>');
             galleryElement = element;
         }
     };
