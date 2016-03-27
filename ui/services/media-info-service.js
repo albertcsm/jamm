@@ -51,7 +51,9 @@ angular.module('jamm')
                     } else if (file.name.match(/\.(mp4|mkv|wmv|avi|rmvb|mpg)$/)) {
                         videos.push(info);
                         var videoInfo = VolumeFile.mediaInfo({ volumeId: volumeId, path: file.path }, function () {
-                            info.length = parseMediaInfoDuration(videoInfo.duration);
+                            if (videoInfo.duration) {
+                                info.length = parseMediaInfoDuration(videoInfo.duration);
+                            }
                             info.resolution = parseMediaInfoResolution(videoInfo);
                         });
                         dependentPromises.push(videoInfo);
