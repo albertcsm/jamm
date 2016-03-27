@@ -24,6 +24,10 @@ angular.module('jamm')
             $scope.sortDescription = 'Earliest';
         } else if (value.field == 'name') {
             $scope.sortDescription = 'Sort by name';
+        } else if (value.field == 'rating' && value.reversed == true) {
+            $scope.sortDescription = 'Highest rated';
+        } else if (value.field == 'rating' && value.reversed == false) {
+            $scope.sortDescription = 'Lowest rated';
         } else {
             $scope.sortDescription = 'Sorting';
         }

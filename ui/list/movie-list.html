@@ -42,6 +42,13 @@
                                 <a>Earliest</a>
                             </li>
                             <li class="divider"></li>
+                            <li role="menuitem" ng-click="sortParam = { field: 'rating', reversed: true }">
+                                <a>Highest rated</a>
+                            </li>
+                            <li role="menuitem" ng-click="sortParam = { field: 'rating', reversed: false }">
+                                <a>Lowest rated</a>
+                            </li>
+                            <li class="divider"></li>
                             <li role="menuitem" ng-click="sortParam = { field: 'name', reversed: false }">
                                 <a>Sort by name</a>
                             </li>
@@ -95,6 +102,9 @@
                     <th>
                         <table-header-sortable field-name="releaseDate" sort-param="sortParam">Release date</table-header-sortable>
                     </th>
+                    <th>
+                        <table-header-sortable field-name="rating" sort-param="sortParam">Rating</table-header-sortable>
+                    </th>
                 </tr>
             </thead>
             <tbody class="jamm-cursor-pointer">
@@ -106,6 +116,7 @@
                         <span ng-repeat-start="actor in movie.actors">{{actor.name}}</span><span ng-repeat-end ng-if="!($last)">, </span>
                     </td>
                     <td>{{movie.releaseDate}}</td>
+                    <td><uib-rating ng-model="movie.rating" max="5" readonly="true" style="white-space: nowrap"></uib-rating></td>
                 </tr>
             </tbody>
         </table>
