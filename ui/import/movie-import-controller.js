@@ -1,7 +1,6 @@
 angular.module('jamm')
 .controller('MovieImportController', function ($scope, $uibModal, Volume) {
-
-    $scope.init = function () {
+    function initVolumes() {
         $scope.volumePieCharts = {};
 
         $scope.volumes = Volume.query(function () {
@@ -19,7 +18,7 @@ angular.module('jamm')
         });
     };
 
-    $scope.init();
+    initVolumes();
 
     $scope.pieChartOptions = {
         mode: "gauge",
@@ -38,10 +37,9 @@ angular.module('jamm')
                 }
             }
         }).result.then(function () {
-            $scope.init();
+            initVolumes();
         });
     };
-
 })
 .controller('MovieImportModalController', function ($scope, $uibModalInstance, Movie, images, movie) {
     $scope.movie = movie;
