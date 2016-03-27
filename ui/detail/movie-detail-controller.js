@@ -47,21 +47,35 @@ angular.module('jamm')
         }
     };
 
-    $scope.confirmDelete = function () {
+    $scope.confirmDelete = function (deleteFiles) {
         $uibModal.open({
             templateUrl: 'confirm-delete-modal-template',
             controller: 'ConfirmDeleteModalController',
+            resolve: {
+                deleteFiles : function () { return deleteFiles; }
+            },
             scope: $scope
         }).result.then(function () {
-            $scope.delete();
+            $scope.delete(deleteFiles);
         });
     };
 
-    $scope.delete = function () {
-        Movie.delete({ id: $scope.movie._id }, function () {
-            $scope.movie = null;
-            $state.go('movies');
-        });
+    $scope.delete = function (deleteFiles) {
+        function deleteRecord() {
+            Movie.delete({ id: $scope.movie._id }, function () {
+                $scope.movie = null;
+                $state.go('movies.list');
+            });
+        }
+
+        if (deleteFiles) {
+            var storageInfo = $scope.movie.storage;
+            VolumeFile.delete({ volumeId: storageInfo.volume, path: storageInfo.path }, function () {
+                deleteRecord();
+            });
+        } else {
+            deleteRecord();
+        }
     };
 
     $scope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options) {
@@ -134,7 +148,9 @@ angular.module('jamm')
         $uibModalInstance.dismiss('cancel');
     };
 })
-.controller('ConfirmDeleteModalController', function ($scope, $uibModalInstance) {
+.controller('ConfirmDeleteModalController', function ($scope, $uibModalInstance, deleteFiles) {
+    $scope.deleteFiles = deleteFiles;
+
     $scope.proceedToDelete = function () {
         $uibModalInstance.close();
     };

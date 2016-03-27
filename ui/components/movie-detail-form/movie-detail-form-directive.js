@@ -69,8 +69,12 @@ angular.module('jamm.movieDetailForm', [ ])
                 scope.onCancel();
             };
 
-            scope.delete = function() {
-                scope.onDelete();
+            scope.deleteRecord = function() {
+                scope.onDelete({ deleteFiles : false });
+            };
+
+            scope.deleteFilesAndRecord = function() {
+                scope.onDelete({ deleteFiles : true });
             };
         }
     };

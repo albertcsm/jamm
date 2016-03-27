@@ -6,6 +6,7 @@ var async = require('async');
 var _ = require('lodash');
 var mediainfo = require("mediainfo-q");
 var diskusage = require('diskusage');
+var rimraf = require('rimraf');
 
 var Datastore = require('nedb');
 
@@ -173,42 +174,82 @@ VolumeController.prototype.expressRouter = function () {
 
                         if (range) {
                             var matches = range.match(/(.*)=(\d*)-(\d*)/);
-                            start = parseInt(matches[2], 10);
-                            end = parseInt(matches[3], 10);
-                            if (isNaN(start)) {
-                                start = 0;
+                            var explicitStart = parseInt(matches[2], 10);
+                            var explicitEnd = parseInt(matches[3], 10);
+                            if (!isNaN(explicitStart)) {
+                                start = explicitStart;
                             }
-                            if (isNaN(end)) {
-                                end = total - 1;
+                            if (!isNaN(explicitEnd)) {
+                                end = explicitEnd;
                             }
                         }
                         var chunkSize = end - start + 1;
 
-                        var contentType = '';
-                        if (file.match(/\.jpg$/)) {
-                            contentType = 'image/jpeg';
-                        } else if (file.match(/\.mp4$/)) {
-                            contentType = 'video/mp4';
-                        }
+                        if (chunkSize) {
+                            var contentType = '';
+                            if (file.match(/\.jpg$/)) {
+                                contentType = 'image/jpeg';
+                            } else if (file.match(/\.mp4$/)) {
+                                contentType = 'video/mp4';
+                            }
 
-                        res.writeHead(206, {
-                            'Content-Range': 'bytes ' + start + '-' + end + '/' + total,
-                            'Accept-Ranges': 'bytes',
-                            'Content-Length': chunkSize,
-                            'Content-Type': contentType
-                        });
+                            res.writeHead(206, {
+                                'Content-Range': 'bytes ' + start + '-' + end + '/' + total,
+                                'Accept-Ranges': 'bytes',
+                                'Content-Length': chunkSize,
+                                'Content-Type': contentType
+                            });
 
-                        var option = { start: start };
-                        if (end) {
-                            option.end = end;
+                            var option = { start: start };
+                            if (end) {
+                                option.end = end;
+                            }
+                            var stream = fs.createReadStream(path, option)
+                            .on('open', function() {
+                                stream.pipe(res);
+                            })
+                            .on('error', function (err) {
+                                res.end(err);
+                                console.error(err);
+                            });
+                        } else {
+                            res.writeHead(200, { 'Content-Length': 0 });
+                            res.end();
                         }
-                        var stream = fs.createReadStream(path, option)
-                        .on('open', function() {
-                            stream.pipe(res);
-                        })
-                        .on('error', function (err) {
-                            res.end(err);
-                            console.error(err);
+                    }
+                });
+            }
+        });
+    });
+
+    router.delete('/volumes/:id/files/:file', function (req, res, next) {
+        var id = req.params.id;
+        var file = req.params.file;
+
+        db.find({ _id: id }, function (err, docs) {
+            if (err) {
+                res.status(500).send(err);
+            } else if (docs.length == 0) {
+                res.status(404).send('Volume not found');
+            } else {
+                var doc = docs[0];
+                var path = doc.path + '/' + file;
+
+                fs.stat(path, function (err, stats) {
+                    if (err) {
+                        if (err.code == 'ENOENT') {
+                            res.json({ numDeleted: 0 });
+                        } else {
+                            res.status(500, err);
+                        }
+                    } else {
+                        rimraf(path, { disableGlob: true }, function (err) {
+                            if (err) {
+                                res.status(500, err);
+                            } else {
+                                console.log('Deleted ' + path);
+                                res.json({ numDeleted: 1 });
+                            }
                         });
                     }
                 });

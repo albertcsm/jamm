@@ -99,10 +99,17 @@
                 Cancel
             </button>
             <div class="jamm-btn-group-spacer"/>
-            <button class="btn btn-danger" ng-click="delete()" ng-if="originalMovie._id" type="button">
-                <span class="glyphicon glyphicon-trash"></span>
-                Delete
-            </button>
+            <div class="btn-group" ng-if="originalMovie._id">
+                <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+                    <span class="glyphicon glyphicon-trash"></span>
+                    Delete
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="javascript:;" ng-click="deleteRecord()">Database record only</a></li>
+                    <li><a href="javascript:;" ng-click="deleteFilesAndRecord()">Files and database record</a></li>
+                </ul>
+            </div>
         </div>
     </div>
 </form>

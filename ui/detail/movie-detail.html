@@ -79,7 +79,7 @@
     <div class="panel panel-default">
         <div class="panel-heading"><h3 class="panel-title">Information</h3></div>
         <div class="panel-body">
-            <movie-detail-form ng-model="movie" media-info="mediaInfo" on-save="save(model, savedCallback)" on-delete="confirmDelete()"></movie-detail-form>
+            <movie-detail-form ng-model="movie" media-info="mediaInfo" on-save="save(model, savedCallback)" on-delete="confirmDelete(deleteFiles)"></movie-detail-form>
         </div>
     </div>
 
@@ -92,10 +92,20 @@
             <span aria-hidden="true"></span>
             &times;
         </button>
-        <h4 class="modal-title">Confirm delete</h4>
+        <h4 class="modal-title" ng-if="deleteFiles">Delete files and database record</h4>
+        <h4 class="modal-title" ng-if="!deleteFiles">Delete database record</h4>
     </div>
     <div class="modal-body">
-        Delete {{movie.name ? movie.name : movie._id}}?
+        <p>Delete {{movie.name ? movie.name : movie._id}}?</p>
+        <div class="panel panel-danger" ng-if="deleteFiles">
+            <div class="panel-heading">
+                <h3 class="panel-title">WARNING</h3>
+            </div>
+            <div class="panel-body">
+                all files will be deleted with database record.
+            </div>
+        </div>
+        <!-- <p class="bg-danger" ng-if="deleteFiles">WARNING: all files will be deleted with database record.</p> -->
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-danger" ng-click="proceedToDelete()">
