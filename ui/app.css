@@ -71,6 +71,22 @@ img.jamm-image-square-thumbnail {
     color: #555;
 }
 
+tags-input .tags .tag-item {
+    color: black;
+    background: LightGray;
+    border-width: 0;
+}
+
+tags-input .tags .tag-item.selected {
+    color: white;
+    background: steelblue;
+    border-width: 0;
+}
+
+tags-input .tags .tag-item.selected .remove-button {
+    color: white;
+}
+
 /* Hide mediaelement player loading overlay */
 .mejs-overlay-loading {
     display: none;
