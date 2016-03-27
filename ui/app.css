@@ -56,6 +56,12 @@ html {
     padding: 1em;
 }
 
+.jamm-form-group-inline-block {
+    display: inline-block;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+}
+
 img.jamm-image-square-thumbnail {
     height: 4em;
     width: 4em;
