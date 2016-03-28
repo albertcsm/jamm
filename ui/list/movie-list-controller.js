@@ -1,14 +1,54 @@
 angular.module('jamm')
 .controller('MovieListController', function ($scope, Movie) {
+    function loadData() {
+        Movie.query(function (movies) {
+            $scope.movies = movies;
+
+            var years = {};
+            var categories = {};
+            var ratings = { };
+            angular.forEach(movies, function (movie) {
+                if (movie.releaseDate) {
+                    var year = moment(movie.releaseDate).year();
+                    if (years.hasOwnProperty(year)) {
+                        years[year]++;
+                    } else {
+                        years[year] = 1;
+                    }
+                }
+                if (movie.categories) {
+                    angular.forEach(movie.categories, function (movieCategory) {
+                        if (categories.hasOwnProperty(movieCategory.name)) {
+                            categories[movieCategory.name]++;
+                        } else {
+                            categories[movieCategory.name] = 1;
+                        }
+                    });
+                }
+                var rating = movie.rating ? movie.rating : 0;
+                if (ratings.hasOwnProperty(rating)) {
+                    ratings[rating]++;
+                } else {
+                    ratings[rating] = 1;
+                }
+            });
+            $scope.years = _.map(years, function(value, key) {
+                return { key: key, count: value };
+            });
+            $scope.categories = _.map(categories, function(value, key) {
+                return { key: key, count: value };
+            });
+            $scope.ratings = ratings;
+        });
+    }
+
     $scope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options) {
         if (toState.name == 'movies.list') {
-            Movie.query(function (value) {
-                $scope.movies = value;
-            });
+            loadData();
         }
     });
 
-    $scope.movies = Movie.query();
+    loadData();
 
     $scope.displayStyle = 'thumbnail';
     $scope.sortParam = {
@@ -34,6 +74,8 @@ angular.module('jamm')
     }, true);
 
     $scope.searchString = '';
+
+    $scope.filter = {};
 
     $scope.getCoverUrl = function (movie) {
         var storage = movie.storage;
