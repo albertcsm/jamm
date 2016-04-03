@@ -109,9 +109,9 @@
                 <cover-thumbnail movie="movie" image="getCoverUrl(movie)"></cover-thumbnail>
             </a>
         </div>
-        <div class="clearfix visible-sm" ng-if="$index % 4 == 3"></div>
-        <div class="clearfix visible-md" ng-if="$index % 6 == 5"></div>
-        <div class="clearfix visible-lg" ng-if="$index % 6 == 5"></div>
+        <div class="clearfix visible-sm" ng-if="$index % 4 == 3 || $last"></div>
+        <div class="clearfix visible-md" ng-if="$index % 6 == 5 || $last"></div>
+        <div class="clearfix visible-lg" ng-if="$index % 6 == 5 || $last"></div>
         <div ng-repeat-end=""></div>
     </div>
 
