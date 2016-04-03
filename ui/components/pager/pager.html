@@ -3,11 +3,11 @@
         <a href="javascript:;" ng-click="setPage({ newPage: 0 })">First</a>
     </li>
     <li ng-class="currentPage == 0 ? 'disabled' : ''">
-        <a href="javascript:;" ng-click="setPage({ newPage: currentPage - 1 })"><span class="glyphicon glyphicon-arrow-left"></span> Prev</a>
+        <a href="javascript:;" ng-click="setPage({ newPage: currentPage - 1 })"><span class="glyphicon glyphicon-arrow-left hidden-xs"></span> Prev</a>
     </li>
-    <li>&nbsp; Page {{currentPage + 1}} / {{pageCount}} &nbsp;</li>
+    <li>&nbsp;Page {{currentPage + 1}} / {{pageCount}}&nbsp;</li>
     <li ng-class="currentPage < pageCount - 1 ? '' : 'disabled'">
-        <a href="javascript:;" ng-click="setPage({ newPage: currentPage + 1})">Next <span class="glyphicon glyphicon-arrow-right"></span></a>
+        <a href="javascript:;" ng-click="setPage({ newPage: currentPage + 1})">Next <span class="glyphicon glyphicon-arrow-right hidden-xs"></span></a>
     </li>
     <li ng-class="currentPage < pageCount - 1 ? '' : 'disabled'">
         <a href="javascript:;" ng-click="setPage({ newPage: pageCount - 1})">Last</a>
