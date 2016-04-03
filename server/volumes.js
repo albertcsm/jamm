@@ -166,7 +166,7 @@ VolumeController.prototype.expressRouter = function () {
                 var path = doc.path + '/' + file;
                 fs.stat(path, function (err, stats) {
                     if (err) {
-                        res.status(500, err);
+                        res.status(404).send('File not found');
                     } else {
                         var total = stats.size;
                         var start = 0;
@@ -240,12 +240,12 @@ VolumeController.prototype.expressRouter = function () {
                         if (err.code == 'ENOENT') {
                             res.json({ numDeleted: 0 });
                         } else {
-                            res.status(500, err);
+                            res.status(500).send(err);
                         }
                     } else {
                         rimraf(path, { disableGlob: true }, function (err) {
                             if (err) {
-                                res.status(500, err);
+                                res.status(500).send(err);
                             } else {
                                 console.log('Deleted ' + path);
                                 res.json({ numDeleted: 1 });
@@ -273,7 +273,7 @@ VolumeController.prototype.expressRouter = function () {
 
                 fs.stat(path, function (err, stats) {
                     if (err) {
-                        res.status(500, err);
+                        res.status(404).send('File not found');
                     } else {
                         if (ifModifiedSince && new Date(ifModifiedSince).getTime() == stats.mtime.getTime()) {
                             res.status(304).send('Not Modified');
@@ -282,7 +282,7 @@ VolumeController.prototype.expressRouter = function () {
                                 res.setHeader('Last-Modified', stats.mtime.toUTCString());
                                 res.json(info[0]);
                             }).catch(function (err) {
-                                res.status(500, err);
+                                res.status(500).send(err);
                             });
                         }
                     }
