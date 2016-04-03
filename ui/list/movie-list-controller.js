@@ -5,6 +5,7 @@ angular.module('jamm')
             $scope.movies = movies;
             $scope.filteredMovies = filterMovies($scope.filter, $scope.movies);
             loadStatistics();
+            loadPages();
         });
     }
 
@@ -104,6 +105,24 @@ angular.module('jamm')
         $scope.ratings = ratings;
     }
 
+    $scope.pageSize = 24;
+    $scope.pageCount = 0;
+    $scope.currentPage = 0;
+
+    function loadPages() {
+        $scope.pageCount = $scope.filteredMovies ? Math.ceil($scope.filteredMovies.length / $scope.pageSize) : 0;
+        var startPage = Math.max(Math.min($scope.currentPage - 2, $scope.pageCount - 5), 0);
+        var stopPage = Math.min(startPage + 5, $scope.pageCount);
+        $scope.pages = _.range(startPage, stopPage);
+    }
+
+    $scope.setPage = function (page) {
+        if (page >= 0 && page < $scope.pageCount) {
+            $scope.currentPage = page;
+            loadPages();
+        }
+    };
+
     $scope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options) {
         if (toState.name == 'movies.list') {
             loadMovies();
@@ -113,6 +132,8 @@ angular.module('jamm')
     $scope.$watch('filter', function () {
         $scope.filteredMovies = filterMovies($scope.filter, $scope.movies);
         loadStatistics();
+        loadPages();
+        $scope.currentPage = 0;
     }, true);
 
     loadMovies();

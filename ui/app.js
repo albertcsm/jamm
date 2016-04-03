@@ -13,7 +13,8 @@ angular.module('jamm', [
     'jamm.dateTimePicker',
     'jamm.photoswipe',
     'jamm.coverThumbnail',
-    'jamm.movieDetailForm'
+    'jamm.movieDetailForm',
+    'jamm.pager'
 ]).config(function ($stateProvider, $urlRouterProvider) {
     FastClick.attach(document.body);
 

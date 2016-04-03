@@ -99,10 +99,12 @@
 
     </div>
 
-    <div class="jamm-vertical-spacer"></div>
+    <div class="row-fluid">
+        <jamm-pager page-count="pageCount" current-page="currentPage" set-page="setPage(newPage)"></jamm-pager>
+    </div>
 
     <div class="row-fluid" ng-if="displayStyle == 'thumbnail'">
-        <div ng-repeat-start="movie in filteredMovies | filter:searchString | orderBy:['!!'+sortParam.field, sortParam.field]:sortParam.reversed track by movie._id" class="col-sm-3 col-md-2 col-lg-2">
+        <div ng-repeat-start="movie in filteredMovies | filter:searchString | orderBy:['!!'+sortParam.field, sortParam.field]:sortParam.reversed | limitTo:pageSize:(currentPage * pageSize) track by movie._id" class="col-sm-3 col-md-2 col-lg-2">
             <a ui-sref="movies.detail({id: movie._id})">
                 <cover-thumbnail movie="movie" image="getCoverUrl(movie)"></cover-thumbnail>
             </a>
@@ -136,7 +138,7 @@
                 </tr>
             </thead>
             <tbody class="jamm-cursor-pointer">
-                <tr ng-repeat="movie in filteredMovies | filter:searchString | orderBy:['!!'+sortParam.field, sortParam.field]:sortParam.reversed track by movie._id" ui-sref="movies.detail({id: movie._id})">
+                <tr ng-repeat="movie in filteredMovies | filter:searchString | orderBy:['!!'+sortParam.field, sortParam.field]:sortParam.reversed | limitTo:pageSize:(currentPage * pageSize) track by movie._id" ui-sref="movies.detail({id: movie._id})">
                     <td><img class="img-responsive center-block jamm-img-table-row" ng-if="movie.storage.cover" ng-src="{{getCoverUrl(movie)}}"/></td>
                     <td>{{movie.name}}</td>
                     <td>{{movie.subheading}}</td>
@@ -148,6 +150,10 @@
                 </tr>
             </tbody>
         </table>
+    </div>
+
+    <div class="row-fluid">
+        <jamm-pager page-count="pageCount" current-page="currentPage" set-page="setPage(newPage)"></jamm-pager>
     </div>
 
 </div>
