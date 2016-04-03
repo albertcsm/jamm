@@ -15,11 +15,11 @@
                         <div class="btn-group">
                             <label class="btn btn-default" ng-class="displayStyle == 'thumbnail' ? 'active' : ''" ng-click="displayStyle = 'thumbnail'">
                                 <span class="glyphicon glyphicon-th"></span>
-                                Thumbnail
+                                <span class="hidden-xs">Thumbnail</span>
                             </label>
                             <label class="btn btn-default" ng-class="displayStyle == 'list' ? 'active' : ''" ng-click="displayStyle = 'list'">
                                 <span class="glyphicon glyphicon-th-list"></span>
-                                List
+                                <span class="hidden-xs">List</span>
                             </label>
                         </div>
                     </div>
@@ -64,7 +64,7 @@
                     <div class="form-group">
                         <div class="input-group">
                             <span class="input-group-addon" id="sizing-addon1"><span class="glyphicon glyphicon-search"></span></span>
-                            <input type="text" class="form-control search-query" ng-model="searchString"/>
+                            <input type="text" class="form-control" ng-model="searchString"/>
                         </div>
                     </div>
                 </div>
