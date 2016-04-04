@@ -78,21 +78,25 @@
                     <label class="control-label">Year: </label>
                     <a href="javascript:;" ng-repeat-start="year in years | orderBy:year.key" ng-click="filter.year = (filter.year == year.key ? null : year.key)"><span ng-class="filter.year == year.key ? 'label label-primary' : ''">{{year.key}} ({{year.count}})</span></a>
                     <span ng-repeat-end ng-if="!$last"> | </span>
+                    <span ng-if="years.length === 0"><i>no info</i></span>
                 </p>
                 <p>
                     <label class="control-label">Category: </label>
                     <a href="javascript:;" ng-repeat-start="category in categories | orderBy:'count':true track by category.key" ng-click="filter.category = (filter.category == category.key ? null : category.key)"><span ng-class="filter.category == category.key ? 'label label-primary' : ''">{{category.key}} ({{category.count}})</span></a>
                     <span ng-repeat-end ng-if="!$last"> | </span>
+                    <span ng-if="categories.length === 0"><i>no info</i></span>
                 </p>
                 <p>
                     <label class="control-label">Actor: </label>
                     <a href="javascript:;" ng-repeat-start="actor in actors | orderBy:'count':true track by actor.key" ng-click="filter.actor = (filter.actor == actor.key ? null : actor.key)"><span ng-class="filter.actor == actor.key ? 'label label-primary' : ''">{{actor.key}} ({{actor.count}})</span></a>
                     <span ng-repeat-end ng-if="!$last"> | </span>
+                    <span ng-if="actors.length === 0"><i>no info</i></span>
                 </p>
                 <p>
                     <label class="control-label">Rating: </label>
-                    <a href="javascript:;" ng-repeat-start="rating in ratings | orderBy:'key'" ng-click="filter.rating = filter.rating===0 ? null : 0"><span ng-class="filter.rating === 0 ? 'label label-primary' : ''">{{rating.key > 0 ? rating.key : 'no'}} {{rating.key > 1 ? 'stars' : 'star'}} ({{rating.count + 0}})</span></a>
+                    <a href="javascript:;" ng-repeat-start="rating in ratings | orderBy:'key'" ng-click="filter.rating = (filter.rating === rating.key ? null : rating.key)"><span ng-class="filter.rating === rating.key ? 'label label-primary' : ''">{{rating.key > 0 ? rating.key : 'no'}} {{rating.key > 1 ? 'stars' : 'star'}} ({{rating.count + 0}})</span></a>
                     <span ng-repeat-end ng-if="!$last"> | </span>
+                    <span ng-if="ratings.length === 0"><i>no info</i></span>
                 </p>
                 <a href="javascript:;" ng-click="resetFilter()">Reset filters</a>
             </div>

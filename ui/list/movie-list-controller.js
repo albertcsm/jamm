@@ -106,7 +106,7 @@ angular.module('jamm')
             ratings[rating] = (ratings[rating] | 0) + 1;
         });
         $scope.ratings = _.map(ratings, function(value, key) {
-            return { key: key, count: value };
+            return { key: parseInt(key, 10), count: value };
         });
     }
 
