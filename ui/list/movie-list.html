@@ -81,7 +81,12 @@
                 </p>
                 <p>
                     <label class="control-label">Category: </label>
-                    <a href="javascript:;" ng-repeat-start="category in categories | orderBy:category.key" ng-click="filter.category = (filter.category == category.key ? null : category.key)"><span ng-class="filter.category == category.key ? 'label label-primary' : ''">{{category.key}} ({{category.count}})</span></a>
+                    <a href="javascript:;" ng-repeat-start="category in categories | orderBy:'count':true track by category.key" ng-click="filter.category = (filter.category == category.key ? null : category.key)"><span ng-class="filter.category == category.key ? 'label label-primary' : ''">{{category.key}} ({{category.count}})</span></a>
+                    <span ng-repeat-end ng-if="!$last"> | </span>
+                </p>
+                <p>
+                    <label class="control-label">Actor: </label>
+                    <a href="javascript:;" ng-repeat-start="actor in actors | orderBy:'count':true track by actor.key" ng-click="filter.actor = (filter.actor == actor.key ? null : actor.key)"><span ng-class="filter.actor == actor.key ? 'label label-primary' : ''">{{actor.key}} ({{actor.count}})</span></a>
                     <span ng-repeat-end ng-if="!$last"> | </span>
                 </p>
                 <p>

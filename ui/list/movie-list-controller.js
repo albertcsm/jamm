@@ -33,6 +33,15 @@ angular.module('jamm')
                     }
                 }
 
+                if (filter.actor) {
+                    if (!movie.actors) {
+                        return;
+                    }
+                    if (movie.actors && _.filter(movie.actors, { name: filter.actor }).length == 0) {
+                        return;
+                    }
+                }
+
                 if (filter.rating === 0 || filter.rating) {
                     var filterRating = filter.rating + 0;
                     var movieRating = movie.rating ? movie.rating : 0;
@@ -50,6 +59,7 @@ angular.module('jamm')
     function loadStatistics() {
         var years = {};
         var categories = {};
+        var actors = {};
         var ratings = {};
         angular.forEach($scope.movies, function (movie) {
             if (movie.releaseDate) {
@@ -58,6 +68,7 @@ angular.module('jamm')
                     years[year] = 0;
                 } 
             }
+
             if (movie.categories) {
                 angular.forEach(movie.categories, function (movieCategory) {
                     if (!categories.hasOwnProperty(movieCategory.name)) {
@@ -65,6 +76,15 @@ angular.module('jamm')
                     }
                 });
             }
+
+            if (movie.actors) {
+                angular.forEach(movie.actors, function (movieActor) {
+                    if (!actors.hasOwnProperty(movieActor.name)) {
+                        actors[movieActor.name] = 0;
+                    }
+                });
+            }
+
             var rating = movie.rating ? movie.rating : 0;
             if (!ratings.hasOwnProperty(rating)) {
                 ratings[rating] = 0;
@@ -93,6 +113,19 @@ angular.module('jamm')
             }
         });
         $scope.categories = _.map(categories, function(value, key) {
+            return { key: key, count: value };
+        });
+
+        // faceted search statistics for actor filter
+        var moviesIgnoreActorFilter = filterMovies(_.omit($scope.filter, 'actor'), $scope.movies);
+        angular.forEach(moviesIgnoreActorFilter, function (movie) {
+            if (movie.actors) {
+                angular.forEach(movie.actors, function (movieActor) {
+                    actors[movieActor.name]++;
+                });
+            }
+        });
+        $scope.actors = _.map(actors, function(value, key) {
             return { key: key, count: value };
         });
 
