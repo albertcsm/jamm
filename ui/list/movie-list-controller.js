@@ -9,6 +9,16 @@ angular.module('jamm')
         });
     }
 
+    $scope.showFilter = true;
+    $scope.filter = {};
+    $scope.resetFilter = function () {
+        $scope.filter = {};
+    }
+    $scope.isFilterDefined = function () {
+        console.log($scope.filter);
+        return !angular.equals($scope.filter, {});
+    }
+
     function filterMovies(filter, movies) {
         if (!filter) {
             return movies;
@@ -142,10 +152,6 @@ angular.module('jamm')
     }, true);
 
     loadMovies();
-
-    $scope.resetFilter = function () {
-        $scope.filter = {};
-    }
 
     $scope.displayStyle = 'thumbnail';
     $scope.sortParam = {

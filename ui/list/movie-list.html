@@ -69,10 +69,14 @@
                     </div>
                 </div>
 
-                <button class="btn btn-default" ng-class="filter ? 'active' : ''" ng-click="filter = filter ? null : {}">Filters <span class="glyphicon glyphicon-chevron-down"></span></button>
+                <button class="btn btn-default" ng-class="showFilter ? 'active' : ''" ng-click="showFilter = !showFilter">
+                    Filters
+                    <span ng-if="!showFilter" class="glyphicon glyphicon-chevron-down"></span>
+                    <span ng-if="showFilter" class="glyphicon glyphicon-chevron-up"></span>
+                </button>
             </div>
 
-            <div ng-if="filter">
+            <div ng-show="showFilter">
                 <p></p>
                 <p>
                     <label class="control-label">Year: </label>
@@ -99,6 +103,14 @@
                     <span ng-if="ratings.length === 0"><i>no info</i></span>
                 </p>
                 <a href="javascript:;" ng-click="resetFilter()">Reset filters</a>
+            </div>
+            <div ng-show="!showFilter">
+                <p></p>
+                <label class="control-label">Filter(s): </label>
+                <span ng-if="filter.year" class="label label-primary">{{filter.year}}</span>
+                <span ng-if="filter.category" class="label label-primary">{{filter.category}}</span>
+                <span ng-if="filter.actor" class="label label-primary">{{filter.actor}}</span>
+                <span ng-if="filter.rating || filter.rating === 0" class="label label-primary">{{filter.rating > 0 ? rating.key : 'no'}} {{filter.rating > 1 ? 'stars' : 'star'}}</span>
             </div>
         </div>
 
