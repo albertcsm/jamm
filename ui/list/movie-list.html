@@ -110,7 +110,7 @@
                 <span ng-if="filter.year" class="label label-primary">{{filter.year}}</span>
                 <span ng-if="filter.category" class="label label-primary">{{filter.category}}</span>
                 <span ng-if="filter.actor" class="label label-primary">{{filter.actor}}</span>
-                <span ng-if="filter.rating || filter.rating === 0" class="label label-primary">{{filter.rating > 0 ? rating.key : 'no'}} {{filter.rating > 1 ? 'stars' : 'star'}}</span>
+                <span ng-if="filter.rating || filter.rating === 0" class="label label-primary">{{filter.rating > 0 ? filter.rating : 'no'}} {{filter.rating > 1 ? 'stars' : 'star'}}</span>
             </div>
         </div>
 
