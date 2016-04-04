@@ -57,46 +57,13 @@ angular.module('jamm')
     }
 
     function loadStatistics() {
-        var years = {};
-        var categories = {};
-        var actors = {};
-        var ratings = {};
-        angular.forEach($scope.movies, function (movie) {
-            if (movie.releaseDate) {
-                var year = moment(movie.releaseDate).year();
-                if (!years.hasOwnProperty(year)) {
-                    years[year] = 0;
-                } 
-            }
-
-            if (movie.categories) {
-                angular.forEach(movie.categories, function (movieCategory) {
-                    if (!categories.hasOwnProperty(movieCategory.name)) {
-                        categories[movieCategory.name] = 0;
-                    }
-                });
-            }
-
-            if (movie.actors) {
-                angular.forEach(movie.actors, function (movieActor) {
-                    if (!actors.hasOwnProperty(movieActor.name)) {
-                        actors[movieActor.name] = 0;
-                    }
-                });
-            }
-
-            var rating = movie.rating ? movie.rating : 0;
-            if (!ratings.hasOwnProperty(rating)) {
-                ratings[rating] = 0;
-            }
-        });
-
         // faceted search statistics for year filter
+        var years = {};
         var moviesIgnoreYearFilter = filterMovies(_.omit($scope.filter, 'year'), $scope.movies);
         angular.forEach(moviesIgnoreYearFilter, function (movie) {
             if (movie.releaseDate) {
                 var year = moment(movie.releaseDate).year();
-                years[year]++;
+                years[year] = (years[year] | 0) + 1;
             }
         });
         $scope.years = _.map(years, function(value, key) {
@@ -104,11 +71,12 @@ angular.module('jamm')
         });
 
         // faceted search statistics for category filter
+        var categories = {};
         var moviesIgnoreCategoryFilter = filterMovies(_.omit($scope.filter, 'category'), $scope.movies);
         angular.forEach(moviesIgnoreCategoryFilter, function (movie) {
             if (movie.categories) {
                 angular.forEach(movie.categories, function (movieCategory) {
-                    categories[movieCategory.name]++;
+                    categories[movieCategory.name] = (categories[movieCategory.name] | 0) + 1;
                 });
             }
         });
@@ -117,11 +85,12 @@ angular.module('jamm')
         });
 
         // faceted search statistics for actor filter
+        var actors = {};
         var moviesIgnoreActorFilter = filterMovies(_.omit($scope.filter, 'actor'), $scope.movies);
         angular.forEach(moviesIgnoreActorFilter, function (movie) {
             if (movie.actors) {
                 angular.forEach(movie.actors, function (movieActor) {
-                    actors[movieActor.name]++;
+                    actors[movieActor.name] = (actors[movieActor.name] | 0) + 1;
                 });
             }
         });
@@ -130,12 +99,15 @@ angular.module('jamm')
         });
 
         // faceted search statistics for rating filter
+        var ratings = {};
         var moviesIgnoreRatingFilter = filterMovies(_.omit($scope.filter, 'rating'), $scope.movies);
         angular.forEach(moviesIgnoreRatingFilter, function (movie) {
             var rating = movie.rating ? movie.rating : 0;
-            ratings[rating]++;
+            ratings[rating] = (ratings[rating] | 0) + 1;
         });
-        $scope.ratings = ratings;
+        $scope.ratings = _.map(ratings, function(value, key) {
+            return { key: key, count: value };
+        });
     }
 
     $scope.pageSize = 24;
