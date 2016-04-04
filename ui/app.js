@@ -14,7 +14,8 @@ angular.module('jamm', [
     'jamm.photoswipe',
     'jamm.coverThumbnail',
     'jamm.movieDetailForm',
-    'jamm.pager'
+    'jamm.pager',
+    'jamm.facetedSearch'
 ]).config(function ($stateProvider, $urlRouterProvider) {
     FastClick.attach(document.body);
 
