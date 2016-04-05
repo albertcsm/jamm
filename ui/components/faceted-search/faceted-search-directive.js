@@ -1,125 +1,103 @@
 angular.module('jamm.facetedSearch', [ ])
 .directive('jammFacetedSearch', function() {
 
-    function filterData(filter, items) {
+    function filterData(mappedValueSets, filterSet) {
         var filteredData = [];
-        angular.forEach(items, function (item) {
-            if (filter.year) {
-                if (!item.releaseDate) {
-                    return;
-                }
-                if (moment(item.releaseDate).year() != filter.year) {
-                    return;
+        for (var id in mappedValueSets) {
+            var mappedValueSet = mappedValueSets[id];
+
+            var discard = false;
+            for (var filterName in filterSet) {
+                var filterValue = filterSet[filterName];
+                if (filterValue) {
+                    var mappedValue = mappedValueSet[filterName];
+                    if (Array.isArray(mappedValue)) {
+                        var found = false;
+                        if (mappedValue.indexOf(filterValue) == -1) {
+                            discard = true;
+                            break;
+                        }
+                    } else {
+                        if (mappedValue != filterValue) {
+                            discard = true;
+                            break;
+                        }
+                    }
                 }
             }
 
-            if (filter.category) {
-                if (!item.categories) {
-                    return;
-                }
-                if (item.categories && _.filter(item.categories, { name: filter.category }).length == 0) {
-                    return;
-                }
+            if (!discard) {
+                filteredData.push(mappedValueSet);
             }
-
-            if (filter.actor) {
-                if (!item.actors) {
-                    return;
-                }
-                if (item.actors && _.filter(item.actors, { name: filter.actor }).length == 0) {
-                    return;
-                }
-            }
-
-            if (filter.rating === 0 || filter.rating) {
-                var filterRating = filter.rating + 0;
-                var movieRating = item.rating ? item.rating : 0;
-                if (filterRating != movieRating) {
-                    return;
-                }
-            }
-
-            filteredData.push(item);
-        });
+        }
         return filteredData;
     }
 
-    function loadStatistics(filter, items) {
-        // faceted search statistics for year filter
-        var years = {};
-        var moviesIgnoreYearFilter = filterData(_.omit(filter, 'year'), items);
-        angular.forEach(moviesIgnoreYearFilter, function (movie) {
-            if (movie.releaseDate) {
-                var year = moment(movie.releaseDate).year();
-                years[year] = (years[year] | 0) + 1;
+    function loadStatistics(mappedValueSets, filterSet, filterTemplates) {
+        var statistics = {};
+
+        for (var i = 0; i < filterTemplates.length; i++) {
+            var filterTemplate = filterTemplates[i];
+
+            var filteredData = filterData(mappedValueSets, _.omit(filterSet, filterTemplate.name));
+            var histogram = {};
+            for (var id in filteredData) {
+                var mappedValueSet = filteredData[id];
+                var mappedValue = mappedValueSet[filterTemplate.name];
+                if (Array.isArray(mappedValue)) {
+                    for (var j = 0; j < mappedValue.length; j++) {
+                        histogram[mappedValue[j]] = (histogram[mappedValue[j]] | 0) + 1;
+                    }
+                } else {
+                    histogram[mappedValue] = (histogram[mappedValue] | 0) + 1;
+                }
             }
-        });
-
-        // faceted search statistics for category filter
-        var categories = {};
-        var moviesIgnoreCategoryFilter = filterData(_.omit(filter, 'category'), items);
-        angular.forEach(moviesIgnoreCategoryFilter, function (movie) {
-            if (movie.categories) {
-                angular.forEach(movie.categories, function (movieCategory) {
-                    categories[movieCategory.name] = (categories[movieCategory.name] | 0) + 1;
-                });
-            }
-        });
-
-        // faceted search statistics for actor filter
-        var actors = {};
-        var moviesIgnoreActorFilter = filterData(_.omit(filter, 'actor'), items);
-        angular.forEach(moviesIgnoreActorFilter, function (movie) {
-            if (movie.actors) {
-                angular.forEach(movie.actors, function (movieActor) {
-                    actors[movieActor.name] = (actors[movieActor.name] | 0) + 1;
-                });
-            }
-        });
-
-        // faceted search statistics for rating filter
-        var ratings = {};
-        var moviesIgnoreRatingFilter = filterData(_.omit(filter, 'rating'), items);
-        angular.forEach(moviesIgnoreRatingFilter, function (movie) {
-            var rating = movie.rating ? movie.rating : 0;
-            ratings[rating] = (ratings[rating] | 0) + 1;
-        });
-
-        var statistics = {
-            years : _.map(years, function(value, key) {
+            statistics[filterTemplate.name] = _.map(histogram, function(value, key) {
                 return { key: key, count: value };
-            }),
-            categories : _.map(categories, function(value, key) {
-                return { key: key, count: value };
-            }),
-            actors : _.map(actors, function(value, key) {
-                return { key: key, count: value };
-            }),
-            ratings : _.map(ratings, function(value, key) {
-                return { key: parseInt(key, 10), count: value };
-            })
-        };
-
+            });;
+        }
         return statistics;
     }
 
     function link(scope, element, attrs) {
-        scope.filter = {};
+        scope.statistics = {};
+        scope.filterSet = {};
+        var mappedValueSets = {};
+        var itemIndex = {};
 
-        scope.resetFilter = function () {
-            scope.filter = {};
+        function applyFilters() {
+            var filteredData = filterData(mappedValueSets, scope.filterSet);
+            scope.statistics = loadStatistics(mappedValueSets, scope.filterSet, scope.filterTemplates);
+            var filteredItems = [];
+            for (var i = 0; i < filteredData.length; i++) {
+                var filteredId = filteredData[i]._id;
+                filteredItems.push(itemIndex[filteredId]);
+            }
+            scope.searchResultCallback({ items: filteredItems });
         }
 
-        scope.$watch('filter', function () {
-            var filteredItems = filterData(scope.filter, scope.items);
-            scope.statistics = loadStatistics(scope.filter, scope.items);
-            scope.searchResultCallback({ items: filteredItems });
+        scope.resetFilters = function () {
+            scope.filterSet = {};
+        }
+
+        scope.$watch('filterSet', function () {
+            applyFilters();
         }, true);
 
         scope.$watch('items', function () {
-            var filteredItems = filterData(scope.filter, scope.items);
-            scope.statistics = loadStatistics(scope.filter, scope.items);
-            scope.searchResultCallback({ items: filteredItems });
+            mappedValueSets = {};
+            itemIndex = {};
+            angular.forEach(scope.items, function (item) {
+                var id = item[scope.idField];
+                var mappedValueSet = {};
+                angular.forEach(scope.filterTemplates, function (filterTemplate) {
+                    mappedValueSet[filterTemplate.name] = filterTemplate.valueMapper(item);
+                });
+                mappedValueSet._id = id;
+                mappedValueSets[id] = mappedValueSet;
+                itemIndex[id] = item;
+            });
+            applyFilters();
         }, true);
     }
 
@@ -128,6 +106,8 @@ angular.module('jamm.facetedSearch', [ ])
         scope: {
             style: '=',
             items: '=',
+            idField: '@',
+            filterTemplates: '=',
             searchResultCallback: '&'
         },
         templateUrl: "components/faceted-search/faceted-search.html",

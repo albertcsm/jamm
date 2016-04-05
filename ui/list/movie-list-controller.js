@@ -60,6 +60,39 @@ angular.module('jamm')
 
     $scope.searchString = '';
 
+    $scope.filterTemplates = [
+        {
+            name: 'Year',
+            valueMapper: function (movie) {
+                return moment(movie.releaseDate).year();
+            }
+        },
+        {
+            name: 'Category',
+            valueMapper: function (movie) {
+                return _.map(movie.categories, 'name');
+            }
+        },
+        {
+            name: 'Actor',
+            valueMapper: function (movie) {
+                return _.map(movie.actors, 'name');
+            }
+        },
+        {
+            name: 'Rating',
+            valueMapper: function (movie) {
+                if (movie.rating > 1) {
+                    return movie.rating + ' stars';
+                } else if (movie.rating == 1) {
+                    return '1 star';
+                } else if (!movie.rating) {
+                    return 'no star';
+                }
+            }
+        }
+    ];
+
     $scope.updateFilteredMovies = function (items) {
         $scope.filteredMovies = items;
         $scope.setPage(0);
