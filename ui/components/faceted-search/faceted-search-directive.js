@@ -6,6 +6,35 @@ angular.module('jamm.facetedSearch', [ ])
         scope.filterSet = {};
         var invertedIndexMap = {};
 
+        function buildInvertedIndex() {
+            invertedIndexMap = {};
+            angular.forEach(scope.items, function (item) {
+                var id = item[scope.idField];
+
+                angular.forEach(scope.filterTemplates, function (filterTemplate) {
+                    if (!invertedIndexMap.hasOwnProperty(filterTemplate.name)) {
+                        invertedIndexMap[filterTemplate.name] = {};
+                    }
+                    var invertedIndexForField = invertedIndexMap[filterTemplate.name];
+                    var mappedValue = filterTemplate.valueMapper(item);
+                    if (mappedValue) {
+                        function addToIndex(value) {
+                            if (!invertedIndexForField[value]) {
+                                invertedIndexForField[value] = [];
+                            }
+                            invertedIndexForField[value].push(item);
+                        }
+
+                        if (Array.isArray(mappedValue)) {
+                            angular.forEach(mappedValue, addToIndex);
+                        } else {
+                            addToIndex(mappedValue);
+                        }
+                    }
+                });
+            });
+        }
+
         function getFilteredItems(filterSet) {
             var intersection = scope.items;
             for (var appliedFilterName in filterSet) {
@@ -57,32 +86,7 @@ angular.module('jamm.facetedSearch', [ ])
         }
 
         scope.$watch('items', function () {
-            invertedIndexMap = {};
-            angular.forEach(scope.items, function (item) {
-                var id = item[scope.idField];
-
-                angular.forEach(scope.filterTemplates, function (filterTemplate) {
-                    if (!invertedIndexMap.hasOwnProperty(filterTemplate.name)) {
-                        invertedIndexMap[filterTemplate.name] = {};
-                    }
-                    var invertedIndexForField = invertedIndexMap[filterTemplate.name];
-                    var mappedValue = filterTemplate.valueMapper(item);
-                    if (mappedValue) {
-                        function addToIndex(value) {
-                            if (!invertedIndexForField[value]) {
-                                invertedIndexForField[value] = [];
-                            }
-                            invertedIndexForField[value].push(item);
-                        }
-
-                        if (Array.isArray(mappedValue)) {
-                            angular.forEach(mappedValue, addToIndex);
-                        } else {
-                            addToIndex(mappedValue);
-                        }
-                    }
-                });
-            });
+            buildInvertedIndex();
             applyFilters();
         }, true);
 
