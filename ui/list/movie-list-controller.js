@@ -4,7 +4,7 @@ angular.module('jamm')
         Movie.query(function (movies) {
             $scope.movies = movies;
             $scope.filteredMovies = movies;
-            loadPages();
+            updatePageCount();
         });
     }
 
@@ -13,7 +13,7 @@ angular.module('jamm')
     $scope.pageCount = 0;
     $scope.currentPage = 0;
 
-    function loadPages() {
+    function updatePageCount() {
         $scope.pageCount = $scope.filteredMovies ? Math.ceil($scope.filteredMovies.length / $scope.pageSize) : 0;
         var startPage = Math.max(Math.min($scope.currentPage - 2, $scope.pageCount - 5), 0);
         var stopPage = Math.min(startPage + 5, $scope.pageCount);
@@ -23,7 +23,6 @@ angular.module('jamm')
     $scope.setPage = function (page) {
         if (page >= 0 && page < $scope.pageCount) {
             $scope.currentPage = page;
-            loadPages();
         }
     };
 
@@ -95,6 +94,7 @@ angular.module('jamm')
 
     $scope.updateFilteredMovies = function (items) {
         $scope.filteredMovies = items;
+        updatePageCount();
         $scope.setPage(0);
     }
 
