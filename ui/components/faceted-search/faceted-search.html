@@ -1,7 +1,7 @@
 <div ng-if="style == 'full'">
     <p ng-repeat="filterTemplate in filterTemplates">
         <label class="control-label">{{filterTemplate.name}}: </label>
-        <a href="javascript:;" ng-repeat-start="option in statistics[filterTemplate.name]" ng-click="filterSet[filterTemplate.name] = (filterSet[filterTemplate.name] === option.key ? null : option.key)"><span ng-class="filterSet[filterTemplate.name] == option.key ? 'label label-primary' : ''">{{option.key}} ({{option.count}})</a>
+        <a href="javascript:;" ng-repeat-start="option in statistics[filterTemplate.name]" ng-click="toggleFilterOption(filterTemplate.name, option.key)"><span ng-class="isFilterOptionSelected(filterTemplate.name, option.key) ? 'label label-primary' : ''">{{option.key}} ({{option.count}})</a>
         <span ng-repeat-end ng-if="!$last"> | </span>
         <span ng-if="statistics[filterTemplate.name].length == 0"><i>no data</i></span>
     </p>
@@ -10,6 +10,8 @@
 <div ng-if="style == 'brief'">
     <label class="control-label">Filter(s): </label>
     <span ng-repeat="filterTemplate in filterTemplates" ng-if="filterSet[filterTemplate.name]">
-        <span class="label label-primary">{{filterSet[filterTemplate.name]}}</span>
+        <span ng-repeat="option in filterSet[filterTemplate.name]">
+            <span class="label label-primary">{{option}}</span>
+        </span>
     </span>
 </div>

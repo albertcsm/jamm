@@ -7,36 +7,25 @@ angular.module('jamm.facetedSearch', [ ])
         var invertedIndexMap = {};
 
         function getFilteredItems(filterSet) {
-            if (filterSet && !angular.equals(filterSet, {})) {
-                var filteredItems = [];
-                angular.forEach(scope.items, function (item) {
-                    var survive = true;
-                    for (var filterName in filterSet) {
-                        var filterValue = filterSet[filterName];
-                        if (filterValue) {
-                            var itemArray = invertedIndexMap[filterName][filterValue];
-                            if (!itemArray || itemArray.indexOf(item) == -1) {
-                                survive = false;
-                                break;
-                            }
-                        }
-                    }
-                    if (survive) {
-                        filteredItems.push(item);
+            var intersection = scope.items;
+            for (var appliedFilterName in filterSet) {
+                var appliedFilterValues = filterSet[appliedFilterName];
+
+                angular.forEach(appliedFilterValues, function (appliedFilterValue) {
+                    if (intersection == scope.items) {
+                        intersection = invertedIndexMap[appliedFilterName][appliedFilterValue];
+                    } else {
+                        intersection = _.intersection(intersection, invertedIndexMap[appliedFilterName][appliedFilterValue]);
                     }
                 });
-                return filteredItems;
-            } else {
-                return scope.items;
             }
+            return intersection;
         }
 
-        function updateStatistics() {
+        function updateStatistics(filteredItems) {
             scope.statistics = {};
             for (var i = 0; i < scope.filterTemplates.length; i++) {
                 var filterTemplate = scope.filterTemplates[i];
-
-                var filteredItems = getFilteredItems(_.omit(scope.filterSet, filterTemplate.name));
 
                 var histogram = {};
                 var invertedIndex = invertedIndexMap[filterTemplate.name];
@@ -44,11 +33,12 @@ angular.module('jamm.facetedSearch', [ ])
                     var itemArray = invertedIndex[filterValue];
                     if (itemArray) {
                         var count = _.intersection(itemArray, filteredItems).length;
-                        if (count) {
+                        if (count > 0) {
                             histogram[filterValue] = count;
                         }
                     }
                 }
+
                 scope.statistics[filterTemplate.name] = _.map(histogram, function(value, key) {
                     return { key: key, count: value };
                 });;
@@ -56,18 +46,15 @@ angular.module('jamm.facetedSearch', [ ])
         }
 
         function applyFilters() {
-            updateStatistics();
             var filteredItems = getFilteredItems(scope.filterSet);
+            updateStatistics(filteredItems);
             scope.searchResultCallback({ items: filteredItems });
         }
 
         scope.resetFilters = function () {
             scope.filterSet = {};
-        }
-
-        scope.$watch('filterSet', function () {
             applyFilters();
-        }, true);
+        }
 
         scope.$watch('items', function () {
             invertedIndexMap = {};
@@ -98,6 +85,34 @@ angular.module('jamm.facetedSearch', [ ])
             });
             applyFilters();
         }, true);
+
+        scope.toggleFilterOption = function(filterName, filterValue) {
+            if (scope.filterSet[filterName]) {
+                var foundAtIndex = scope.filterSet[filterName].indexOf(filterValue);
+
+                if (foundAtIndex == -1) {
+                    scope.filterSet[filterName].push(filterValue);
+                } else {
+                    scope.filterSet[filterName].splice(foundAtIndex, 1);
+                    if (!scope.filterSet[filterName].length) {
+                        delete scope.filterSet[filterName];
+                    }
+                }
+            } else {
+                scope.filterSet[filterName] = [ filterValue ];
+            }
+
+            applyFilters();
+        }
+
+        scope.isFilterOptionSelected = function(filterName, filterValue) {
+            if (!scope.filterSet[filterName] || scope.filterSet[filterName].indexOf(filterValue) == -1) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
     }
 
     return {
