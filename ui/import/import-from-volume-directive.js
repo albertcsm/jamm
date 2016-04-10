@@ -1,5 +1,5 @@
 angular.module('jamm')
-.directive('importFromVolume', function($parse, $uibModal, VolumeFile, MediaInfoService, Movie) {
+.directive('importFromVolume', function($parse, $uibModal, VolumeFile, MediaInfoService, MovieService) {
 
     function link(scope, element, attrs) {
         scope.volume = $parse(attrs.volume)(scope);
@@ -13,7 +13,7 @@ angular.module('jamm')
         });
 
         scope.importedPaths = [];
-        Movie.query(function (movies) {
+        MovieService.query(function (movies) {
             angular.forEach(movies, function (movie) {
                 if (movie.storage.volume == scope.volume._id) {
                     scope.importedPaths.push(movie.storage.path);

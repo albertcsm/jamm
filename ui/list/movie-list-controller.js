@@ -1,10 +1,25 @@
 angular.module('jamm')
-.controller('MovieListController', function ($scope, Movie) {
+.controller('MovieListController', function ($scope, MovieService) {
     function loadMovies() {
-        Movie.query(function (movies) {
+        MovieService.query(function (movies) {
             $scope.movies = movies;
             $scope.filteredMovies = movies;
             updatePageCount();
+
+            MovieService.subscribe($scope, function (data) {
+                if (data.event == 'deleted') {
+                    console.log('received movie deleted event: ' + data.id);
+                    _.remove($scope.movies, { _id : data.id });
+                    updatePageCount();
+                } else if (data.event == 'updated') {
+                    console.log('received movie updated event: ' + data.id);
+                    var index = _.findIndex($scope.movies, { _id : data.id });
+                    $scope.movies.splice(index, 1, data.newValue);
+                } else if (data.event == 'added') {
+                    console.log('received movie added event: ' + data.value);
+                    $scope.movies.push(data.value);
+                }
+            });
         });
     }
 
@@ -15,9 +30,9 @@ angular.module('jamm')
 
     function updatePageCount() {
         $scope.pageCount = $scope.filteredMovies ? Math.ceil($scope.filteredMovies.length / $scope.pageSize) : 0;
-        var startPage = Math.max(Math.min($scope.currentPage - 2, $scope.pageCount - 5), 0);
-        var stopPage = Math.min(startPage + 5, $scope.pageCount);
-        $scope.pages = _.range(startPage, stopPage);
+        if ($scope.currentPage >= $scope.pageCount) {
+            $scope.currentPage = $scope.pageCount - 1;
+        }
     }
 
     $scope.setPage = function (page) {
@@ -26,11 +41,11 @@ angular.module('jamm')
         }
     };
 
-    $scope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options) {
-        if (toState.name == 'movies.list') {
-            loadMovies();
-        }
-    });
+    // $scope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options) {
+    //     if (toState.name == 'movies.list') {
+    //         loadMovies();
+    //     }
+    // });
 
     loadMovies();
 

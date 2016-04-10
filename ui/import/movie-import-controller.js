@@ -41,7 +41,7 @@ angular.module('jamm')
         });
     };
 })
-.controller('MovieImportModalController', function ($scope, $uibModalInstance, Movie, images, movie) {
+.controller('MovieImportModalController', function ($scope, $uibModalInstance, MovieService, images, movie) {
     $scope.movie = movie;
 
     $scope.mediaInfo = {
@@ -58,7 +58,7 @@ angular.module('jamm')
     };
 
     $scope.save = function (model) {
-        Movie.create(model, function () {
+        MovieService.create(model, function () {
             $uibModalInstance.close(true);
             $scope.movie = model;
         });

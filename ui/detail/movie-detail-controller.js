@@ -1,5 +1,5 @@
 angular.module('jamm')
-.controller('MovieDetailController', function ($scope, $stateParams, $state, $uibModal, Movie, VolumeFile, MediaInfoService) {
+.controller('MovieDetailController', function ($scope, $stateParams, $state, $uibModal, MovieService, VolumeFile, MediaInfoService) {
 
     var movieId = $stateParams.id;
 
@@ -8,7 +8,7 @@ angular.module('jamm')
     $scope.selectedVideo = null;
 
     if (movieId) {
-        $scope.movie = Movie.get({ id: movieId }, function () {
+        $scope.movie = MovieService.get({ id: movieId }, function () {
             var storageInfo = $scope.movie.storage;
             if (storageInfo) {
                 $scope.mediaInfo = MediaInfoService.getMediaInfo(storageInfo.volume, storageInfo.path, function (info) {
@@ -33,13 +33,13 @@ angular.module('jamm')
 
     $scope.save = function(model, savedCallback) {
         if (model._id == $scope.movie._id) {
-            model.$update(function () {
+            MovieService.update(model._id, model, function () {
                 $scope.movie = angular.copy(model);
                 savedCallback();
             });
         } else {
-            Movie.create(model, function () {
-                Movie.delete({ id: $scope.movie._id }, function () {
+            MovieService.create(model, function () {
+                MovieService.delete({ id: $scope.movie._id }, function () {
                     $scope.movie = angular.copy(model);
                     savedCallback();
                 });
@@ -62,7 +62,7 @@ angular.module('jamm')
 
     $scope.delete = function (deleteFiles) {
         function deleteRecord() {
-            Movie.delete({ id: $scope.movie._id }, function () {
+            MovieService.delete({ id: $scope.movie._id }, function () {
                 $scope.movie = null;
                 $state.go('movies.list');
             });
