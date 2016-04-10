@@ -1,7 +1,7 @@
 <div ng-if="style == 'full'">
     <p ng-repeat="filterTemplate in filterTemplates">
         <label class="control-label">{{filterTemplate.name}}: </label>
-        <a href="javascript:;" ng-repeat-start="option in statistics[filterTemplate.name]" ng-click="toggleFilterOption(filterTemplate.name, option.key)"><span ng-class="isFilterOptionSelected(filterTemplate.name, option.key) ? 'label label-primary' : ''">{{option.key}} ({{option.count}})</a>
+        <a href="javascript:;" ng-repeat-start="option in statistics[filterTemplate.name] | orderBy:'key'" ng-click="toggleFilterOption(filterTemplate.name, option.key)"><span ng-class="isFilterOptionSelected(filterTemplate.name, option.key) ? 'label label-primary' : ''">{{option.key}} ({{option.count}})</a>
         <span ng-repeat-end ng-if="!$last"> | </span>
         <span ng-if="statistics[filterTemplate.name].length == 0"><i>no data</i></span>
     </p>
