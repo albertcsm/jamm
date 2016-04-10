@@ -5,6 +5,7 @@
         <small>
             <ul class="list-inline">
                 <li ng-repeat="actor in movie.actors">{{actor.name}}</li>
+                <span class="pull-right jamm-rating-small"><uib-rating ng-model="movie.rating" readonly="true" max="5"></uib-rating></span>
             </ul>
         </small>
     </div>

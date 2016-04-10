@@ -77,6 +77,12 @@ img.jamm-image-square-thumbnail {
     color: #555;
 }
 
+.jamm-rating-small {
+    font-size: 0.5em;
+    letter-spacing: -0.2em;
+    color: #555;
+}
+
 tags-input .tags .tag-item {
     color: black;
     background: LightGray;
