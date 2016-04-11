@@ -12,11 +12,23 @@ angular.module('jamm')
             }
         });
 
-        scope.importedPaths = [];
-        MovieService.query(function (movies) {
-            angular.forEach(movies, function (movie) {
-                if (movie.storage.volume == scope.volume._id) {
-                    scope.importedPaths.push(movie.storage.path);
+        function loadImportedMovies() {
+            scope.importedPaths = [];
+            return MovieService.query(function (movies) {
+                scope.importedPaths = [];
+                angular.forEach(movies, function (movie) {
+                    if (movie.storage.volume == scope.volume._id) {
+                        scope.importedPaths.push(movie.storage.path);
+                    }
+                });
+            });
+        }
+
+        loadImportedMovies().$promise.then(function () {
+            MovieService.subscribe(scope, function (data) {
+                if (data.event == 'deleted') {
+                    console.log('received movie deleted event: ' + data.id);
+                    loadImportedMovies();
                 }
             });
         });
