@@ -40,21 +40,25 @@ angular.module('jamm.facetedSearch', [ ])
             for (var appliedFilterName in filterSet) {
                 var appliedFilterValues = filterSet[appliedFilterName];
 
+                var union = [];
                 angular.forEach(appliedFilterValues, function (appliedFilterValue) {
-                    if (intersection == scope.items) {
-                        intersection = invertedIndexMap[appliedFilterName][appliedFilterValue];
-                    } else {
-                        intersection = _.intersection(intersection, invertedIndexMap[appliedFilterName][appliedFilterValue]);
-                    }
+                    union = _.union(union, invertedIndexMap[appliedFilterName][appliedFilterValue]);
                 });
+
+                if (intersection == scope.items) {
+                    intersection = union;
+                } else {
+                    intersection = _.intersection(intersection, union);
+                }
             }
             return intersection;
         }
 
-        function updateStatistics(filteredItems) {
+        function updateStatistics() {
             scope.statistics = {};
             for (var i = 0; i < scope.filterTemplates.length; i++) {
                 var filterTemplate = scope.filterTemplates[i];
+                var filteredItems = getFilteredItems(_.omit(scope.filterSet, filterTemplate.name));
 
                 var histogram = {};
                 var invertedIndex = invertedIndexMap[filterTemplate.name];
@@ -62,7 +66,7 @@ angular.module('jamm.facetedSearch', [ ])
                     var itemArray = invertedIndex[filterValue];
                     if (itemArray) {
                         var count = _.intersection(itemArray, filteredItems).length;
-                        if (count > 0) {
+                        if (count > 0 || (scope.filterSet[filterTemplate.name] && scope.filterSet[filterTemplate.name].indexOf(filterValue) != -1)) {
                             histogram[filterValue] = count;
                         }
                     }
@@ -75,8 +79,9 @@ angular.module('jamm.facetedSearch', [ ])
         }
 
         function applyFilters() {
+            updateStatistics();
+
             var filteredItems = getFilteredItems(scope.filterSet);
-            updateStatistics(filteredItems);
             scope.searchResultCallback({ items: filteredItems });
         }
 
