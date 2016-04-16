@@ -23,7 +23,8 @@ angular.module('jamm')
         });
     }
 
-    $scope.showFilter = true;
+    $scope.showFilter = false;
+    $scope.filters = {};
     $scope.pageSize = 24;
     $scope.pageCount = 0;
     $scope.currentPage = 0;
@@ -111,6 +112,10 @@ angular.module('jamm')
         $scope.filteredMovies = items;
         updatePageCount();
         $scope.setPage(0);
+    }
+
+    $scope.isFilterDefined = function (filters) {
+        return !angular.equals(filters, {});
     }
 
     $scope.getCoverUrl = function (movie) {

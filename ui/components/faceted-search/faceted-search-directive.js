@@ -3,7 +3,6 @@ angular.module('jamm.facetedSearch', [ ])
 
     function link(scope, element, attrs) {
         scope.statistics = {};
-        scope.filterSet = {};
         var invertedIndexMap = {};
 
         function buildInvertedIndex() {
@@ -86,7 +85,9 @@ angular.module('jamm.facetedSearch', [ ])
         }
 
         scope.resetFilters = function () {
-            scope.filterSet = {};
+            angular.forEach(scope.filterSet, function (value, key) {
+                delete scope.filterSet[key];
+            });
             applyFilters();
         }
 
@@ -110,16 +111,7 @@ angular.module('jamm.facetedSearch', [ ])
             } else {
                 scope.filterSet[filterName] = [ filterValue ];
             }
-
             applyFilters();
-        }
-
-        scope.isFilterOptionSelected = function(filterName, filterValue) {
-            if (!scope.filterSet[filterName] || scope.filterSet[filterName].indexOf(filterValue) == -1) {
-                return false;
-            } else {
-                return true;
-            }
         }
 
     }
@@ -129,7 +121,7 @@ angular.module('jamm.facetedSearch', [ ])
         scope: {
             style: '=',
             items: '=',
-            idField: '@',
+            filterSet: '=filters',
             filterTemplates: '=',
             searchResultCallback: '&'
         },

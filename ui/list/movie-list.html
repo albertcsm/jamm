@@ -8,80 +8,79 @@
 <div class="container-fluid">
 
     <div class="row-fluid">
-        <div class="panel-body form-inline" style="background-color: #f5f5f5;">
-            <div class="jamm-form-group-inline-block">
-                <div class="form-group">
-                    <div class="input-group">
-                        <div class="btn-group">
-                            <label class="btn btn-default" ng-class="displayStyle == 'thumbnail' ? 'active' : ''" ng-click="displayStyle = 'thumbnail'">
-                                <span class="glyphicon glyphicon-th"></span>
-                                <span class="hidden-xs">Thumbnail</span>
-                            </label>
-                            <label class="btn btn-default" ng-class="displayStyle == 'list' ? 'active' : ''" ng-click="displayStyle = 'list'">
-                                <span class="glyphicon glyphicon-th-list"></span>
-                                <span class="hidden-xs">List</span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="jamm-form-group-inline-block">
-                <div class="form-group input-group">
-                    <div class="">
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-sort"></span></span>
-                        <div class="input-group-btn">
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ng-disabled="disabled" style="width: 9em;">
-                                {{sortDescription}}
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li role="menuitem" ng-click="sortParam = { field: 'releaseDate', reversed: true }">
-                                    <a>Latest</a>
-                                </li>
-                                <li role="menuitem" ng-click="sortParam = { field: 'releaseDate', reversed: false }">
-                                    <a>Earliest</a>
-                                </li>
-                                <li class="divider"></li>
-                                <li role="menuitem" ng-click="sortParam = { field: 'rating', reversed: true }">
-                                    <a>Highest rated</a>
-                                </li>
-                                <li role="menuitem" ng-click="sortParam = { field: 'rating', reversed: false }">
-                                    <a>Lowest rated</a>
-                                </li>
-                                <li class="divider"></li>
-                                <li role="menuitem" ng-click="sortParam = { field: 'name', reversed: false }">
-                                    <a>Sort by name</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pull-right">
+        <div class="panel-body" style="background-color: #f5f5f5;">
+            <div class="form-inline">
                 <div class="jamm-form-group-inline-block">
                     <div class="form-group">
                         <div class="input-group">
-                            <span class="input-group-addon" id="sizing-addon1"><span class="glyphicon glyphicon-search"></span></span>
-                            <input type="text" class="form-control" ng-model="searchString"/>
+                            <div class="btn-group">
+                                <label class="btn btn-default" ng-class="displayStyle == 'thumbnail' ? 'active' : ''" ng-click="displayStyle = 'thumbnail'">
+                                    <span class="glyphicon glyphicon-th"></span>
+                                    <span class="hidden-xs">Thumbnail</span>
+                                </label>
+                                <label class="btn btn-default" ng-class="displayStyle == 'list' ? 'active' : ''" ng-click="displayStyle = 'list'">
+                                    <span class="glyphicon glyphicon-th-list"></span>
+                                    <span class="hidden-xs">List</span>
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <button class="btn btn-default" ng-class="showFilter ? 'active' : ''" ng-click="showFilter = !showFilter">
-                    Filters
-                    <span ng-if="!showFilter" class="glyphicon glyphicon-chevron-down"></span>
-                    <span ng-if="showFilter" class="glyphicon glyphicon-chevron-up"></span>
-                </button>
-            </div>
+                <div class="jamm-form-group-inline-block">
+                    <div class="form-group input-group">
+                        <div class="">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-sort"></span></span>
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ng-disabled="disabled" style="width: 9em;">
+                                    {{sortDescription}}
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li role="menuitem" ng-click="sortParam = { field: 'releaseDate', reversed: true }">
+                                        <a>Latest</a>
+                                    </li>
+                                    <li role="menuitem" ng-click="sortParam = { field: 'releaseDate', reversed: false }">
+                                        <a>Earliest</a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li role="menuitem" ng-click="sortParam = { field: 'rating', reversed: true }">
+                                        <a>Highest rated</a>
+                                    </li>
+                                    <li role="menuitem" ng-click="sortParam = { field: 'rating', reversed: false }">
+                                        <a>Lowest rated</a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li role="menuitem" ng-click="sortParam = { field: 'name', reversed: false }">
+                                        <a>Sort by name</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            <div>
-                <p></p>
-                <jamm-faceted-search style="showFilter ? 'full' : 'brief'" items="movies" id-field="_id" filter-templates="filterTemplates" search-result-callback="updateFilteredMovies(items)"></jamm-faceted-search>
+                <div class="pull-right">
+                    <div class="jamm-form-group-inline-block">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="sizing-addon1"><span class="glyphicon glyphicon-search"></span></span>
+                                <input type="text" class="form-control" ng-model="searchString"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-default" ng-class="showFilter ? 'active' : ''" ng-click="showFilter = !showFilter">
+                        Filters
+                        <span ng-if="!showFilter" class="glyphicon glyphicon-chevron-down"></span>
+                        <span ng-if="showFilter" class="glyphicon glyphicon-chevron-up"></span>
+                    </button>
+                </div>
+            </div>
+            <div style="padding-top: 1em;" ng-show="showFilter || isFilterDefined(filters)">
+                <jamm-faceted-search style="showFilter ? 'full' : 'brief'" items="movies" filter-templates="filterTemplates" filters="filters" search-result-callback="updateFilteredMovies(items)"></jamm-faceted-search>
             </div>
         </div>
-
     </div>
 
     <div class="row-fluid">
