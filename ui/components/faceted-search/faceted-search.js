@@ -28,13 +28,49 @@ angular.module('jamm.facetedSearch', [ ])
         return invertedIndexMap;
     }
 
+    function filterByText(items, searchText) {
+        var filteredItems = [];
+        var searchTextLowerCase = searchText.toLowerCase();
+        for (var index in items) {
+            var item = items[index];
+
+            var match = false;
+            angular.forEach(item, function (value, key) {
+                if (matchByText(value, searchTextLowerCase)) {
+                    match = true;
+                }
+            });
+            if (match) {
+                filteredItems.push(item);
+            }
+        }
+        return filteredItems;
+    }
+
+    function matchByText(field, searchText) {
+        if ((typeof field) == 'string') {
+            return field.toLowerCase().indexOf(searchText) > -1;
+        } else if (Array.isArray(field)) {
+            for (var i = 0; i < field.length; i++) {
+                if (matchByText(field[i], searchText)) {
+                    return true;
+                }
+            }
+            return false;
+        } else if (field && (typeof field == 'object')) {
+            return matchByText(field.name, searchText);
+        } else {
+            return false;
+        }
+    }
+
     var FacetedSearchIndex = function (items, filterTemplates) {
         this.items = items;
         this.filterTemplates = filterTemplates;
         this.invertedIndexMap = buildInvertedIndex({}, items, filterTemplates);
     };
 
-    FacetedSearchIndex.prototype.getFilteredItems = function (filterSet) {
+    FacetedSearchIndex.prototype.getFilteredItems = function (filterSet, searchText) {
         var intersection = this.items;
         for (var appliedFilterName in filterSet) {
             var appliedFilterValues = filterSet[appliedFilterName];
@@ -51,14 +87,19 @@ angular.module('jamm.facetedSearch', [ ])
                 intersection = _.intersection(intersection, union);
             }
         }
-        return intersection;
+
+        if (searchText) {
+            return filterByText(intersection, searchText);
+        } else {
+            return intersection;
+        }
     };
 
-    FacetedSearchIndex.prototype.getStatistics = function (filterSet) {
+    FacetedSearchIndex.prototype.getStatistics = function (filterSet, searchText) {
         var statistics = {};
         for (var i = 0; i < this.filterTemplates.length; i++) {
             var filterTemplate = this.filterTemplates[i];
-            var filteredItems = this.getFilteredItems(_.omit(filterSet, filterTemplate.name));
+            var filteredItems = this.getFilteredItems(_.omit(filterSet, filterTemplate.name), searchText);
 
             var histogram = {};
             var invertedIndex = this.invertedIndexMap[filterTemplate.name];

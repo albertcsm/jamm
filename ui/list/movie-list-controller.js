@@ -6,6 +6,7 @@ angular.module('jamm')
     $scope.filteredMovies = [];
     $scope.showFilter = false;
     $scope.filters = {};
+    $scope.searchText = '';
     $scope.statistics = {};
     $scope.pageSize = 24;
     $scope.pageCount = 0;
@@ -48,19 +49,24 @@ angular.module('jamm')
             $scope.movies = movies;
 
             facetedSearchIndex = new FacetedSearchIndex($scope.movies, $scope.filterTemplates);
-            $scope.filteredMovies = facetedSearchIndex.getFilteredItems($scope.filters);
-            $scope.statistics = facetedSearchIndex.getStatistics($scope.filters);
+            updateFilteredMovies();
             updatePageCount();
 
-            $scope.$watch('filters', function (value) {
-                $scope.filteredMovies = facetedSearchIndex.getFilteredItems($scope.filters);
-                $scope.statistics = facetedSearchIndex.getStatistics($scope.filters);
-                updatePageCount();
+            $scope.$watch('filters', function (newValue, oldValue) {
+                if (newValue !== oldValue) {
+                    updateFilteredMovies();
+                    updatePageCount();
+                }
             }, true);
 
-            MovieService.subscribe($scope, function (data) {
-                var reloadFilteredMovies = false;
+            $scope.$watch('searchText', function (newValue, oldValue) {
+                if (newValue !== oldValue) {
+                    updateFilteredMovies();
+                    updatePageCount();
+                }
+            });
 
+            MovieService.subscribe($scope, function (data) {
                 if (data.event == 'deleted') {
                     console.log('received movie deleted event: ' + data.id);
                     
@@ -68,7 +74,8 @@ angular.module('jamm')
                     facetedSearchIndex.removeItem($scope.movies[index]);
                     $scope.movies.splice(index, 1);
 
-                    reloadFilteredMovies = true;
+                    updateFilteredMovies();
+                    updatePageCount();
                 } else if (data.event == 'updated') {
                     console.log('received movie updated event: ' + data.id);
 
@@ -77,29 +84,32 @@ angular.module('jamm')
                     facetedSearchIndex.addItem(data.newValue);
                     $scope.movies.splice(index, 1, data.newValue);
 
-                    reloadFilteredMovies = true;
+                    updateFilteredMovies();
+                    updatePageCount();
                 } else if (data.event == 'added') {
                     console.log('received movie added event: ' + data.value);
 
                     facetedSearchIndex.addItem(data.value);
                     $scope.movies.push(data.value);
 
-                    reloadFilteredMovies = true;
-                }
-
-                if (reloadFilteredMovies) {
-                    $scope.filteredMovies = facetedSearchIndex.getFilteredItems($scope.filters);
-                    $scope.statistics = facetedSearchIndex.getStatistics($scope.filters);
+                    updateFilteredMovies();
                     updatePageCount();
                 }
             });
         });
     }
 
+    function updateFilteredMovies() {
+        $scope.filteredMovies = facetedSearchIndex.getFilteredItems($scope.filters, $scope.searchText);
+        $scope.statistics = facetedSearchIndex.getStatistics($scope.filters, $scope.searchText);
+    }
+
     function updatePageCount() {
         $scope.pageCount = Math.ceil($scope.filteredMovies.length / $scope.pageSize);
-        if ($scope.currentPage >= $scope.pageCount) {
-            $scope.currentPage = $scope.pageCount - 1;
+        if ($scope.pageCount > 0) {
+            if ($scope.currentPage >= $scope.pageCount) {
+                $scope.currentPage = $scope.pageCount - 1;
+            }
         }
     }
 
@@ -133,8 +143,6 @@ angular.module('jamm')
             $scope.sortDescription = 'Sorting';
         }
     }, true);
-
-    $scope.searchString = '';
 
     $scope.isFilterDefined = function (filters) {
         return !angular.equals(filters, {});
