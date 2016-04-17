@@ -78,7 +78,7 @@
                 </div>
             </div>
             <div style="padding-top: 1em;" ng-show="showFilter || isFilterDefined(filters)">
-                <jamm-faceted-search style="showFilter ? 'full' : 'brief'" items="movies" filter-templates="filterTemplates" filters="filters" search-result-callback="updateFilteredMovies(items)"></jamm-faceted-search>
+                <jamm-faceted-search style="showFilter ? 'full' : 'brief'" filter-templates="filterTemplates" filters="filters" statistics="statistics"></jamm-faceted-search>
             </div>
         </div>
     </div>

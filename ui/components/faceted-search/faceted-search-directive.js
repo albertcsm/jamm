@@ -1,28 +1,14 @@
 angular.module('jamm.facetedSearch')
-.directive('jammFacetedSearch', function(FacetedSearchIndex) {
+.directive('jammFacetedSearch', function() {
 
     function link(scope, element, attrs) {
         scope.statistics = {};
-        var facetedSearchIndex;
-
-        function applyFilters() {
-            scope.statistics = facetedSearchIndex.getStatistics(scope.filterSet);
-
-            var filteredItems = facetedSearchIndex.getFilteredItems(scope.filterSet);
-            scope.searchResultCallback({ items: filteredItems });
-        }
 
         scope.resetFilters = function () {
             angular.forEach(scope.filterSet, function (value, key) {
                 delete scope.filterSet[key];
             });
-            applyFilters();
         }
-
-        scope.$watch('items', function () {
-            facetedSearchIndex = new FacetedSearchIndex(scope.items, scope.filterTemplates);
-            applyFilters();
-        }, true);
 
         scope.toggleFilterOption = function(filterName, filterValue) {
             if (scope.filterSet[filterName]) {
@@ -39,7 +25,6 @@ angular.module('jamm.facetedSearch')
             } else {
                 scope.filterSet[filterName] = [ filterValue ];
             }
-            applyFilters();
         }
 
         scope.isFilterOptionSelected = function(filterName, filterValue) {
@@ -55,10 +40,9 @@ angular.module('jamm.facetedSearch')
         restrict: "E",
         scope: {
             style: '=',
-            items: '=',
             filterSet: '=filters',
             filterTemplates: '=',
-            searchResultCallback: '&'
+            statistics: '='
         },
         templateUrl: "components/faceted-search/faceted-search.html",
         link: link
