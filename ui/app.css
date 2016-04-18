@@ -37,6 +37,13 @@ html {
     margin-bottom: 0.25em;
 }
 
+.jamm-text-clear-button {
+    z-index: 3;
+    color: lightgrey;
+    pointer-events: auto;
+    cursor: pointer;
+}
+
 .jamm-img-table-row {
     max-height: 3em;
 }

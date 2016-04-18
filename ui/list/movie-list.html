@@ -62,11 +62,12 @@
 
                 <div class="pull-right">
                     <div class="jamm-form-group-inline-block">
-                        <div class="form-group">
+                        <div class="form-group has-feedback">
                             <div class="input-group">
                                 <span class="input-group-addon" id="sizing-addon1"><span class="glyphicon glyphicon-search"></span></span>
                                 <input type="text" class="form-control" ng-model="searchText" ng-model-options="{ debounce : 500 }"/>
                             </div>
+                            <span class="form-control-feedback glyphicon glyphicon-remove-sign jamm-text-clear-button" ng-click="searchText = ''"></span>
                         </div>
                     </div>
 
