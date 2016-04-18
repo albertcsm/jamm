@@ -4,7 +4,6 @@ angular.module('jamm', [
     'ct.ui.router.extras',
     'as.sortable',
     'ngResource',
-    'ngAnimate',
     'treeControl',
     'n3-pie-chart',
     'ngTagsInput',
