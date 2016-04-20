@@ -104,7 +104,7 @@
         <table class="table table-hover" ng-if="displayStyle == 'list'">
             <thead>
                 <tr>
-                    <th><!-- thumbnail --></th>
+                    <th class="hidden-xs"><!-- thumbnail --></th>
                     <th>
                         <table-header-sortable field-name="name" sort-param="sortParam">Name</table-header-sortable>
                     </th>
@@ -124,7 +124,7 @@
             </thead>
             <tbody class="jamm-cursor-pointer">
                 <tr ng-repeat="movie in filteredMovies | orderBy:['!!'+sortParam.field, sortParam.field]:sortParam.reversed | limitTo:pageSize:(currentPage * pageSize) track by movie._id" ui-sref="movies.detail({id: movie._id})">
-                    <td><img class="img-responsive center-block jamm-img-table-row" ng-if="movie.storage.cover" ng-src="{{getCoverUrl(movie)}}"/></td>
+                    <td class="hidden-xs"><img class="img-responsive center-block jamm-img-table-row" ng-if="movie.storage.cover" ng-src="{{getCoverUrl(movie)}}"/></td>
                     <td>{{movie.name}}</td>
                     <td>{{movie.subheading}}</td>
                     <td>
