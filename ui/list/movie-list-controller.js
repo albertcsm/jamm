@@ -1,6 +1,7 @@
 angular.module('jamm')
-.controller('MovieListController', function ($scope, MovieService, FacetedSearchIndex) {
+.controller('MovieListController', function ($scope, $q, MovieService, Volume, FacetedSearchIndex) {
     var facetedSearchIndex;
+    var volumeIdToNameMap;
 
     $scope.movies = [];
     $scope.filteredMovies = [];
@@ -41,61 +42,79 @@ angular.module('jamm')
                     return 'no star';
                 }
             }
+        },
+        {
+            name: 'Volume',
+            valueMapper: function (movie) {
+                return volumeIdToNameMap[movie.storage.volume];
+            }
         }
     ];
 
+    function loadVolumes() {
+        return Volume.query(function (volumes) {
+            volumeIdToNameMap = {};
+            for (var i = 0; i < volumes.length; i++) {
+                var volume = volumes[i];
+                volumeIdToNameMap[volume._id] = volume.name;
+            }
+        }).$promise;
+    }
+
     function loadMovies() {
-        MovieService.query(function (movies) {
+        return MovieService.query(function (movies) {
             $scope.movies = movies;
+        }).$promise;
+    }
 
-            facetedSearchIndex = new FacetedSearchIndex($scope.movies, $scope.filterTemplates);
-            updateFilteredMovies();
-            updatePageCount();
+    function initializeFacetedSearchFilter() {
+        facetedSearchIndex = new FacetedSearchIndex($scope.movies, $scope.filterTemplates);
+        updateFilteredMovies();
+        updatePageCount();
 
-            $scope.$watch('filters', function (newValue, oldValue) {
-                if (newValue !== oldValue) {
-                    updateFilteredMovies();
-                    updatePageCount();
-                }
-            }, true);
+        $scope.$watch('filters', function (newValue, oldValue) {
+            if (newValue !== oldValue) {
+                updateFilteredMovies();
+                updatePageCount();
+            }
+        }, true);
 
-            $scope.$watch('searchText', function (newValue, oldValue) {
-                if (newValue !== oldValue) {
-                    updateFilteredMovies();
-                    updatePageCount();
-                }
-            });
+        $scope.$watch('searchText', function (newValue, oldValue) {
+            if (newValue !== oldValue) {
+                updateFilteredMovies();
+                updatePageCount();
+            }
+        });
 
-            MovieService.subscribe($scope, function (data) {
-                if (data.event == 'deleted') {
-                    console.log('received movie deleted event: ' + data.id);
-                    
-                    var index = _.findIndex($scope.movies, { _id : data.id });
-                    facetedSearchIndex.removeItem($scope.movies[index]);
-                    $scope.movies.splice(index, 1);
+        MovieService.subscribe($scope, function (data) {
+            if (data.event == 'deleted') {
+                console.log('received movie deleted event: ' + data.id);
+                
+                var index = _.findIndex($scope.movies, { _id : data.id });
+                facetedSearchIndex.removeItem($scope.movies[index]);
+                $scope.movies.splice(index, 1);
 
-                    updateFilteredMovies();
-                    updatePageCount();
-                } else if (data.event == 'updated') {
-                    console.log('received movie updated event: ' + data.id);
+                updateFilteredMovies();
+                updatePageCount();
+            } else if (data.event == 'updated') {
+                console.log('received movie updated event: ' + data.id);
 
-                    var index = _.findIndex($scope.movies, { _id : data.id });
-                    facetedSearchIndex.removeItem($scope.movies[index]);
-                    facetedSearchIndex.addItem(data.newValue);
-                    $scope.movies.splice(index, 1, data.newValue);
+                var index = _.findIndex($scope.movies, { _id : data.id });
+                facetedSearchIndex.removeItem($scope.movies[index]);
+                facetedSearchIndex.addItem(data.newValue);
+                $scope.movies.splice(index, 1, data.newValue);
 
-                    updateFilteredMovies();
-                    updatePageCount();
-                } else if (data.event == 'added') {
-                    console.log('received movie added event: ' + data.value);
+                updateFilteredMovies();
+                updatePageCount();
+            } else if (data.event == 'added') {
+                console.log('received movie added event: ' + data.value);
 
-                    facetedSearchIndex.addItem(data.value);
-                    $scope.movies.push(data.value);
+                facetedSearchIndex.addItem(data.value);
+                $scope.movies.push(data.value);
 
-                    updateFilteredMovies();
-                    updatePageCount();
-                }
-            });
+                updateFilteredMovies();
+                updatePageCount();
+            }
         });
     }
 
@@ -113,13 +132,13 @@ angular.module('jamm')
         }
     }
 
+    $q.all([ loadMovies(), loadVolumes() ]).then(initializeFacetedSearchFilter);
+
     $scope.setPage = function (page) {
         if (page >= 0 && page < $scope.pageCount) {
             $scope.currentPage = page;
         }
     };
-
-    loadMovies();
 
     $scope.displayStyle = 'thumbnail';
     $scope.sortParam = {
