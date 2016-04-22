@@ -65,9 +65,24 @@ angular.module('jamm.facetedSearch', [ ])
     }
 
     var FacetedSearchIndex = function (items, filterTemplates) {
-        this.items = items;
+        this.items = _.clone(items);
         this.filterTemplates = filterTemplates;
         this.invertedIndexMap = buildInvertedIndex({}, items, filterTemplates);
+    };
+
+    FacetedSearchIndex.prototype.getInvalidatedFilterOptions = function (filterSet) {
+        var filterOptions = {};
+        for (var filterName in filterSet) {
+            filterOptions[filterName] = [];
+            var invertedIndex = this.invertedIndexMap[filterName];
+            for (var i = 0; i < filterSet[filterName].length; i++) {
+                var filterValue = filterSet[filterName][i];
+                if (!invertedIndex[filterValue] || invertedIndex[filterValue].length == 0) {
+                    filterOptions[filterName].push(filterValue);
+                }
+            }
+        }
+        return filterOptions;
     };
 
     FacetedSearchIndex.prototype.getFilteredItems = function (filterSet, searchText) {
@@ -120,17 +135,24 @@ angular.module('jamm.facetedSearch', [ ])
         return statistics;
     };
 
-    FacetedSearchIndex.prototype.addItem = function (item) {
-        this.invertedIndexMap = buildInvertedIndex(this.invertedIndexMap, [ item ], this.filterTemplates);
+    FacetedSearchIndex.prototype.addItems = function (items) {
+        this.invertedIndexMap = buildInvertedIndex(this.invertedIndexMap, items, this.filterTemplates);
     };
 
-    FacetedSearchIndex.prototype.removeItem = function (item) {
+    FacetedSearchIndex.prototype.removeItems = function (predicate) {
+        var items = _.filter(this.items, predicate);
         for (var filterName in this.invertedIndexMap) {
             var invertedIndex = this.invertedIndexMap[filterName];
             for (var filterValue in invertedIndex) {
-                var pos = invertedIndex[filterValue].indexOf(item);
-                if (pos != -1) {
-                    invertedIndex[filterValue].splice(pos, 1);
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var pos = invertedIndex[filterValue].indexOf(item);
+                    if (pos != -1) {
+                        invertedIndex[filterValue].splice(pos, 1);
+                    }
+                }
+                if (invertedIndex[filterValue].length == 0) {
+                    delete invertedIndex[filterValue];
                 }
             }
         }

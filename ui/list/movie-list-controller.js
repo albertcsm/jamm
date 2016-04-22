@@ -91,8 +91,9 @@ angular.module('jamm')
                 console.log('received movie deleted event: ' + data.id);
                 
                 var index = _.findIndex($scope.movies, { _id : data.id });
-                facetedSearchIndex.removeItem($scope.movies[index]);
                 $scope.movies.splice(index, 1);
+
+                facetedSearchIndex.removeItems({ _id : data.id });
 
                 updateFilteredMovies();
                 updatePageCount();
@@ -100,17 +101,19 @@ angular.module('jamm')
                 console.log('received movie updated event: ' + data.id);
 
                 var index = _.findIndex($scope.movies, { _id : data.id });
-                facetedSearchIndex.removeItem($scope.movies[index]);
-                facetedSearchIndex.addItem(data.newValue);
                 $scope.movies.splice(index, 1, data.newValue);
+
+                facetedSearchIndex.removeItems({ _id : data.id });
+                facetedSearchIndex.addItems([ data.newValue ]);
 
                 updateFilteredMovies();
                 updatePageCount();
             } else if (data.event == 'added') {
                 console.log('received movie added event: ' + data.value);
 
-                facetedSearchIndex.addItem(data.value);
                 $scope.movies.push(data.value);
+
+                facetedSearchIndex.addItems([ data.value ]);
 
                 updateFilteredMovies();
                 updatePageCount();
@@ -119,6 +122,18 @@ angular.module('jamm')
     }
 
     function updateFilteredMovies() {
+        var invalidatedFilterOptions = facetedSearchIndex.getInvalidatedFilterOptions($scope.filters);
+        for (var filterName in invalidatedFilterOptions) {
+            var filterOptions = invalidatedFilterOptions[filterName];
+            for (var i = 0; i < filterOptions.length; i++) {
+                var filterOption = filterOptions[i];
+                var index = $scope.filters[filterName].indexOf(filterOption);
+                $scope.filters[filterName].splice(index, 1);
+                if ($scope.filters[filterName].length == 0) {
+                    delete $scope.filters[filterName];
+                }
+            }
+        }
         $scope.filteredMovies = facetedSearchIndex.getFilteredItems($scope.filters, $scope.searchText);
         $scope.statistics = facetedSearchIndex.getStatistics($scope.filters, $scope.searchText);
     }
