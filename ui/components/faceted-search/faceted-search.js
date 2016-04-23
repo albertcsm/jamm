@@ -1,33 +1,6 @@
 angular.module('jamm.facetedSearch', [ ])
 .factory('FacetedSearchIndex', function () {
 
-    function buildInvertedIndex(invertedIndexMap, items, filterTemplates) {
-        angular.forEach(items, function (item) {
-            angular.forEach(filterTemplates, function (filterTemplate) {
-                if (!invertedIndexMap.hasOwnProperty(filterTemplate.name)) {
-                    invertedIndexMap[filterTemplate.name] = {};
-                }
-                var invertedIndexForField = invertedIndexMap[filterTemplate.name];
-                var mappedValue = filterTemplate.valueMapper(item);
-                if (mappedValue) {
-                    function addToIndex(value) {
-                        if (!invertedIndexForField[value]) {
-                            invertedIndexForField[value] = [];
-                        }
-                        invertedIndexForField[value].push(item);
-                    }
-
-                    if (Array.isArray(mappedValue)) {
-                        angular.forEach(mappedValue, addToIndex);
-                    } else {
-                        addToIndex(mappedValue);
-                    }
-                }
-            });
-        });
-        return invertedIndexMap;
-    }
-
     function filterByText(items, searchText) {
         var filteredItems = [];
         var searchTextLowerCase = searchText.toLowerCase();
@@ -65,9 +38,10 @@ angular.module('jamm.facetedSearch', [ ])
     }
 
     var FacetedSearchIndex = function (items, filterTemplates) {
-        this.items = _.clone(items);
         this.filterTemplates = filterTemplates;
-        this.invertedIndexMap = buildInvertedIndex({}, items, filterTemplates);
+        this.invertedIndexMap = {};
+        this.items = [];
+        this.addItems(items);
     };
 
     FacetedSearchIndex.prototype.getInvalidatedFilterOptions = function (filterSet) {
@@ -136,11 +110,36 @@ angular.module('jamm.facetedSearch', [ ])
     };
 
     FacetedSearchIndex.prototype.addItems = function (items) {
-        this.invertedIndexMap = buildInvertedIndex(this.invertedIndexMap, items, this.filterTemplates);
+        this.items = this.items.concat(items);
+        var instance = this;
+        angular.forEach(items, function (item) {
+            angular.forEach(instance.filterTemplates, function (filterTemplate) {
+                if (!instance.invertedIndexMap.hasOwnProperty(filterTemplate.name)) {
+                    instance.invertedIndexMap[filterTemplate.name] = {};
+                }
+                var invertedIndexForField = instance.invertedIndexMap[filterTemplate.name];
+                var mappedValue = filterTemplate.valueMapper(item);
+                if (mappedValue) {
+                    function addToIndex(value) {
+                        if (!invertedIndexForField[value]) {
+                            invertedIndexForField[value] = [];
+                        }
+                        invertedIndexForField[value].push(item);
+                    }
+
+                    if (Array.isArray(mappedValue)) {
+                        angular.forEach(mappedValue, addToIndex);
+                    } else {
+                        addToIndex(mappedValue);
+                    }
+                }
+            });
+        });
     };
 
     FacetedSearchIndex.prototype.removeItems = function (predicate) {
         var items = _.filter(this.items, predicate);
+        this.items = _.difference(this.items, items);
         for (var filterName in this.invertedIndexMap) {
             var invertedIndex = this.invertedIndexMap[filterName];
             for (var filterValue in invertedIndex) {
