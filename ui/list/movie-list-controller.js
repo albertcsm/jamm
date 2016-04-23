@@ -155,6 +155,11 @@ angular.module('jamm')
         }
     };
 
+    $scope.clearSearchField = function () {
+        $scope.searchText = '';
+        angular.element('#searchField').trigger('focus');
+    };
+
     $scope.displayStyle = 'thumbnail';
     $scope.sortParam = {
         field: 'releaseDate',
