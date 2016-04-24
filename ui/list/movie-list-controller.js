@@ -93,7 +93,7 @@ angular.module('jamm')
                 var index = _.findIndex($scope.movies, { _id : data.id });
                 $scope.movies.splice(index, 1);
 
-                facetedSearchIndex.removeItems({ _id : data.id });
+                facetedSearchIndex.removeItem({ _id : data.id });
 
                 updateFilteredMovies();
                 updatePageCount();
@@ -103,8 +103,7 @@ angular.module('jamm')
                 var index = _.findIndex($scope.movies, { _id : data.id });
                 $scope.movies.splice(index, 1, data.newValue);
 
-                facetedSearchIndex.removeItems({ _id : data.id });
-                facetedSearchIndex.addItems([ data.newValue ]);
+                facetedSearchIndex.updateItem({ _id : data.id }, data.newValue);
 
                 updateFilteredMovies();
                 updatePageCount();
@@ -113,7 +112,7 @@ angular.module('jamm')
 
                 $scope.movies.push(data.value);
 
-                facetedSearchIndex.addItems([ data.value ]);
+                facetedSearchIndex.addItem(data.value);
 
                 updateFilteredMovies();
                 updatePageCount();
