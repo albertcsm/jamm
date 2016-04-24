@@ -7,6 +7,7 @@ angular.module('jamm', [
     'treeControl',
     'n3-pie-chart',
     'ngTagsInput',
+    'ngclipboard',
     'jamm.unitFilter',
     'jamm.tableHeaderSortable',
     'jamm.dateTimePicker',

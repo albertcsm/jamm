@@ -39,6 +39,7 @@
                         <th>Resolution</th>
                         <th>Length</th>
                         <th>Size</th>
+                        <th><!-- Functions --></th>
                     </tr>
                 </thead>
                 <tbody class="jamm-cursor-pointer">
@@ -48,6 +49,13 @@
                         <td>{{video.resolution}}</td>
                         <td>{{video.length | formatDuration}}</td>
                         <td>{{video.size | formatByte}}</td>
+                        <td class="text-right">
+                            <a ng-click="discardClick($event)" ng-href="{{getAbsoluteUrl(video.src)}}">
+                                <button class="btn btn-info btn-xs" ngclipboard data-clipboard-text="{{getAbsoluteUrl(video.src)}}" uib-tooltip="Copy URL">
+                                    <span class="glyphicon glyphicon-link"></span>
+                                </button>
+                            </a>
+                        </td>
                     </tr>
                 </tbody>
             </table>

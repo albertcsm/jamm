@@ -18,7 +18,13 @@ angular.module('jamm')
                 });
             }
 
-            $scope.movieFiles = VolumeFile.query({ volumeId: storageInfo.volume, dir: storageInfo.path });
+            $scope.movieFiles = [
+                {
+                    name: storageInfo.path,
+                    type: 'directory',
+                    children: VolumeFile.query({ volumeId: storageInfo.volume, dir: storageInfo.path })
+                }
+            ];
         });
     }
 
@@ -134,6 +140,20 @@ angular.module('jamm')
             $scope.mediaInfo.cancel();
         }
     });
+
+    $scope.getAbsoluteUrl = (function() {
+        var a;
+        return function(url) {
+            if (!a) a = document.createElement('a');
+            a.href = url;
+            return a.href;
+        };
+    })();
+
+    $scope.discardClick = function($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+    }
 })
 .controller('UnsavedChangeModalController', function ($scope, $uibModalInstance) {
     $scope.saveAndProceed = function () {
