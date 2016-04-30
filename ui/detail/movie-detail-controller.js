@@ -53,7 +53,9 @@ angular.module('jamm')
         MovieService.update($scope.movie._id, $scope.movieModelInEdit, function () {
             $scope.movie = angular.copy($scope.movieModelInEdit);
             $scope.isModified = false;
-            callback(null);
+            if (callback) {
+                callback(null);
+            }
         });
     };
 
