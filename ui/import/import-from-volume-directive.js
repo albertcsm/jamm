@@ -88,13 +88,15 @@ angular.module('jamm')
                 controller: 'MovieImportModalController',
                 resolve: {
                     movie: function() {
-                        return {
+                        var initModel = {
                             name: scope.selectedPath.split('/').reverse()[0],
+                            actors: [ { name: '' } ],
                             storage: {
                                 volume: scope.volume._id,
                                 path: scope.selectedPath
                             }
                         };
+                        return initModel;
                     },
                     images: function() { return scope.mediaInfo.images; }
                 }

@@ -47,12 +47,7 @@
                 </div>
             </div>
 
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="add more..." ng-model="newActor"/>
-                <span class="input-group-btn">
-                    <button class="btn btn-default" type="button" ng-disabled="!newActor" ng-click="model.actors.push({'name': newActor}); newActor = ''"><span class="glyphicon glyphicon-plus-sign"></span></button>
-                </span>
-            </div>
+            <button class="btn btn-default btn-sm" type="button" ng-click="addNewActor()"><span class="glyphicon glyphicon-plus-sign"></span> Add more</button>
 
         </div>
     </div>

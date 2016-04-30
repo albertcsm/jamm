@@ -9,6 +9,7 @@ angular.module('jamm.movieDetailForm', [ ])
         },
         templateUrl: 'components/movie-detail-form/movie-detail-form.html',
         link: function (scope, element, attrs) {
+
             scope.getCoverUrl = function () {
                 if (scope.model && scope.model.storage && scope.model.storage.cover) {
                     var storage = scope.model.storage;
@@ -21,6 +22,11 @@ angular.module('jamm.movieDetailForm', [ ])
             scope.setCover = function (imageName) {
                 scope.model.storage.cover = imageName;
             }
+
+            scope.addNewActor = function () {
+                scope.model.actors.push({'name': ''});
+            }
+
         }
     };
 

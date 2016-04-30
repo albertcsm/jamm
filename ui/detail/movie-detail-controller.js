@@ -11,10 +11,6 @@ angular.module('jamm')
 
     if (movieId) {
         $scope.movie = MovieService.get({ id: movieId }, function () {
-            if (!$scope.movie.actors) {
-                $scope.movie.actors = [];
-            }
-
             $scope.movieModelInEdit = angular.copy($scope.movie);
 
             var storageInfo = $scope.movie.storage;
