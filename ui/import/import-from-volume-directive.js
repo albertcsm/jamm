@@ -1,5 +1,25 @@
 angular.module('jamm')
-.directive('importFromVolume', function($parse, $uibModal, VolumeFile, MediaInfoService, MovieService) {
+.service('MovieModelInitializer', function () {
+    this.initializeMovieModel = function (volume, path, mediaInfo) {
+        var initModel = {
+            name: path.split('/').reverse()[0],
+            actors: [ { name: '' } ],
+            storage: {
+                volume: volume._id,
+                path: path
+            }
+        };
+        for (var key in mediaInfo.images) {
+            var imageInfo = mediaInfo.images[key];
+            if (imageInfo.name.match(/^(.*\W)?cover(\W.*)?$/)) {
+                initModel.storage.cover = imageInfo.name;
+                break;
+            }
+        }
+        return initModel;
+    };
+})
+.directive('importFromVolume', function($parse, $uibModal, VolumeFile, MediaInfoService, MovieService, MovieModelInitializer) {
 
     function link(scope, element, attrs) {
         scope.volume = $parse(attrs.volume)(scope);
@@ -88,15 +108,7 @@ angular.module('jamm')
                 controller: 'MovieImportModalController',
                 resolve: {
                     movie: function() {
-                        var initModel = {
-                            name: scope.selectedPath.split('/').reverse()[0],
-                            actors: [ { name: '' } ],
-                            storage: {
-                                volume: scope.volume._id,
-                                path: scope.selectedPath
-                            }
-                        };
-                        return initModel;
+                        return MovieModelInitializer.initializeMovieModel(scope.volume, scope.selectedPath, scope.mediaInfo);
                     },
                     images: function() { return scope.mediaInfo.images; }
                 }
