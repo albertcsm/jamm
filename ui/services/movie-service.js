@@ -16,7 +16,7 @@ angular.module('jamm')
         create: function (value, callback) {
             var ret = Movie.create(value, callback);
             ret.$promise.then(function () {
-                $rootScope.$emit('MovieService:event', { event: 'added', value: value });
+                $rootScope.$emit('MovieService:event', { event: 'added', value: ret });
             });
             return ret;
         },

@@ -108,7 +108,7 @@ angular.module('jamm')
                 updateFilteredMovies();
                 updatePageCount();
             } else if (data.event == 'added') {
-                console.log('received movie added event: ' + data.value);
+                console.log('received movie added event: ' + data.value._id);
 
                 $scope.movies.push(data.value);
 
