@@ -106,14 +106,15 @@
                     </button>
                     <div class="jamm-btn-group-spacer"/>
                     <div class="btn-group">
-                        <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+                        <button class="btn btn-danger" ng-click="confirmDeleteFilesAndRecord()">
                             <span class="glyphicon glyphicon-trash"></span>
                             Delete
+                        </button>
+                        <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right">
                             <li><a href="javascript:;" ng-click="confirmDeleteRecord()">Database record only</a></li>
-                            <li><a href="javascript:;" ng-click="confirmDeleteFilesAndRecord()">Files and database record</a></li>
                         </ul>
                     </div>
                 </div>
