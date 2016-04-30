@@ -87,7 +87,38 @@
     <div class="panel panel-default">
         <div class="panel-heading"><h3 class="panel-title">Information</h3></div>
         <div class="panel-body">
-            <movie-detail-form ng-model="movie" media-info="mediaInfo" on-save="save(model, savedCallback)" on-delete="confirmDelete(deleteFiles)"></movie-detail-form>
+
+            <movie-detail-form ng-model="movieModelInEdit" media-info="mediaInfo"></movie-detail-form>
+
+            <div class="jamm-vertical-spacer"/>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-8">
+                    <button class="btn btn-default btn-primary" ng-click="save()" ng-disabled="!isModified" type="button">
+                        <span class="glyphicon glyphicon-ok"></span>
+                        Save
+                    </button>
+                    <div class="jamm-btn-group-spacer"/>
+                    <button class="btn btn-default" ng-click="discard()" ng-disabled="!isModified" type="button">
+                        <span class="glyphicon glyphicon-remove"></span>
+                        Discard
+                    </button>
+                    <div class="jamm-btn-group-spacer"/>
+                    <div class="btn-group">
+                        <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+                            <span class="glyphicon glyphicon-trash"></span>
+                            Delete
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a href="javascript:;" ng-click="confirmDeleteRecord()">Database record only</a></li>
+                            <li><a href="javascript:;" ng-click="confirmDeleteFilesAndRecord()">Files and database record</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 

@@ -42,11 +42,21 @@
 
 
 <script type="text/ng-template" id="movie-info-modal-template">
-    <div class="container-fluid">
-        <div class="row-fluid">
-            <h3>Import</h3>
-            <movie-detail-form ng-model="movie" media-info="mediaInfo" on-save="save(model)" on-cancel="cancel()"></movie-detail-form>
-        </div>
+    <div class="modal-header">
+        <h4 class='modal-title'>Import</h4>
+    </div>
+    <div class="modal-body">
+        <movie-detail-form ng-model="movie" media-info="mediaInfo"></movie-detail-form>
+    <div>
+    <div class="modal-footer">
+        <button class="btn btn-default btn-primary" ng-click="save()" type="button">
+            <span class="glyphicon glyphicon-ok"></span>
+            Save
+        </button>
+        <button class="btn btn-default" ng-click="cancel()" type="button">
+            <span class="glyphicon glyphicon-remove"></span>
+            Cancel
+        </button>
     </div>
 </script>
 

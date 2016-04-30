@@ -4,11 +4,19 @@ angular.module('jamm')
     var movieId = $stateParams.id;
 
     $scope.movie = null;
+    $scope.movieModelInEdit = null;
+    $scope.isModified = false;
     $scope.mediaInfo = null;
     $scope.selectedVideo = null;
 
     if (movieId) {
         $scope.movie = MovieService.get({ id: movieId }, function () {
+            if (!$scope.movie.actors) {
+                $scope.movie.actors = [];
+            }
+
+            $scope.movieModelInEdit = angular.copy($scope.movie);
+
             var storageInfo = $scope.movie.storage;
             if (storageInfo) {
                 $scope.mediaInfo = MediaInfoService.getMediaInfo(storageInfo.volume, storageInfo.path, function (info) {
@@ -28,6 +36,10 @@ angular.module('jamm')
         });
     }
 
+    $scope.$watch('movieModelInEdit', function (value) {
+        $scope.isModified = !angular.equals(value, $scope.movie);
+    }, true);
+
     $scope.getCoverUrl = function (movie) {
         if (movie && movie.storage) {
             var storage = movie.storage;
@@ -37,51 +49,63 @@ angular.module('jamm')
         }
     };
 
-    $scope.save = function(model, savedCallback) {
-        if (model._id == $scope.movie._id) {
-            MovieService.update(model._id, model, function () {
-                $scope.movie = angular.copy(model);
-                savedCallback();
-            });
-        } else {
-            MovieService.create(model, function () {
-                MovieService.delete({ id: $scope.movie._id }, function () {
-                    $scope.movie = angular.copy(model);
-                    savedCallback();
-                });
-            });
-        }
+    $scope.save = function (callback) {
+        MovieService.update($scope.movie._id, $scope.movieModelInEdit, function () {
+            $scope.movie = angular.copy($scope.movieModelInEdit);
+            $scope.isModified = false;
+            callback(null);
+        });
     };
 
-    $scope.confirmDelete = function (deleteFiles) {
+    $scope.discard = function () {
+        $scope.movieModelInEdit = angular.copy($scope.movie);
+        $scope.isModified = false;
+    };
+
+    $scope.confirmDeleteRecord = function () {
         $uibModal.open({
             templateUrl: 'confirm-delete-modal-template',
             controller: 'ConfirmDeleteModalController',
             resolve: {
-                deleteFiles : function () { return deleteFiles; }
+                deleteFiles : function () { return false; }
             },
             scope: $scope
         }).result.then(function () {
-            $scope.delete(deleteFiles);
+            $scope.deleteRecord(function () {
+                $state.go('movies.list');
+            });
         });
     };
 
-    $scope.delete = function (deleteFiles) {
-        function deleteRecord() {
-            MovieService.delete({ id: $scope.movie._id }, function () {
-                $scope.movie = null;
-                $state.go('movies.list');
+    $scope.confirmDeleteFilesAndRecord = function () {
+        $uibModal.open({
+            templateUrl: 'confirm-delete-modal-template',
+            controller: 'ConfirmDeleteModalController',
+            resolve: {
+                deleteFiles : function () { return true; }
+            },
+            scope: $scope
+        }).result.then(function () {
+            $scope.deleteFiles(function () {
+                $scope.deleteRecord(function () {
+                    $state.go('movies.list');
+                });
             });
-        }
+        });
+    };
 
-        if (deleteFiles) {
-            var storageInfo = $scope.movie.storage;
-            VolumeFile.delete({ volumeId: storageInfo.volume, path: storageInfo.path }, function () {
-                deleteRecord();
-            });
-        } else {
-            deleteRecord();
-        }
+    $scope.deleteRecord = function (callback) {
+        MovieService.delete({ id: $scope.movie._id }, function () {
+            $scope.movie = null;
+            callback();
+        });
+    };
+
+    $scope.deleteFiles = function (callback) {
+        var storageInfo = $scope.movie.storage;
+        VolumeFile.delete({ volumeId: storageInfo.volume, path: storageInfo.path }, function () {
+            callback();
+        });
     };
 
     $scope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options) {
@@ -92,11 +116,13 @@ angular.module('jamm')
                 controller: 'UnsavedChangeModalController'
             }).result.then(function (saving) {
                 if (saving) {
-                    $scope.save();
+                    $scope.save(function (newMovieModel) {
+                        $state.go(toState, toParams);
+                    });
                 } else {
                     $scope.discard();
+                    $state.go(toState, toParams);
                 }
-                $state.go(toState, toParams);
             });
         }
     });

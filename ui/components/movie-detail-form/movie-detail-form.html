@@ -20,14 +20,14 @@
     <div class="form-group">
         <label class="col-sm-2 control-label">Name</label>
         <div class="col-sm-8">
-            <input type="text" class="form-control" ng-model="movie.name"/>
+            <input type="text" class="form-control" ng-model="model.name"/>
         </div>
     </div>
 
     <div class="form-group">
         <label class="col-sm-2 control-label">Subheading</label>
         <div class="col-sm-8">
-            <input type="text" class="form-control" ng-model="movie.subheading"/>
+            <input type="text" class="form-control" ng-model="model.subheading"/>
         </div>
     </div>
 
@@ -35,13 +35,13 @@
         <label class="col-sm-2 control-label">Actors</label>
         <div class="col-sm-5">
 
-            <div ng-model="movie.actors" as-sortable>
-                <div ng-repeat="actor in movie.actors track by actor.name" as-sortable-item>
+            <div ng-model="model.actors" as-sortable>
+                <div ng-repeat="actor in model.actors track by actor.name" as-sortable-item>
                     <div class="input-group jamm-text-list-seperator">
                         <div class="input-group-addon" as-sortable-item-handle><span class="glyphicon glyphicon-move"></span></div>
                         <input type="text" class="form-control" ng-model="actor.name"/>
                         <span class="input-group-btn">
-                            <button class="btn btn-default" type="button" ng-click="movie.actors.splice($index, 1)"><span class="glyphicon glyphicon-remove"></span></button>
+                            <button class="btn btn-default" type="button" ng-click="model.actors.splice($index, 1)"><span class="glyphicon glyphicon-remove"></span></button>
                         </span>
                     </div>
                 </div>
@@ -50,7 +50,7 @@
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="add more..." ng-model="newActor"/>
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="button" ng-disabled="!newActor" ng-click="movie.actors.push({'name': newActor}); newActor = ''"><span class="glyphicon glyphicon-plus-sign"></span></button>
+                    <button class="btn btn-default" type="button" ng-disabled="!newActor" ng-click="model.actors.push({'name': newActor}); newActor = ''"><span class="glyphicon glyphicon-plus-sign"></span></button>
                 </span>
             </div>
 
@@ -60,14 +60,14 @@
     <div class="form-group">
         <label class="col-sm-2 control-label">Release date</label>
         <div class="col-sm-4">
-            <date-time-picker ng-model="movie.releaseDate"></date-time-picker>
+            <date-time-picker ng-model="model.releaseDate"></date-time-picker>
         </div>
     </div>
     
     <div class="form-group">
         <label class="col-sm-2 control-label">Categories</label>
         <div class="col-sm-8">
-            <tags-input ng-model="movie.categories" display-property="name" placeholder="add more...">
+            <tags-input ng-model="model.categories" display-property="name" placeholder="add more...">
                 <!-- <auto-complete source="loadTags($query)"></auto-complete> -->
             </tags-input>
         </div>
@@ -76,40 +76,8 @@
     <div class="form-group">
         <label class="col-sm-2 control-label">Rating</label>
         <div class="col-sm-8">
-            <span class="jamm-rating-large"><uib-rating ng-model="movie.rating" max="5"></uib-rating></span>
+            <span class="jamm-rating-large"><uib-rating ng-model="model.rating" max="5"></uib-rating></span>
         </div>
     </div>
 
-    <div class="jamm-vertical-spacer"/>
-
-    <div class="form-group">
-        <label class="col-sm-2 control-label"></label>
-        <div class="col-sm-8">
-            <button class="btn btn-default btn-primary" ng-click="save()" ng-disabled="originalMovie._id && !isModified" type="button">
-                <span class="glyphicon glyphicon-ok"></span>
-                Save
-            </button>
-            <div class="jamm-btn-group-spacer"/>
-            <button class="btn btn-default" ng-click="discard()" ng-if="originalMovie._id" ng-disabled="!isModified" type="button">
-                <span class="glyphicon glyphicon-remove"></span>
-                Discard
-            </button>
-            <button class="btn btn-default" ng-click="cancel()" ng-if="!originalMovie._id" type="button">
-                <span class="glyphicon glyphicon-remove"></span>
-                Cancel
-            </button>
-            <div class="jamm-btn-group-spacer"/>
-            <div class="btn-group" ng-if="originalMovie._id">
-                <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
-                    <span class="glyphicon glyphicon-trash"></span>
-                    Delete
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-right">
-                    <li><a href="javascript:;" ng-click="deleteRecord()">Database record only</a></li>
-                    <li><a href="javascript:;" ng-click="deleteFilesAndRecord()">Files and database record</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
 </form>
