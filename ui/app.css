@@ -90,6 +90,14 @@ img.jamm-image-square-thumbnail {
     color: #555;
 }
 
+.jamm-treecontrol-userselectable {
+    user-select: text;
+    -webkit-user-select: text;
+    moz-user-select: -moz-text;
+    -khtml-user-select: text;
+    -ms-user-select: text;
+}
+
 tags-input .tags .tag-item {
     color: black;
     background: LightGray;

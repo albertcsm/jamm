@@ -8,7 +8,10 @@ angular.module('jamm')
     $scope.isModified = false;
     $scope.mediaInfo = null;
     $scope.selectedVideo = null;
-
+    $scope.treeOpts = {
+        dirSelectable: false
+    };
+    
     if (movieId) {
         $scope.movie = MovieService.get({ id: movieId }, function () {
             $scope.movieModelInEdit = angular.copy($scope.movie);

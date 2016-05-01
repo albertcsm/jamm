@@ -72,9 +72,10 @@
         </div>
 
         <div role="tabpanel" class="tab-pane" id="allFiles">
-            <treecontrol class="tree-light"
+            <treecontrol class="tree-light jamm-treecontrol-userselectable"
                 tree-model="movieDirectoryTree"
                 expanded-nodes="expandedTreeNodes"
+                options="treeOpts"
                 xon-node-toggle="showToggle(volume._id, node, expanded, $parentNode, $index, $first, $middle, $last, $odd, $even)"
                 xon-selection="showSelected(node, selected)">
                 {{node.name}}
