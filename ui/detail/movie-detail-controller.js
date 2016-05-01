@@ -1,5 +1,5 @@
 angular.module('jamm')
-.controller('MovieDetailController', function ($scope, $stateParams, $state, $uibModal, MovieService, VolumeFile, MediaInfoService) {
+.controller('MovieDetailController', function ($scope, $stateParams, $state, $uibModal, MovieService, VolumeFile, Volume, MediaInfoService) {
 
     var movieId = $stateParams.id;
 
@@ -20,15 +20,32 @@ angular.module('jamm')
                         $scope.selectVideo(info.videos[0]);
                     }
                 });
-            }
 
-            $scope.movieFiles = [
-                {
+                var movieNode = {
                     name: storageInfo.path,
                     type: 'directory',
-                    children: VolumeFile.query({ volumeId: storageInfo.volume, dir: storageInfo.path })
-                }
-            ];
+                    children: []
+                };
+
+                var volumeNode = {
+                    name: storageInfo.volume,
+                    type: 'directory',
+                    children: [ movieNode ]
+                };
+
+                $scope.movieDirectoryTree = [ volumeNode ];
+
+                $scope.expandedTreeNodes = [ volumeNode ];
+
+                VolumeFile.query({ volumeId: storageInfo.volume, dir: storageInfo.path }, function (volumeFiles) {
+                    movieNode.children = volumeFiles;
+                    $scope.expandedTreeNodes.push(movieNode);
+                });
+
+                Volume.get({ id : storageInfo.volume }, function (volumeInfo) {
+                    volumeNode.name = volumeInfo.name;
+                });
+            }
         });
     }
 

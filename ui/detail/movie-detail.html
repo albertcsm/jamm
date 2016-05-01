@@ -73,7 +73,8 @@
 
         <div role="tabpanel" class="tab-pane" id="allFiles">
             <treecontrol class="tree-light"
-                tree-model="movieFiles"
+                tree-model="movieDirectoryTree"
+                expanded-nodes="expandedTreeNodes"
                 xon-node-toggle="showToggle(volume._id, node, expanded, $parentNode, $index, $first, $middle, $last, $odd, $even)"
                 xon-selection="showSelected(node, selected)">
                 {{node.name}}
