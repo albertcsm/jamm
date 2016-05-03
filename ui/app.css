@@ -114,16 +114,6 @@ tags-input .tags .tag-item.selected .remove-button {
     color: white;
 }
 
-/* Hide mediaelement player loading overlay */
-.mejs-overlay-loading {
-    display: none;
-}
-
-/* Hide focus outline for mediaelement play time slider */
-.mejs-time-slider:focus {
-    outline: none;
-}
-
 .animate-if.ng-enter, .animate-if.ng-leave {
   transition: all ease-out 0.25s;
 }
