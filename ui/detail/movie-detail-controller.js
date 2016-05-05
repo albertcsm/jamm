@@ -11,7 +11,7 @@ angular.module('jamm')
     $scope.treeOpts = {
         dirSelectable: false
     };
-    
+
     if (movieId) {
         $scope.movie = MovieService.get({ id: movieId }, function () {
             $scope.movieModelInEdit = angular.copy($scope.movie);
@@ -148,24 +148,17 @@ angular.module('jamm')
     var player = null;
 
     $scope.initPlayer = function () {
-        player = new MediaElementPlayer('#videoPlayer', {
-            videoWidth: '100%',
-            videoHeight: '100%',
-            type: 'video/mp4',
-            success: function(mediaElement, originalNode) {
-            },
-            error : function(mediaElement) {
-                if (player) {
-                    console.error('medialement problem is detected: %o', mediaElement);
-                }
-            }
+        player = videojs('videoPlayer', { responsive: true, aspectRatio: '16:9' }).ready(function() {
+            this.hotkeys({
+                enableVolumeScroll: false,
+                enableNumbers: false
+            });
         });
     };
 
     $scope.selectVideo = function (video, play) {
         $scope.selectedVideo = video;
-        player.setSrc(video.src);
-        player.load();
+        player.src(video.src);
     };
 
     $scope.playVideo = function (video) {
@@ -176,9 +169,7 @@ angular.module('jamm')
     }
 
     $scope.$on('$destroy', function () {
-        player.setSrc('');
-        player.load();
-        player = null;
+        player.dispose();
 
         if ($scope.mediaInfo) {
             $scope.mediaInfo.cancel();
