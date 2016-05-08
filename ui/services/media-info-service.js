@@ -39,27 +39,43 @@ angular.module('jamm')
         var dependentPromises = [];
 
         dependentPromises.push(VolumeFile.query({ volumeId: volumeId, dir: path }, function (files) {
+            function handleFile(file) {
+                var info = {
+                    name: file.name,
+                    size: file.size,
+                    src: 'api/volumes/' + volumeId + '/files/' + encodeURIComponent(file.path)
+                };
+                if (file.name.match(/\.(jpg|jpeg|png|gif)$/)) {
+                    images.push(info);
+                } else if (file.name.match(/\.(mp4|mkv|wmv|avi|rmvb|mpg)$/)) {
+                    videos.push(info);
+                    var videoInfo = VolumeFile.mediaInfo({ volumeId: volumeId, path: file.path }, function () {
+                        if (videoInfo.duration) {
+                            info.length = parseMediaInfoDuration(videoInfo.duration);
+                        }
+                        info.resolution = parseMediaInfoResolution(videoInfo);
+                    });
+                    dependentPromises.push(videoInfo);
+                } else {
+                    others.push(info);
+                }
+            };
+
+            function handleDir(dir) {
+                dependentPromises.push(VolumeFile.query({ volumeId: volumeId, dir: dir.path }, function (files) {
+                    angular.forEach(files, function (file) {
+                        if (file.type == 'file') {
+                            handleFile(file);
+                        }
+                    });
+                }));
+            }
+
             angular.forEach(files, function (file) {
                 if (file.type == 'file') {
-                    var info = {
-                        name: file.name,
-                        size: file.size,
-                        src: 'api/volumes/' + volumeId + '/files/' + encodeURIComponent(file.path)
-                    };
-                    if (file.name.match(/\.(jpg|jpeg|png|gif)$/)) {
-                        images.push(info);
-                    } else if (file.name.match(/\.(mp4|mkv|wmv|avi|rmvb|mpg)$/)) {
-                        videos.push(info);
-                        var videoInfo = VolumeFile.mediaInfo({ volumeId: volumeId, path: file.path }, function () {
-                            if (videoInfo.duration) {
-                                info.length = parseMediaInfoDuration(videoInfo.duration);
-                            }
-                            info.resolution = parseMediaInfoResolution(videoInfo);
-                        });
-                        dependentPromises.push(videoInfo);
-                    } else {
-                        others.push(info);
-                    }
+                    handleFile(file);
+                } else {
+                    handleDir(file);
                 }
             });
 
