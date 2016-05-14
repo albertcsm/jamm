@@ -64,6 +64,7 @@ angular.module('jamm')
             function handleDir(dir) {
                 dependentPromises.push(VolumeFile.query({ volumeId: volumeId, dir: dir.path }, function (files) {
                     angular.forEach(files, function (file) {
+                        file.name = dir.name + '/' + file.name;
                         if (file.type == 'file') {
                             handleFile(file);
                         }
