@@ -7,19 +7,19 @@
                     <div class="text-center">
                         <div class="form-group">
                             <div class="btn-group" style="margin-right: 0.5em;">
-                                <a href="javascript:;" class="btn btn-sm btn-default active">Unimported</a>
-                                <a href="javascript:;" class="btn btn-sm btn-default">Show all</a>
+                                <a href="javascript:;" class="btn btn-sm btn-default" ng-class="showImported ? '' : 'active'" ng-click="showImported = false">Show new</a>
+                                <a href="javascript:;" class="btn btn-sm btn-default" ng-class="showImported ? 'active' : ''" ng-click="showImported = true">Show all</a>
                             </div>
                             <button class="btn btn-sm btn-default" ng-click="loadVolumeFiles()"><span class="glyphicon glyphicon-refresh"></span></button>
                             <button class="btn btn-sm btn-default" ng-click="showEditVolumeModal()"><span class="glyphicon glyphicon-cog"></span></button>
                         </div>
                     </div>
                     <treecontrol class="tree-light jamm-treecontrol-userselectable"
-                        tree-model="volumeFiles"
+                        tree-model="showImported ? volumeFiles : newFileNodes"
                         on-node-toggle="showToggle(node, expanded, $parentNode, $index, $first, $middle, $last, $odd, $even)"
                         on-selection="showSelected(node, selected)">
-                        <span style="color: steelblue;" ng-if="importedPaths.indexOf(node.path) == -1">{{node.name}}</span>
-                        <span style="color: black;" ng-if="importedPaths.indexOf(node.path) > -1">{{node.name}}</span>
+                        <span style="color: steelblue;" ng-if="importedPaths.indexOf(node.info.path) == -1">{{node.info.name}}</span>
+                        <span style="color: black;" ng-if="importedPaths.indexOf(node.info.path) > -1">{{node.info.name}}</span>
                     </treecontrol>
                 </div>
             </div>

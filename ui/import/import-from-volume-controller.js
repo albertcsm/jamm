@@ -25,20 +25,52 @@ angular.module('jamm')
 
     $scope.volume = Volume.get({ id: $scope.volumeId });
 
-    $scope.loadVolumeFiles = function () {
-        $scope.volumeFiles = VolumeFile.query({ volumeId: $scope.volumeId }, function () {
-            for (var key in $scope.volumeFiles) {
-                if ($scope.volumeFiles[key].type == 'directory') {
-                    $scope.volumeFiles[key].children = [ {} ];
+    $scope.showImported = false;
+
+    function populateFileNodes(nodes, dir, callback) {
+        VolumeFile.query({ volumeId: $scope.volumeId, dir: dir }, function (files) {
+            angular.forEach(files, function (file) {
+                var node = {
+                    info : file
+                };
+                if (file.type == 'directory') {
+                    node.children = [ {} ];
                 }
+                nodes.push(node);
+            });
+
+            if (callback) {
+                callback();
             }
-            
-            $scope.selectedPath = null;
-            $scope.mediaInfo = null;
         });
+    }
+
+    $scope.loadVolumeFiles = function () {
+        $scope.volumeFiles = [];
+        populateFileNodes($scope.volumeFiles, null, function () {
+            $scope.newFileNodes = [];
+            populateNewFileNodes($scope.newFileNodes, $scope.volumeFiles);
+        });
+        $scope.selectedPath = null;
+        $scope.mediaInfo = null;
     };
 
     $scope.loadVolumeFiles();
+
+    function populateNewFileNodes(newFileNodes, allFileNodes) {
+        angular.forEach(allFileNodes, function (node) {
+            if (node.info && $scope.importedPaths.indexOf(node.info.path) == -1) {
+                var newNode = {
+                    info : node.info
+                };
+                if (node.children) {
+                    newNode.children = [];
+                    populateNewFileNodes(newNode.children, node.children);
+                }
+                newFileNodes.push(node);
+            }
+        });
+    }
 
     function loadImportedMovies() {
         $scope.importedPaths = [];
@@ -49,6 +81,9 @@ angular.module('jamm')
                     $scope.importedPaths.push(movie.storage.path);
                 }
             });
+
+            $scope.newFileNodes = [];
+            populateNewFileNodes($scope.newFileNodes, $scope.volumeFiles);
         });
     }
 
@@ -56,6 +91,9 @@ angular.module('jamm')
         MovieService.subscribe($scope, function (data) {
             if (data.event == 'deleted') {
                 console.log('received movie deleted event: ' + data.id);
+                loadImportedMovies();
+            } else if (data.event == 'added') {
+                console.log('received movie added event: ' + data.value._id);
                 loadImportedMovies();
             }
         });
@@ -66,9 +104,9 @@ angular.module('jamm')
             $scope.mediaInfo.cancel();
         }
         if (selected) {
-            $scope.selectedPath = node.path;
-            if (node.type == 'directory') {
-                $scope.mediaInfo = MediaInfoService.getMediaInfo($scope.volumeId, node.path);
+            $scope.selectedPath = node.info.path;
+            if (node.info.type == 'directory') {
+                $scope.mediaInfo = MediaInfoService.getMediaInfo($scope.volumeId, node.info.path);
             } else {
                 $scope.mediaInfo = null;
             }   
@@ -79,13 +117,8 @@ angular.module('jamm')
 
     $scope.showToggle = function(node, expanded, $parentNode, $index, $first, $middle, $last, $odd, $even) {
         if (expanded) {
-            node.children = VolumeFile.query({ volumeId: $scope.volumeId, dir: node.path }, function () {
-                for (var key in node.children) {
-                    if (node.children[key].type == 'directory') {
-                        node.children[key].children = [ {} ];
-                    }
-                }
-            });
+            node.children = [];
+            populateFileNodes(node.children, node.info.path);
         } else {
             node.children = [ {} ];
         }
