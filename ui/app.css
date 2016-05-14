@@ -69,6 +69,10 @@ html {
     margin-right: 1em;
 }
 
+.jamm-control-panel {
+    background-color: #f5f5f5;
+}
+
 img.jamm-image-square-thumbnail {
     height: 4em;
     width: 4em;

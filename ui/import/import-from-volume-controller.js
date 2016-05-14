@@ -46,10 +46,12 @@ angular.module('jamm')
     }
 
     $scope.loadVolumeFiles = function () {
-        $scope.volumeFiles = [];
-        populateFileNodes($scope.volumeFiles, null, function () {
+        $scope.fileNodes = null;
+        var fileNodes = [];
+        populateFileNodes(fileNodes, null, function () {
+            $scope.fileNodes = fileNodes;
             $scope.newFileNodes = [];
-            populateNewFileNodes($scope.newFileNodes, $scope.volumeFiles);
+            populateNewFileNodes($scope.newFileNodes, $scope.fileNodes);
         });
         $scope.selectedPath = null;
         $scope.mediaInfo = null;
@@ -83,7 +85,7 @@ angular.module('jamm')
             });
 
             $scope.newFileNodes = [];
-            populateNewFileNodes($scope.newFileNodes, $scope.volumeFiles);
+            populateNewFileNodes($scope.newFileNodes, $scope.fileNodes);
         });
     }
 

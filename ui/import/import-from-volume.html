@@ -1,11 +1,11 @@
-<div class="container">
+<div class="container-fluid">
     <div class="row">
 
         <div class="col-md-4">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <div class="text-center">
-                        <div class="form-group">
+                    <div class="form-group">
+                        <div class="panel-body jamm-control-panel text-center">
                             <div class="btn-group" style="margin-right: 0.5em;">
                                 <a href="javascript:;" class="btn btn-sm btn-default" ng-class="showImported ? '' : 'active'" ng-click="showImported = false">Show new</a>
                                 <a href="javascript:;" class="btn btn-sm btn-default" ng-class="showImported ? 'active' : ''" ng-click="showImported = true">Show all</a>
@@ -14,12 +14,13 @@
                             <button class="btn btn-sm btn-default" ng-click="showEditVolumeModal()"><span class="glyphicon glyphicon-cog"></span></button>
                         </div>
                     </div>
+                    <span ng-if="fileNodes && (showImported ? fileNodes : newFileNodes).length == 0" style="color: grey;"><i>no item found</i></span>
                     <treecontrol class="tree-light jamm-treecontrol-userselectable"
-                        tree-model="showImported ? volumeFiles : newFileNodes"
+                        tree-model="showImported ? fileNodes : newFileNodes"
                         on-node-toggle="showToggle(node, expanded, $parentNode, $index, $first, $middle, $last, $odd, $even)"
                         on-selection="showSelected(node, selected)">
-                        <span style="color: steelblue;" ng-if="importedPaths.indexOf(node.info.path) == -1">{{node.info.name}}</span>
-                        <span style="color: black;" ng-if="importedPaths.indexOf(node.info.path) > -1">{{node.info.name}}</span>
+                        <span style="color: black;" ng-if="importedPaths.indexOf(node.info.path) == -1">{{node.info.name}}</span>
+                        <span style="color: lightgrey;" ng-if="importedPaths.indexOf(node.info.path) > -1">{{node.info.name}}</span>
                     </treecontrol>
                 </div>
             </div>
@@ -29,9 +30,8 @@
             <div class="panel panel-default">
                 <div class="panel-body">
 
-                    <section>
-                        <h3><span class="glyphicon glyphicon-folder-open"></span> {{selectedPath}}</h3>
-                    </section>
+                    <h3 style="margin: 0"><span class="glyphicon glyphicon-folder-open"></span> {{selectedPath}}</h3>
+                    <hr/>
 
                     <section ng-if="mediaInfo && mediaInfo.videos.length">
                         <h4>Videos</h4>
@@ -84,6 +84,7 @@
                     </section>
 
                     <section>
+                        <hr/>
                         <div class="form-group">
                             <button class="btn btn-default btn-primary" ng-disabled="!mediaInfo.videos.length" ng-click="import()" type="button">
                                 <span class="glyphicon glyphicon-plus"></span>
