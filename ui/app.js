@@ -48,12 +48,23 @@ angular.module('jamm', [
         .state('import', {
             url: "/import",
             sticky: true,
+            deepStateRedirect: {
+                default: "import.volumelist"
+            }
+        })
+        .state('import.volumelist', {
+            url: null,
             views: {
-                'import': {
+                'import@': {
                     templateUrl: "import/movie-import.html",
                     controller: 'MovieImportController'
                 }
             }
+        })
+        .state('import.volumelist.directorylist', {
+            url: "/:id",
+            templateUrl: "import/import-from-volume.html",
+            controller: "ImportFromVolumeController"
         })
         .state('about', {
             url: "/about",

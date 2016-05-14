@@ -1,5 +1,5 @@
 angular.module('jamm')
-.controller('MovieImportController', function ($scope, $uibModal, Volume) {
+.controller('MovieImportController', function ($scope, $uibModal, $state, Volume) {
     function initVolumes() {
         $scope.volumePieCharts = {};
 
@@ -8,7 +8,6 @@ angular.module('jamm')
                 var diskusage = Volume.diskusage({ id: volume._id }, function () {
                     var percentage = Math.round((1 - diskusage.free / diskusage.total) * 1000) / 10;
                     $scope.volumePieCharts[volume._id] = [{
-                        label: volume.name,
                         value: percentage,
                         suffix: "%",
                         color: "steelblue"
@@ -24,6 +23,23 @@ angular.module('jamm')
         mode: "gauge",
         thickness: 3,
         total: 100
+    };
+
+    $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
+        $scope.selectedVolumeId = $state.params.id;
+        if ($scope.selectedVolumeId && !$scope.selectedVolume) {
+            $scope.selectedVolume = Volume.get({ id : $scope.selectedVolumeId });
+        }
+    });
+
+    $scope.$on('import.volumeUpdated', function(volumeId) {
+        initVolumes();
+        $scope.selectedVolume = Volume.get({ id : $scope.selectedVolumeId });
+    });
+
+    $scope.selectVolume = function(volume) {
+        $state.go('import.volumelist.directorylist', { id: volume._id });
+        $scope.selectedVolume = volume;
     };
 
     $scope.showAddVolumeModal = function(volume) {

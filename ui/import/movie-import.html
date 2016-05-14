@@ -1,45 +1,35 @@
 <div class="container-fluid">
     <ol class="breadcrumb">
         <li><a href="#"><span class="glyphicon glyphicon-home"></span> Home</a></li>
-        <li class="active">Import</li>
+        <li class="active" ng-if="!selectedVolumeId">Import</li>
+        <li ng-if="selectedVolumeId"><a ui-sref="import.volumelist">Import</a></li>
+        <li class="active" ng-if="selectedVolumeId">{{selectedVolume.name}}</li>
     </ol>
 </div>
 
 <div class="container">
-    <div class="row">
-        <div class="panel panel-default">
-            <div class="panel-body media">
-                <div class="media-body">
-                    <span ng-repeat="volume in volumes">
-                        <div ng-if="volumePieCharts[volume._id]" style="width: 8em; height: 8em; display: inline-block;">
-                            <pie-chart data="volumePieCharts[volume._id]" options="pieChartOptions"></pie-chart>
-                        </div>
-                    </span>
+    <div style="display: flex; margin: 0 -1em;">
+        <div style="display: flex; margin: 0 1em;" ng-repeat="volume in volumes">
+            <button class="btn btn-default" ng-class="volume._id == selectedVolumeId ? 'active' : ''" ng-click="selectVolume(volume)">
+                <h5><span class="glyphicon glyphicon-hdd"></span> {{volume.name}}</h5>
+                <div ng-if="volumePieCharts[volume._id]" style="width: 6em; height: 6em; display: inline-block;">
+                    <pie-chart data="volumePieCharts[volume._id]" options="pieChartOptions"></pie-chart>
                 </div>
-                <div class="media-right media-bottom">
-                    <button class="btn btn-default" ng-click="showAddVolumeModal({})">
-                        <span class="glyphicon glyphicon-plus"></span>
-                        Add volume...
-                    </button>
-                </div>
-            </div>
+            </button>
         </div>
-
-        <uib-accordion>
-            <uib-accordion-group ng-repeat="volume in volumes" is-open="$first">
-                <uib-accordion-heading>
-                    <span class="glyphicon glyphicon-hdd"></span> {{volume.name}}
-                    <a href="javascript:;" ng-click="showAddVolumeModal(volume); $event.stopPropagation();" class="pull-right">
-                        <span class="glyphicon glyphicon-pencil"></span>
-                    </a>
-                </uib-accordion-heading>
-                <import-from-volume volume="{{volume}}"></import-from-volume>
-            </uib-accordion-group>
-        </uib-accordion>
-
+        <div style="display: flex; margin: 0 1em;">
+            <button class="btn btn-default" ng-click="showAddVolumeModal({})">
+                <span class="glyphicon glyphicon-plus"></span>
+                Add volume...
+            </button>
+        </div>
     </div>
+
+    <div class="jamm-vertical-spacer"></div>
+
 </div>
 
+<div ui-view></div>
 
 <script type="text/ng-template" id="movie-info-modal-template">
     <div class="modal-header">
