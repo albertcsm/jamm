@@ -3,9 +3,12 @@
 
         <div class="col-md-4">
             <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title">Directory tree</div>
+                </div>
                 <div class="panel-body">
                     <div class="form-group">
-                        <div class="panel-body jamm-control-panel text-center">
+                        <div class="text-center">
                             <div class="btn-group" style="margin-right: 0.5em;">
                                 <a href="javascript:;" class="btn btn-sm btn-default" ng-class="showImported ? '' : 'active'" ng-click="showImported = false">Show new</a>
                                 <a href="javascript:;" class="btn btn-sm btn-default" ng-class="showImported ? 'active' : ''" ng-click="showImported = true">Show all</a>
@@ -17,8 +20,14 @@
                     <span ng-if="fileNodes && (showImported ? fileNodes : newFileNodes).length == 0" style="color: grey;"><i>no item found</i></span>
                     <treecontrol class="tree-light jamm-treecontrol-userselectable"
                         tree-model="showImported ? fileNodes : newFileNodes"
+                        selected-node="selectedNodes"
+                        expanded-nodes="expandedNodes"
                         on-node-toggle="showToggle(node, expanded, $parentNode, $index, $first, $middle, $last, $odd, $even)"
                         on-selection="showSelected(node, selected)">
+                        <span ng-switch="node.info.type">
+                            <span ng-switch-when="directory" class="fa fa-folder-open" style="color:#EEAA33;"></span>
+                            <span ng-switch-when="file" class="fa fa-file-o"></span>
+                        <span>
                         <span style="color: black;" ng-if="importedPaths.indexOf(node.info.path) == -1">{{node.info.name}}</span>
                         <span style="color: lightgrey;" ng-if="importedPaths.indexOf(node.info.path) > -1">{{node.info.name}}</span>
                     </treecontrol>
@@ -26,62 +35,70 @@
             </div>
         </div>
 
-        <div class="col-md-8" ng-if="mediaInfo">
+        <div class="col-md-8">
             <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title">Files</div>
+                </div>
                 <div class="panel-body">
 
-                    <h3 style="margin: 0"><span class="glyphicon glyphicon-folder-open"></span> {{selectedPath}}</h3>
-                    <hr/>
+                    <div ng-if="!mediaInfo">
+                        <span style="color: grey;"><i>Select a directory first</i></span>
+                    </div>
 
-                    <section ng-if="mediaInfo && mediaInfo.videos.length">
-                        <h4>Videos</h4>
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Resolution</th>
-                                    <th>Length</th>
-                                    <th>Size</th>
-                                </tr>
-                            </thead>
-                            <tbody class="jamm-cursor-pointer">
-                                <tr ng-repeat="video in mediaInfo.videos track by video.name" ng-click="previewVideo(video.src)">
-                                    <td>{{video.name}}</td>
-                                    <td>{{video.resolution}}</td>
-                                    <td>{{video.length | formatDuration}}</td>
-                                    <td>{{video.size | formatByte}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </section>
+                    <div ng-if="mediaInfo">
+                        <h3 class="page-header" style="margin: 0"><span class="glyphicon glyphicon-folder-open"></span> {{selectedPath}}</h3>
 
-                    <section ng-if="mediaInfo && mediaInfo.images.length">
-                        <h4>Images</h4>
-                        <div jamm-photoswipe-gallery>
-                            <span ng-repeat="image in mediaInfo.images track by image.name">
-                                <a href="javascript:;" jamm-photoswipe-image="{{image.src}}"><img class="jamm-image-square-thumbnail" ng-src="{{image.src}}"/></a>
-                            </span>
-                        </div>
-                        <div class="jamm-vertical-spacer"></div>
-                    </section>
+                        <section ng-if="mediaInfo && mediaInfo.videos.length">
+                            <h4>Videos</h4>
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Resolution</th>
+                                        <th>Length</th>
+                                        <th>Size</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="jamm-cursor-pointer">
+                                    <tr ng-repeat="video in mediaInfo.videos track by video.name" ng-click="previewVideo(video.src)">
+                                        <td>{{video.name}}</td>
+                                        <td>{{video.resolution}}</td>
+                                        <td>{{video.length | formatDuration}}</td>
+                                        <td>{{video.size | formatByte}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </section>
 
-                    <section ng-if="mediaInfo && mediaInfo.others.length">
-                        <h4>Others</h4>
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Size</th>
-                                </tr>
-                            </thead>
-                            <tbody class="jamm-cursor-pointer">
-                                <tr ng-repeat="other in mediaInfo.others track by other.name">
-                                    <td>{{other.name}}</td>
-                                    <td>{{other.size | formatByte}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </section>
+                        <section ng-if="mediaInfo && mediaInfo.images.length">
+                            <h4>Images</h4>
+                            <div jamm-photoswipe-gallery>
+                                <span ng-repeat="image in mediaInfo.images track by image.name">
+                                    <a href="javascript:;" jamm-photoswipe-image="{{image.src}}"><img class="jamm-image-square-thumbnail" ng-src="{{image.src}}"/></a>
+                                </span>
+                            </div>
+                            <div class="jamm-vertical-spacer"></div>
+                        </section>
+
+                        <section ng-if="mediaInfo && mediaInfo.others.length">
+                            <h4>Others</h4>
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Size</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="jamm-cursor-pointer">
+                                    <tr ng-repeat="other in mediaInfo.others track by other.name">
+                                        <td>{{other.name}}</td>
+                                        <td>{{other.size | formatByte}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </section>
+                    </div>
 
                     <section>
                         <hr/>

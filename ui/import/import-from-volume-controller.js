@@ -27,6 +27,9 @@ angular.module('jamm')
 
     $scope.showImported = false;
 
+    $scope.selectedNodes = [];
+    $scope.expandedNodes = [];
+
     function populateFileNodes(nodes, dir, callback) {
         VolumeFile.query({ volumeId: $scope.volumeId, dir: dir }, function (files) {
             angular.forEach(files, function (file) {
@@ -53,6 +56,8 @@ angular.module('jamm')
             $scope.newFileNodes = [];
             populateNewFileNodes($scope.newFileNodes, $scope.fileNodes);
         });
+        $scope.selectedNodes = [];
+        $scope.expandedNodes = [];
         $scope.selectedPath = null;
         $scope.mediaInfo = null;
     };
