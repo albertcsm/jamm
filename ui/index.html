@@ -49,6 +49,7 @@
         <script src="components/faceted-search/faceted-search.js"></script>
         <script src="components/faceted-search/faceted-search-directive.js"></script>
         <script src="app.js"></script>
+        <script src="services/repo-service.js"></script>
         <script src="services/movie-service.js"></script>
         <script src="services/volume-service.js"></script>
         <script src="services/media-info-service.js"></script>
@@ -56,6 +57,7 @@
         <script src="list/movie-list-controller.js"></script>
         <script src="import/import-from-volume-controller.js"></script>
         <script src="import/movie-import-controller.js"></script>
+        <script src="settings/settings-controller.js"></script>
     </head>
     <body ng-app="jamm">
         <div ng-controller="AppStateController">
@@ -72,6 +74,7 @@
                     <ul class="nav navbar-nav">
                         <li ng-class="{'active': routerState.includes('movies')}"><a ui-sref="movies.list">Movies</a></li>
                         <li ng-class="{'active': routerState.includes('import')}"><a ui-sref="import">Import</a></li>
+                        <li ng-class="{'active': routerState.includes('settings')}"><a ui-sref="settings">Settings</a></li>
                         <li ng-class="{'active': routerState.includes('about')}"><a ui-sref="about">About</a></li>
                     </ul>
                 </div>

@@ -1,0 +1,86 @@
+<div class="container-fluid">
+    <ol class="breadcrumb">
+        <li><a href="#"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+        <li class="active">Settings</li>
+    </ol>
+</div>
+
+<div class="container">
+
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a href="javascript:;" data-target="#repositories" data-toggle="tab">
+                Repositories
+            </a>
+        </li>
+    </ul>
+
+    <div class="tab-content jamm-tab-content-border">
+        <div role="tabpanel" class="tab-pane active" id="repositories">
+
+            <uib-accordion>
+
+                <uib-accordion-group ng-repeat="repo in repos">
+                    <uib-accordion-heading>
+                        <a href="javascript:;">
+                            <div class="panel-title">
+                                {{repo.id}}
+                            </div>
+                        </a>
+                    </uib-accordion-heading>
+
+                    <h4>Customize</h4>
+
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Field</th>
+                                <th>Type</th>
+                                <th>Default</th>
+                            </tr>
+                        </thead>
+                        <tbody class="jamm-cursor-pointer">
+                            <tr ng-repeat="field in repo.fields">
+                                <td>{{field.name}}</td>
+                                <td>{{field.type}}</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-plus"></span> Add field...</button>
+                    
+                    <hr/>
+
+                    <h4>Preview</h4>
+                    <div class="well well-sm">
+                        <movie-detail-form></movie-detail-form>
+                    </div>
+
+                    <hr/>
+
+                    <div class="text-right">
+                        <button class="btn btn-primary">
+                            <span class="glyphicon glyphicon-ok"></span>
+                            Save
+                        </button>
+                        <button class="btn btn-default">
+                            <span class="glyphicon glyphicon-remove"></span>
+                            Discard
+                        </button>
+                        <div class="jamm-btn-group-spacer"/>
+                        <button class="btn btn-danger">
+                            <span class="glyphicon glyphicon-trash"></span>
+                            Delete
+                        </button>
+                    </div>
+
+                </uib-accordion-group>
+
+            </uib-accordion>
+
+            <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-plus"></span> Add repository...</button>
+
+        </div>
+    </div>
+</div>

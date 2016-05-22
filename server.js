@@ -7,6 +7,7 @@ var express = require('express'),
     path = require('path');
 var argv = require('minimist')(process.argv.slice(2));
 var fs = require('fs');
+var RepoController = require(__dirname + '/server/repos.js');
 var MovieController = require(__dirname + '/server/movies.js');
 var VolumeController = require(__dirname + '/server/volumes.js');
 
@@ -25,6 +26,9 @@ function startServer(port, datadir) {
     app.get('/', function (req, res) {
         res.sendFile(uiDir + "/index.html");
     });
+
+    var repoController = new RepoController(path.resolve(__dirname, datadir, 'repos.db'));
+    app.use('/api', repoController.expressRouter());
 
     var movieController = new MovieController(path.resolve(__dirname, datadir, 'movies.db'));
     app.use('/api', movieController.expressRouter());

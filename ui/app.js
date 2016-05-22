@@ -66,6 +66,11 @@ angular.module('jamm', [
             templateUrl: "import/import-from-volume.html",
             controller: "ImportFromVolumeController"
         })
+        .state('settings', {
+            url: '/settings',
+            templateUrl: 'settings/settings.html',
+            controller: "SettingsController"
+        })
         .state('about', {
             url: "/about",
             templateUrl: "about.html"
