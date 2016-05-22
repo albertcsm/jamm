@@ -1,4 +1,5 @@
-var express = require('express');
+var express = require('express'),
+    onFinished = require('on-finished');
 
 var path = require('path');
 var fs = require('fs');
@@ -209,8 +210,12 @@ VolumeController.prototype.expressRouter = function () {
                                 stream.pipe(res);
                             })
                             .on('error', function (err) {
-                                res.end(err);
+                                res.end(JSON.stringify(err));
                                 console.error(err);
+                            });
+
+                            onFinished(req, function (err, req) {
+                                stream.destroy();
                             });
                         } else {
                             res.writeHead(200, { 'Content-Length': 0 });
